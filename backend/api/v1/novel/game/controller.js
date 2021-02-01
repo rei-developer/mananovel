@@ -1,5 +1,5 @@
 const {
-  getNovelPageStartIdx,
+  getNovelPageStartId,
   getNovelScript,
   getNovelActor,
   getNovelBackground,
@@ -10,39 +10,39 @@ const {
   getNovelCount,
   getNovelList,
   getNovelCustomCssOptions
-} = require('../../../database/novel/read')
+} = require('../../../../database/novel/game/read')
 
 module.exports.getNovelScript = async ctx => {
   const {
-    idx,
+    id,
     version
   } = ctx.state
   const {
     type,
-    pageIdx,
-    scriptIdxOrSortNo,
-    selectIdx
+    pageId,
+    scriptIdOrSortNo,
+    selectId
   } = ctx.request.body
-  let purePageIdx = pageIdx
-  let pureScriptIdxOrSortNo = scriptIdxOrSortNo
+  let purePageId = pageId
+  let pureScriptIdOrSortNo = scriptIdOrSortNo
   switch (type) {
     case 'READY':
-      purePageIdx = await getNovelPageStartIdx(idx)
+      purePageId = await getNovelPageStartId(id)
       break
     case 'NEXT':
-      ++pureScriptIdxOrSortNo
+      ++pureScriptIdOrSortNo
       break
     case 'CHOICE':
-      const distanceSelectList = await getNovelSelectList(idx, version, pageIdx, scriptIdxOrSortNo)
+      const distanceSelectList = await getNovelSelectList(id, version, pageId, scriptIdOrSortNo)
       if (distanceSelectList) {
         const select = distanceSelectList
-          ?.find(item => item.id === selectIdx)
-        purePageIdx = select.novelPageMoveId
-        pureScriptIdxOrSortNo = select.novelScriptMoveId
+          ?.find(item => item.id === selectId)
+        purePageId = select.novelPageMoveId
+        pureScriptIdOrSortNo = select.novelScriptMoveId
       }
       break
   }
-  const script = await getNovelScript(idx, version, purePageIdx, pureScriptIdxOrSortNo)
+  const script = await getNovelScript(id, version, purePageId, pureScriptIdOrSortNo)
   if (!script)
     return ctx.body = {
       status: 'FAIL',
@@ -69,7 +69,7 @@ module.exports.getNovelScript = async ctx => {
     ? await getNovelSound(script.novelSoundId)
     : undefined
   const selectList = script.id
-    ? await getNovelSelectList(idx, version, purePageIdx, script.id)
+    ? await getNovelSelectList(id, version, purePageId, script.id)
     : undefined
   ctx.body = {
     status: 'DONE',
@@ -95,11 +95,11 @@ module.exports.getNovelList = async ctx => {
 
 module.exports.getNovel = async ctx => {
   const {
-    idx,
+    id,
     novel
   } = ctx.state
   const customCSSOptions = novel.isUseCustomCSS === 1
-    ? await getNovelCustomCssOptions(idx)
+    ? await getNovelCustomCssOptions(id)
     : []
   ctx.body = {
     status: 'DONE',

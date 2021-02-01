@@ -1,12 +1,12 @@
-const {getNovel} = require('../../../database/novel/read')
+const {getNovel} = require('../../../../database/novel/game/read')
 // const User = require('../../../lib/user')
 
 module.exports.authenticated = async (ctx, next) => {
-  const idx = ctx.params.idx
+  const id = ctx.params.id
   const version = ctx.params.version
   const token = ctx.get('x-access-token')
   // const user = await User.getUser(token)
-  const novel = await getNovel(idx, version)
+  const novel = await getNovel(id, version)
   if (!novel)
     return ctx.body = {
       status: 'FAIL',
@@ -18,7 +18,7 @@ module.exports.authenticated = async (ctx, next) => {
       status: 'FAIL',
       message: 'ONLY_MEMBER'
     }
-  ctx.state.idx = idx
+  ctx.state.id = id
   ctx.state.version = version
   // ctx.state.user = user
   ctx.state.novel = novel

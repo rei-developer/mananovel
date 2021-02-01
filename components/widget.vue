@@ -13,12 +13,12 @@
         <NuxtLink
           class='thumb'
           :style='{backgroundImage: item.uuid ? `url("https://cdn.mananovel.com/thumb/${item.uuid}.jpg")` : undefined}'
-          :to='`/${item.idx}`'
+          :to='`/${item.id}`'
           v-if='type === "magazine"'
         />
         <NuxtLink
           class='title'
-          :to='`/${item.idx}`'
+          :to='`/${item.id}`'
         >
           {{ item.title }}
         </NuxtLink>

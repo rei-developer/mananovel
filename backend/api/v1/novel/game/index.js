@@ -8,8 +8,8 @@ const {
 
 const app = new Router()
 
-app.post('/script/:idx/:version', authenticated, getNovelScript)
+app.post('/script/:id/:version', authenticated, getNovelScript)
 app.post('/', getNovelList)
-app.post('/:idx/:version', authenticated, getNovel)
+app.post('/:id/:version', authenticated, getNovel)
 
 module.exports = app

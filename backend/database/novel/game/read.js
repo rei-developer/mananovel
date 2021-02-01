@@ -1,7 +1,7 @@
-const pool = require('..')
+const pool = require('../..')
 // const _ = require('lodash')
 
-module.exports.getNovelPageStartIdx = async idx => {
+module.exports.getNovelPageStartId = async id => {
   try {
     const result = await pool.query(
       `
@@ -9,18 +9,18 @@ module.exports.getNovelPageStartIdx = async idx => {
       FROM NOVEL_OPTIONS
       WHERE novelId = ?;
       `,
-      [idx]
+      [id]
     )
     if (result.length < 1)
       return false
-    return result[0].novelPAGE_START_id
+    return result[0].novelPageStartId
   } catch (error) {
     console.error(error.message)
     return false
   }
 }
 
-module.exports.getNovelScript = async (idx, version, pageIdx, sortNo) => {
+module.exports.getNovelScript = async (id, version, pageId, sortNo) => {
   try {
     const result = await pool.query(
       `
@@ -42,7 +42,7 @@ module.exports.getNovelScript = async (idx, version, pageIdx, sortNo) => {
         AND NOVEL_SCRIPTS.sortNo = ?
         AND NOVEL_SCRIPTS.isVisible = 1;
       `,
-      [idx, version, pageIdx, sortNo]
+      [id, version, pageId, sortNo]
     )
     if (result.length < 1)
       return false
@@ -52,7 +52,7 @@ module.exports.getNovelScript = async (idx, version, pageIdx, sortNo) => {
   }
 }
 
-module.exports.getNovelSelectList = async (idx, version, pageIdx, scriptIdx) => {
+module.exports.getNovelSelectList = async (id, version, pageId, scriptId) => {
   try {
     const result = await pool.query(
       `
@@ -66,7 +66,7 @@ module.exports.getNovelSelectList = async (idx, version, pageIdx, scriptIdx) => 
         AND novelPageId = ?
         AND novelScriptId = ?;
       `,
-      [idx, version, pageIdx, scriptIdx]
+      [id, version, pageId, scriptId]
     )
     if (result.length < 1)
       return false
@@ -76,7 +76,7 @@ module.exports.getNovelSelectList = async (idx, version, pageIdx, scriptIdx) => 
   }
 }
 
-module.exports.getNovelActor = async idx => {
+module.exports.getNovelActor = async id => {
   try {
     const result = await pool.query(
       `
@@ -87,7 +87,7 @@ module.exports.getNovelActor = async idx => {
         AND isPublic = 1
         AND isVisible = 1;
       `,
-      [idx]
+      [id]
     )
     if (result.length < 1)
       return false
@@ -98,7 +98,7 @@ module.exports.getNovelActor = async idx => {
   }
 }
 
-module.exports.getNovelBackground = async idx => {
+module.exports.getNovelBackground = async id => {
   try {
     const result = await pool.query(
       `
@@ -108,7 +108,7 @@ module.exports.getNovelBackground = async idx => {
         AND isPublic = 1
         AND isVisible = 1;
       `,
-      [idx]
+      [id]
     )
     if (result.length < 1)
       return false
@@ -119,7 +119,7 @@ module.exports.getNovelBackground = async idx => {
   }
 }
 
-module.exports.getNovelBGM = async idx => {
+module.exports.getNovelBGM = async id => {
   try {
     const result = await pool.query(
       `
@@ -129,7 +129,7 @@ module.exports.getNovelBGM = async idx => {
         AND isPublic = 1
         AND isVisible = 1;
       `,
-      [idx]
+      [id]
     )
     if (result.length < 1)
       return false
@@ -140,7 +140,7 @@ module.exports.getNovelBGM = async idx => {
   }
 }
 
-module.exports.getNovelBGS = async idx => {
+module.exports.getNovelBGS = async id => {
   try {
     const result = await pool.query(
       `
@@ -150,7 +150,7 @@ module.exports.getNovelBGS = async idx => {
         AND isPublic = 1
         AND isVisible = 1;
       `,
-      [idx]
+      [id]
     )
     if (result.length < 1)
       return false
@@ -161,7 +161,7 @@ module.exports.getNovelBGS = async idx => {
   }
 }
 
-module.exports.getNovelSound = async idx => {
+module.exports.getNovelSound = async id => {
   try {
     const result = await pool.query(
       `
@@ -171,7 +171,7 @@ module.exports.getNovelSound = async idx => {
         AND isPublic = 1
         AND isVisible = 1;
       `,
-      [idx]
+      [id]
     )
     if (result.length < 1)
       return false
@@ -192,7 +192,7 @@ module.exports.getNovelCount = async () => {
     )
     if (result.length < 1)
       return false
-    return result[0].COUNT
+    return result[0].count
   } catch (error) {
     console.error(error.message)
     return false
@@ -229,7 +229,7 @@ module.exports.getNovelList = async (page, limit) => {
   }
 }
 
-module.exports.getNovel = async (idx, version) => {
+module.exports.getNovel = async (id, version) => {
   try {
     const result = await pool.query(
       `
@@ -255,7 +255,7 @@ module.exports.getNovel = async (idx, version) => {
         AND NOVELS.version = ?
         AND NOVELS.isVisible = 1;
       `,
-      [idx, version]
+      [id, version]
     )
     if (result.length < 1)
       return false
@@ -266,7 +266,7 @@ module.exports.getNovel = async (idx, version) => {
   }
 }
 
-module.exports.getNovelCustomCssOptions = async idx => {
+module.exports.getNovelCustomCssOptions = async id => {
   try {
     const result = await pool.query(
       `
@@ -275,7 +275,7 @@ module.exports.getNovelCustomCssOptions = async idx => {
       FROM NOVEL_CUSTOM_CSS_OPTIONS
       WHERE novelOptionId = ?;
       `,
-      [idx]
+      [id]
     )
     if (result.length < 1)
       return false
