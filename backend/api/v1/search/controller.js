@@ -2,13 +2,13 @@ const {
   getSaveCount,
   getSaveList
 } = require('../../database/save/read')
-const {createSearch} = require('../../database/search/create')
+const {createSearch} = require('../../../database/search/create')
 const {
   getSearchListWithWidget,
   getSearchList,
   getSearchText
-} = require('../../database/search/read')
-const {patchSearch} = require('../../database/search/update')
+} = require('../../../database/search/read')
+const {patchSearch} = require('../../../database/search/update')
 
 module.exports.getSearchListWithWidget = async ctx => {
   const type = ctx.params.type

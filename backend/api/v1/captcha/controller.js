@@ -1,5 +1,5 @@
 const {verify} = require('hcaptcha')
-const config = require('../../config.json')
+const config = require('../../../config.json')
 
 module.exports.getVerify = async ctx => {
   const token = ctx.request.body.token

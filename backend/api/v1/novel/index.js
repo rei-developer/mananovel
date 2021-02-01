@@ -1,8 +1,8 @@
 const Router = require('koa-router')
-const v1 = require('./v1')
+const game = require('./game')
 
 const app = new Router()
 
-app.use('/v1', v1.routes())
+app.use('/game', game.routes())
 
 module.exports = app

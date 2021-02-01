@@ -27,7 +27,7 @@ export default {
     const {
       status,
       saveList
-    } = await $axios.$get(`/api/search?q=${encodeURI(q)}`)
+    } = await $axios.$get(`/api/v1/search?q=${encodeURI(q)}`)
     if (status === 'FAIL')
       throw new Error('서버 응답에 실패했습니다')
     return {

@@ -1,4 +1,4 @@
-const PATH = '/api/captcha'
+const PATH = '/api/v1/captcha'
 
 module.exports.verify = async (token, $axios) => {
   try {

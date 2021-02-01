@@ -1,7 +1,7 @@
 const Router = require('koa-router')
 const Controller = require('./controller')
 
-const {getUserLimiter} = require('../../middleware/rate-limit')
+const {getUserLimiter} = require('../../../middleware/rate-limit')
 
 const app = new Router()
 

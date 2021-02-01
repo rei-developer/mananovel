@@ -71,7 +71,7 @@ export default {
       const {
         status,
         result
-      } = await this.$axios.$get('/api/search/widget/realtime')
+      } = await this.$axios.$get('/api/v1/search/widget/realtime')
       if (status === 'FAIL')
         return
       this.tags = result

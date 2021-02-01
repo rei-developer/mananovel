@@ -308,7 +308,7 @@ export default {
       if (this.searchText === '' || this.searchText.length < 2)
         return this.searchResult = []
       try {
-        const data = await this.$axios.$get(`/api/search/list/${this.searchText}`)
+        const data = await this.$axios.$get(`/api/v1/search/list/${this.searchText}`)
         if (data.status === 'FAIL' || !data.result)
           return this.searchResult = []
         this.searchResult = data.result
