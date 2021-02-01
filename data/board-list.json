@@ -1,0 +1,19 @@
+[
+  {
+    "field": "best",
+    "name": "인기",
+    "icon": "star",
+    "visible": false
+  },
+  {
+    "field": "newest",
+    "name": "최신",
+    "icon": "history",
+    "visible": false
+  },
+  {
+    "field": "movie",
+    "name": "영화",
+    "visible": true
+  }
+]
