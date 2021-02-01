@@ -72,6 +72,9 @@
             최신작
           </li>
         </nuxt-link>
+        <nuxt-link to='/novel'>
+          <li>노벨 목록</li>
+        </nuxt-link>
         <!--        <nuxt-link-->
         <!--            :to='`/save/${item.field}`'-->
         <!--            v-for='(item, index) in boardList'-->

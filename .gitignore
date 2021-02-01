@@ -90,5 +90,5 @@ sw.*
 # Vim swap files
 *.swp
 
-key.json
+data/key.json
 config.json

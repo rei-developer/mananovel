@@ -1,7 +1,7 @@
 <template>
   <div
     class='backdrop'
-    @click.prevent.self='close'
+    @click.self='close'
   >
     <section>
       <div class='header'>
@@ -61,9 +61,9 @@
 </template>
 
 <style lang='less' scoped>
+@primary: #EDA7B2;
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
-@primary: #EDA7B2;
 
 .backdrop {
   position: fixed;
@@ -81,13 +81,14 @@
     background: #FFF;
     box-shadow: 1px 0 20px rgba(0, 0, 0, .2);
     > .header,
+    > ul > li,
     > ul > a > li {
       display: flex;
       align-items: center;
       height: 40px;
       padding: 0 .75rem 3px 0;
       color: #FFF;
-      background: @primary-hover;
+      background: @primary;
     }
     > .header {
       display: flex;
@@ -106,24 +107,23 @@
       background: #FAFAFA;
       list-style: none;
       overflow-y: auto;
-      > a {
-        text-decoration: none;
-        > li {
+      > a {text-decoration: none}
+      > li, > a > li {
+        display: flex;
+        color: @primary-hover;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        background: #FFF;
+        cursor: pointer;
+        &:hover {
+          color: @font-color;
+          background: @primary-hover;
+        }
+        > .icon {
           display: flex;
-          color: @primary-hover;
-          border-bottom: 1px solid rgba(0, 0, 0, .1);
-          background: #FFF;
-          &:hover {
-            color: @font-color;
-            background: @primary;
-          }
-          > .icon {
-            display: flex;
-            justify-content: center;
-            width: 1.5rem;
-            margin-left: .5rem;
-            padding-top: 1px;
-          }
+          justify-content: center;
+          width: 1.5rem;
+          margin-left: .5rem;
+          padding-top: 1px;
         }
       }
     }
