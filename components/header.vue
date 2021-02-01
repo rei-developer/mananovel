@@ -2,7 +2,7 @@
   <div class='wrapper'>
     <SidebarMenu v-if='isSidebar'/>
     <header
-        :class='[
+      :class='[
         "desktop-only",
         top >= 100 ? "fixed" : undefined
       ]'
@@ -22,19 +22,19 @@
         <li>
           <b-input-group size='sm'>
             <vue-typeahead-bootstrap
-                size='sm'
-                placeholder='웹노벨 검색'
-                v-model='searchText'
-                :data='searchResult'
-                :serializer='s => s.text'
-                :maxMatches='7'
-                @keyup.enter='onSearchClick'
+              size='sm'
+              placeholder='웹노벨 검색'
+              v-model='searchText'
+              :data='searchResult'
+              :serializer='s => s.text'
+              :maxMatches='7'
+              @keyup.enter='onSearchClick'
             />
             <b-input-group-append>
               <b-button
-                  size='sm'
-                  variant='primary'
-                  @click='onSearchClick'
+                size='sm'
+                variant='primary'
+                @click='onSearchClick'
               >
                 <font-awesome-icon icon='search'/>
               </b-button>
@@ -54,7 +54,7 @@
     </header>
     <header class='mobile-only'/>
     <nav
-        :class='[
+      :class='[
         "desktop-only",
         top >= 100 ? "fixed" : undefined
       ]'
@@ -114,17 +114,17 @@
       </ul>
     </nav>
     <b-button
-        class='scroll-top'
-        variant='dark'
-        @click='onScrollTopClick'
-        v-if='top >= 100'
+      class='scroll-top'
+      variant='dark'
+      @click='onScrollTopClick'
+      v-if='top >= 100'
     >
       <font-awesome-icon icon='chevron-up'/>
     </b-button>
     <b-button
-        class='side-menu'
-        variant='dark'
-        @click='onSidebarClick'
+      class='side-menu'
+      variant='dark'
+      @click='onSidebarClick'
     >
       <font-awesome-icon icon='bars'/>
     </b-button>
@@ -264,7 +264,7 @@ export default {
       searchText: '',
       searchResult: [],
       boardList: BOARD_LIST
-          .filter(item => item.visible),
+        .filter(item => item.visible),
       top: 0,
       logo: Math.floor(Math.random() * 4) + 1,
       isSidebar: false

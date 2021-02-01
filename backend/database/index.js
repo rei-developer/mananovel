@@ -15,7 +15,7 @@ const pool = mysql.createPool({
   host: HOST,
   user: USER,
   password: PASSWORD,
-  database: SCHEMA,
+  database: SCHEMA
   // multipleStatements: true
 })
 

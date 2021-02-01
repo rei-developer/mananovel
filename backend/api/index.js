@@ -1,6 +1,5 @@
 const Router = require('koa-router')
 const captcha = require('./captcha')
-// const save = require('./save')
 // const search = require('./search')
 
 const app = new Router()
@@ -10,7 +9,6 @@ app.get('/', ctx => ctx.body = {
   status: 'ok'
 })
 app.use('/captcha', captcha.routes())
-// app.use('/save', save.routes())
 // app.use('/search', search.routes())
 
 module.exports = app
