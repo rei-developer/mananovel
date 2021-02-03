@@ -35,15 +35,15 @@ header {
     margin: 0;
     padding: 0;
     list-style: none;
-    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    border-bottom: 1px solid @primary-hover;
     > li {
       padding: 0 .4rem;
       &:active, &.active {
         margin-bottom: -1px;
+        color: @primary-hover;
         background: rgba(255, 255, 255, .4);
       }
       &.active {
-        color: @primary-hover;
         border-bottom: 4px solid @primary-hover;
       }
       &:hover {background: rgba(255, 255, 255, .2)}

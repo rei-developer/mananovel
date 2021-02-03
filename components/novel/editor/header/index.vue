@@ -35,11 +35,14 @@ header {
     line-height: 26px;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    border-bottom: 1px solid @primary-hover;
     list-style: none;
     > li {
       padding: 0 .4rem;
-      &:active, &.active {background: rgba(255, 255, 255, .4)}
+      &:active, &.active {
+        color: @font-color;
+        background: @primary-hover;
+      }
     }
   }
 }

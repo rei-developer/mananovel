@@ -75,9 +75,7 @@
         <nuxt-link to='/novel'>
           <li>노벨 목록</li>
         </nuxt-link>
-        <nuxt-link to='/novel/editor'>
-          <li>노벨 만들기</li>
-        </nuxt-link>
+        <li @click='onNovelEditorClick'>노벨 만들기</li>
         <!--        <nuxt-link-->
         <!--            :to='`/save/${item.field}`'-->
         <!--            v-for='(item, index) in boardList'-->
@@ -255,15 +253,16 @@
 </style>
 
 <script>
-import SidebarMenu from '@/components/sidebar/menu'
 import VueTypeaheadBootstrap from '@/components/common/search'
+import SidebarMenu from '@/components/sidebar/menu'
+
 import BOARD_LIST from '@/data/board-list'
 
 export default {
   name: 'Header',
   components: {
-    SidebarMenu,
-    VueTypeaheadBootstrap
+    VueTypeaheadBootstrap,
+    SidebarMenu
   },
   data() {
     return {
@@ -273,6 +272,7 @@ export default {
         .filter(item => item.visible),
       top: 0,
       logo: Math.floor(Math.random() * 4) + 1,
+      isNovelEditorPopupOpen: false,
       isSidebar: false
     }
   },
@@ -332,6 +332,15 @@ export default {
     async onScrollTopClick() {
       await this.$nextTick()
       window.scrollTo(0, 0)
+    },
+    async onNovelEditorClick() {
+      this.isNovelEditorPopupOpen = !this.isNovelEditorPopupOpen
+      let routeData = this.$router.resolve(
+        {
+          path: '/novel/editor',
+          query: {'dataParameter': 'parameterValue'}
+        })
+      window.open(routeData.href, '_blank', 'width=1280,height=720,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0')
     },
     onSidebarClick() {
       this.isSidebar = !this.isSidebar
