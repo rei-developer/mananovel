@@ -47,27 +47,31 @@
   user-select: none;
   > .list,
   > .sub-event {
-    width: 21px;
-    height: 21px;
+    min-width: 21px;
+    height: 22px;
     border-right: 1px solid @primary;
+    border-bottom: 1px dashed @primary;
   }
   > .list {
-    width: 100px;
+    min-width: 100px;
     line-height: 21px;
     padding: 0 3px;
     border-right: 1px dashed @primary;
+    border-bottom: 1px dashed @primary;
   }
   > .sub-event {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -1px;
+    padding-bottom: 1px;
     border-right: 1px solid @primary;
+    border-bottom: 1px dashed @primary;
   }
   > ul {
     display: flex;
     margin: 0;
     padding: 0;
+    border-bottom: 1px dashed @primary;
     list-style: none;
     cursor: cell;
     > li {

@@ -1,33 +1,33 @@
-@primary-hover: #EDA7B2;
-@primary-hover-focus: #29313E;
+@primary: #EDA7B2;
+@primary-hover: #5F5476;
 
 .btn-primary,
 .btn-primary:disabled,
 .btn-primary.disabled {
-  background-color: @primary-hover;
-  border-color: @primary-hover;
+  background-color: @primary;
+  border-color: @primary;
 }
 
 .btn-outline-primary,
 .btn-outline-primary:disabled,
 .btn-outline-primary.disabled {
-  color: @primary-hover;
+  color: @primary;
   background-color: #FFF;
-  border-color: @primary-hover;
+  border-color: @primary;
 }
 
 .btn-primary:hover,
 .btn-outline-primary:hover {
-  background-color: @primary-hover-focus;
-  border-color: @primary-hover-focus;
+  background-color: @primary-hover;
+  border-color: @primary-hover;
 }
 
 .btn-primary:focus,
 .btn-primary.focus,
 .btn-outline-primary:focus,
 .btn-outline-primary.focus {
-  background-color: @primary-hover-focus;
-  border-color: @primary-hover-focus;
+  background-color: @primary-hover;
+  border-color: @primary-hover;
   box-shadow: 0 0 0 0.2rem rgba(144, 50, 68, 0.5);
 }
 
@@ -37,8 +37,8 @@
 .btn-outline-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle,
 .show > .btn-outline-primary.dropdown-toggle {
-  background-color: @primary-hover-focus;
-  border-color: @primary-hover-focus;
+  background-color: @primary-hover;
+  border-color: @primary-hover;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus,
@@ -48,19 +48,19 @@
 .show > .btn-primary.dropdown-toggle:focus,
 .show > .btn-outline-primary.dropdown-toggle:focus {box-shadow: 0 0 0 0.2rem rgba(144, 50, 68, 0.5)}
 
-.btn-link {color: @primary-hover}
+.btn-link {color: @primary}
 
-.btn-link:hover {color: @primary-hover-focus}
+.btn-link:hover {color: @primary-hover}
 
 .btn-link:focus,
 .btn-link.focus {box-shadow: none}
 
-.text-primary {color: @primary-hover !important}
+.text-primary {color: @primary !important}
 
 a.text-primary,
 a.text-primary:hover {
   color: #FFF !important;
-  background-color: @primary-hover;
+  background-color: @primary;
   cursor: default;
   pointer-events: none;
 }
@@ -69,36 +69,36 @@ a.text-primary:hover {
 .dropdown-item:active {
   color: #FFF;
   text-decoration: none;
-  background-color: @primary-hover;
+  background-color: @primary;
   outline: none;
 }
 
 .dropdown-item:hover,
 .dropdown-item:focus {outline: none}
 
-.badge-primary {background-color: @primary-hover}
+.badge-primary {background-color: @primary}
 
 .custom-control-input:checked ~ .custom-control-label::before {
-  border-color: @primary-hover;
-  background-color: @primary-hover;
+  border-color: @primary;
+  background-color: @primary;
 }
 
 .custom-control-input:focus ~ .custom-control-label::before {box-shadow: 0 0 0 0.2rem rgba(144, 50, 68, 0.25)}
 
 .form-control:focus {
-  border-color: @primary-hover-focus;
+  border-color: @primary-hover;
   box-shadow: 0 0 0 0.2rem rgba(144, 50, 68, 0.25);
 }
 
-.page-link {color: @primary-hover}
+.page-link {color: @primary}
 
-.page-link:hover {color: @primary-hover-focus}
+.page-link:hover {color: @primary-hover}
 
 .page-link:focus {box-shadow: 0 0 0 0.2rem rgba(144, 50, 68, 0.25)}
 
 .page-item.active .page-link {
-  background-color: @primary-hover;
-  border-color: @primary-hover;
+  background-color: @primary;
+  border-color: @primary;
 }
 
 .pagination-sm .page-item:first-child .page-link,
@@ -116,8 +116,8 @@ a.text-primary:hover {
     &:hover,
     &:focus {
       color: #FFF;
-      border-color: @primary-hover;
-      background-color: @primary-hover;
+      border-color: @primary;
+      background-color: @primary;
     }
   }
 }

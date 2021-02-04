@@ -12,8 +12,11 @@
 .content-box {
   width: 400px;
   padding: .5rem;
-  border-left: 1px solid @primary;
-  background: #FFF;
+  color: @font-color;
+  font-size: 13px;
+  border: 1px solid @primary;
+  border-top: 0;
+  background: #333;
 }
 </style>
 

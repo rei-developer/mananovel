@@ -1,8 +1,6 @@
 <template>
   <div>
-<!--    <drag-it-dude>-->
-<!--      테스트입니다-->
-<!--    </drag-it-dude>-->
+    테스트입니다
   </div>
 </template>
 

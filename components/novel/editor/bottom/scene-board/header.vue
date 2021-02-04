@@ -2,9 +2,10 @@
   <div class='bottom-box'>
     <div
       class='list'
-      @resize='resize'
+      @click='reverse'
     >
       목록
+      <font-awesome-icon :icon='isReverse ? "chevron-down" : "chevron-up"'/>
     </div>
     <div
       class='sub-event'
@@ -52,28 +53,33 @@
   > .sub-event {
     display: flex;
     justify-content: center;
-    width: 21px;
-    height: 21px;
+    min-width: 21px;
+    height: 22px;
     line-height: 18px;
     font-weight: bold;
     border-right: 1px solid @primary;
+    border-bottom: 1px solid @primary;
   }
   > .list {
-    width: 100px;
+    min-width: 100px;
     padding: 0 3px;
     border-right: 1px dashed @primary;
+    border-bottom: 1px solid @primary;
+    > svg {margin: 4px 0 0 4px}
   }
   > .sub-event {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -1px;
+    padding-bottom: 1px;
     border-right: 1px solid @primary;
+    border-bottom: 1px solid @primary;
   }
   > ul {
     display: flex;
     margin: 0;
     padding: 0;
+    border-bottom: 1px solid @primary;
     list-style: none;
     > li {
       width: 21px;
@@ -100,6 +106,10 @@ export default {
       default: 30
     },
     isAllHide: {
+      type: Boolean,
+      default: false
+    },
+    isReverse: {
       type: Boolean,
       default: false
     }
@@ -136,11 +146,15 @@ export default {
       this.$eventBus.$emit('playSound', 'done.mp3')
       this.$eventBus.$emit('view', id)
     },
+    reverse() {
+      this.$eventBus.$emit('playSound', 'done.mp3')
+      this.$eventBus.$emit('reverse')
+    },
     resize(event) {
       console.log(event)
     },
     remove() {
-
+      this.$eventBus.$emit('beforeAllRemove')
     },
     hide() {
       this.$eventBus.$emit('playSound', 'done.mp3')

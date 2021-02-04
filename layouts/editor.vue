@@ -17,8 +17,8 @@
   width: 4800px;
   height: 4148px;
   position: fixed;
-  top: -6rem;
-  left: 0;
+  top: 3rem;
+  left: -1.25rem;
   background-image: url('/background.jpg');
   background-size: 20%;
   opacity: .1;
