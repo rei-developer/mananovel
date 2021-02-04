@@ -1,5 +1,5 @@
 <template>
-  <div class='content-box'>
+  <div class='content-box' @contextmenu.prevent>
     <!--    <NovelGamePreview/>-->
     <main>
       <novel-editor-bottom-scene-board
@@ -26,7 +26,7 @@
 <script>
 // import NovelGamePreview from '@/components/novel/game/preview'
 import NovelEditorSidebarScriptEdit from '@/components/novel/editor/sidebar/script-edit'
-import NovelEditorBottomSceneBoard from '@/components/novel/editor/bottom/scene-board'
+import NovelEditorBottomSceneBoard from '~/components/novel/editor/bottom/scene-board'
 
 export default {
   name: 'NovelEditor',

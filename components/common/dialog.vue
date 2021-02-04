@@ -21,8 +21,8 @@
           {{ message }}
         </div>
         <div class='footer'>
-          <b-button squared variant='primary' size='sm' @click.prevent='submit'>확인</b-button>
-          <b-button squared size='sm' @click='close'>취소</b-button>
+          <b-button squared variant='primary' size='sm' @click.prevent='submit'>응!</b-button>
+          <b-button squared variant='dark' size='sm' @click='close'>아니...</b-button>
         </div>
       </div>
     </drag-it-dude>
@@ -30,9 +30,9 @@
 </template>
 
 <style lang='less' scoped>
+@primary: #EDA7B2;
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
-@primary: #EDA7B2;
 
 .backdrop {
   position: fixed;
@@ -62,7 +62,7 @@
       line-height: 21px;
       padding: 0 .5rem;
       color: #FFF;
-      background: @primary-hover;
+      background: @primary;
       > .close {
         padding-top: 3px;
         color: #FFF;
@@ -96,6 +96,7 @@ export default {
       header: null,
       icon: null,
       message: null,
+      doEvent: null,
       w: 300,
       x: 0,
       y: 0,
@@ -111,10 +112,11 @@ export default {
     })
   },
   methods: {
-    async show({header, icon, message}) {
+    async show({header, icon, message, doEvent}) {
       this.header = header || '알림'
       this.icon = icon
       this.message = message
+      this.doEvent = doEvent || 'submit'
       this.visible = true
       await this.$nextTick()
       const ch = this.$refs.dialog.clientHeight
@@ -122,7 +124,7 @@ export default {
       this.y = (window.innerHeight / 2) - (ch / 2)
     },
     submit() {
-      this.$eventBus.$emit('submit')
+      this.$eventBus.$emit(this.doEvent)
       this.visible = false
     },
     close() {
