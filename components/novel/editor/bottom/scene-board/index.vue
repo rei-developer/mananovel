@@ -66,8 +66,8 @@ export default {
   data() {
     return {
       viewId: 1,
-      rowCount: 2,
-      columnCount: 5,
+      rowCount: 5,
+      columnCount: 30,
       sceneBoardList: [],
       isAllHide: false
     }

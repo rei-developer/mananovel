@@ -1,6 +1,11 @@
 <template>
   <div class='bottom-box'>
-    <div class='list'>목록</div>
+    <div
+      class='list'
+      @resize='resize'
+    >
+      목록
+    </div>
     <div
       class='sub-event'
       @click='remove'
@@ -130,6 +135,9 @@ export default {
       }
       this.$eventBus.$emit('playSound', 'done.mp3')
       this.$eventBus.$emit('view', id)
+    },
+    resize(event) {
+      console.log(event)
     },
     remove() {
 

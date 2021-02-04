@@ -20,7 +20,7 @@
   top: -6rem;
   left: 0;
   background-image: url('/background.jpg');
-  background-size: 40%;
+  background-size: 20%;
   opacity: .1;
   z-index: -1;
 }
