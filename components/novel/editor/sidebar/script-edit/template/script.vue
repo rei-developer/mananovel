@@ -3,6 +3,7 @@
     <div class='item'>
       <div class='label'>대사 편집</div>
       <textarea
+        ref='text'
         class='custom-scroll-box'
         v-model='text'
         placeholder='이곳에 대사를 입력하세요'
@@ -15,6 +16,12 @@
     >
       저장
     </b-button>
+    <b-form-checkbox
+      v-model='isAllApplyWithVisible'
+      value='accepted'
+    >
+      활성화된 모든 컬럼에 동일하게 적용
+    </b-form-checkbox>
     {{ data }}
   </div>
 </template>
@@ -29,16 +36,18 @@
     &:not(:last-child) {margin-bottom: .5rem}
     > .label {
       height: 24px;
-      margin: 0 0 5px;
+      margin: -5px 0 5px;
       font-size: 13px;
       border-bottom: 1px solid rgba(255, 255, 255, .2);
     }
     > textarea {
       width: 100%;
+      min-height: 82px;
       color: #FFF;
       border: 1px solid @primary;
       background: transparent;
       outline: none;
+      &:focus {border-style: dashed}
     }
   }
 }
@@ -66,7 +75,8 @@ export default {
       data: this.pureData,
       text: !!this.pureData.script
         ? this.pureData.script.text
-        : null
+        : null,
+      isAllApplyWithVisible: false
     }
   },
   watch: {
@@ -75,6 +85,7 @@ export default {
       this.text = !!this.pureData.script
         ? this.pureData.script.text
         : null
+      this.$refs.text.focus()
     }
   },
   computed: {
@@ -92,8 +103,8 @@ export default {
         this.data.script = {}
         this.data.script.text = this.text
       }
+      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isAllApplyWithVisible)
       this.$forceUpdate()
-      this.$eventBus.$emit('sb.update', this.rowId, this.data)
     }
   }
 }

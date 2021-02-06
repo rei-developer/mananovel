@@ -15,12 +15,15 @@
 @font-color: #EDE3EB;
 
 .e-sidebar-script-edit {
+  display: flex;
+  flex-direction: column;
   width: 400px;
+  height: calc(100vh - 192px - 56px);
   padding: .5rem;
   color: @font-color;
   font-size: 13px;
   border: 1px solid @primary;
-  border-top: 0;
+  border-bottom: 0;
   background: #333;
 }
 </style>

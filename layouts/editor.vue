@@ -1,9 +1,19 @@
 <template>
-  <div class='wrapper'>
-    <novel-editor-header/>
-    <novel-editor-header-page/>
-    <Nuxt/>
-    <div class='background'/>
+  <div>
+    <b-overlay variant='dark' :show='isLoading'>
+      <template #overlay>
+        <div class='text-center'>
+          <font-awesome-icon class='fa-spin' style='width: 3rem; height: 3rem' icon='cog'/>
+          <p>데이터를 불러오고 있는 중이에요...!</p>
+        </div>
+      </template>
+      <div class='wrapper'>
+        <novel-editor-header/>
+        <novel-editor-header-page/>
+        <Nuxt/>
+        <div class='background'/>
+      </div>
+    </b-overlay>
   </div>
 </template>
 
@@ -36,9 +46,10 @@ export default {
     NovelEditorHeader,
     NovelEditorHeaderPage
   },
-  data() {
-    return {}
-  },
-  methods: {}
+  computed: {
+    isLoading() {
+      return this.$store.state['novel']['editor']['isLoading']
+    }
+  }
 }
 </script>

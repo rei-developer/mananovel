@@ -2,6 +2,7 @@
   <div class='e-scene-board-inner'>
     <div class='list'>
       <label>
+        <span class='required' v-if='isRequired'>*</span>
         {{ id }}:
         <input
           v-model='name'
@@ -14,7 +15,7 @@
       class='sub-event'
       @click='onClickRemove'
     >
-      <font-awesome-icon icon='trash-alt'/>
+      <font-awesome-icon :icon='isRequired ? "recycle" : "trash-alt"'/>
     </div>
     <div
       class='sub-event'
@@ -32,7 +33,9 @@
         @mousedown='onMouseDown'
         v-for='item in columns'
         :key='item.id'
-      />
+      >
+        <font-awesome-icon icon='edit' v-if='item.isOpened'/>
+      </li>
     </ul>
   </div>
 </template>
@@ -68,15 +71,18 @@
     padding: 0 3px;
     border-right: 1px dashed @primary;
     border-bottom: 1px dashed @primary;
-    > label > input {
-      width: 100%;
-      height: auto;
-      margin: 0 0 0 5px;
-      padding: 0;
-      border: 0;
-      color: #FFF;
-      background-color: transparent;
-      outline: none;
+    > label {
+      > span.required {color: red}
+      > input {
+        width: 100%;
+        height: auto;
+        margin: 0 0 0 5px;
+        padding: 0;
+        border: 0;
+        color: #FFF;
+        background-color: transparent;
+        outline: none;
+      }
     }
   }
   > .sub-event {
@@ -143,6 +149,13 @@
       &.ended,
       &.visible.ended {background-image: url('~assets/end-point.png')}
       &.started.ended {background-image: url('~assets/one-point.png')}
+      &.open,
+      &.open:before {background-color: #ED1C24 !important}
+      > svg {
+        position: absolute;
+        top: 4px;
+        margin-left: 4px;
+      }
     }
   }
 }
@@ -173,6 +186,10 @@ export default {
     isPureHidden: {
       type: Boolean,
       default: false
+    },
+    isRequired: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -201,6 +218,8 @@ export default {
         .findIndex(item => item.id === id)
       if (findIndex >= 0) {
         const block = this.columns[findIndex]
+        if (!!block.isOpened)
+          classList.push('open')
         if (!!block.isViewed)
           classList.push('view')
         if (!this.isHidden) {
@@ -223,6 +242,7 @@ export default {
       return classList
     },
     onChangeName() {
+      this.$eventBus.$emit('cs.getRow', {id: this.id, name: this.name})
       this.$eventBus.$emit('sb.name', this.id, this.name)
     },
     onClickBlock(event) {
@@ -237,7 +257,7 @@ export default {
     onDoubleClick(event, id) {
       if (this.isHidden)
         return
-      this.release()
+      this.$eventBus.$emit('cs.getRowAndSceneId', {id: this.id, name: this.name}, id)
       this.$eventBus.$emit('sb.openSidebar', this.id, id)
     },
     onContextMenu(event, id) {
@@ -276,6 +296,18 @@ export default {
         else
           delete item.isViewed
         this.$forceUpdate()
+      }
+    },
+    open(id) {
+      const findIndex = this.columns
+        .findIndex(item => item.id === id)
+      if (findIndex >= 0) {
+        const item = this.columns[findIndex]
+        if (!item.isOpened) {
+          item.isOpened = 1
+          item.isDragged = 1
+          this.visible(true)
+        }
       }
     },
     setStartAndEnd() {
@@ -330,6 +362,7 @@ export default {
     },
     release() {
       this.columns = this.columns.map(item => {
+        delete item.isOpened
         delete item.isDragged
         delete item.isDraggedStart
         delete item.isDraggedEnd

@@ -10,9 +10,14 @@
         </div>
       </main>
       <section>
-        <novel-editor-sidebar-script-edit
-          ref='sidebarScriptEdit'
-        />
+        <div class='e-content-wrapper'>
+          <novel-editor-sidebar-script-edit
+            ref='sidebarScriptEdit'
+          />
+        </div>
+        <div>
+          <novel-editor-sidebar-console/>
+        </div>
       </section>
     </div>
   </client-only>
@@ -21,13 +26,10 @@
 <style lang='less' scoped>
 .e-content-box {
   display: flex;
-  > main {
+  > main,
+  > section {
     flex: 1;
     > .e-content-wrapper {min-height: calc(100vh - 192px - 56px)}
-  }
-  > section {
-    display: flex;
-    justify-content: flex-end;
   }
 }
 </style>
@@ -35,6 +37,7 @@
 <script>
 import NovelEditorContent from '@/components/novel/editor/content'
 import NovelEditorSidebarScriptEdit from '~/components/novel/editor/sidebar/script-edit/index'
+import NovelEditorSidebarConsole from '~/components/novel/editor/sidebar/console'
 import NovelEditorBottomSceneBoard from '@/components/novel/editor/bottom/scene-board'
 
 export default {
@@ -43,6 +46,7 @@ export default {
   components: {
     NovelEditorContent,
     NovelEditorSidebarScriptEdit,
+    NovelEditorSidebarConsole,
     NovelEditorBottomSceneBoard
   }
 }
