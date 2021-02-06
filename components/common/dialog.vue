@@ -116,7 +116,7 @@ export default {
       this.header = header || '알림'
       this.icon = icon
       this.message = message
-      this.doEvent = doEvent || 'submit'
+      this.doEvent = doEvent
       this.visible = true
       await this.$nextTick()
       const ch = this.$refs.dialog.clientHeight
@@ -124,7 +124,8 @@ export default {
       this.y = (window.innerHeight / 2) - (ch / 2)
     },
     submit() {
-      this.$eventBus.$emit(this.doEvent)
+      if (!!this.doEvent)
+        this.$eventBus.$emit(this.doEvent)
       this.visible = false
     },
     close() {

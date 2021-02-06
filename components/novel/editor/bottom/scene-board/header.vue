@@ -2,20 +2,20 @@
   <div class='e-scene-board-header'>
     <div
       class='list'
-      @click='reverse'
+      @click='onClickReverse'
     >
       목록
       <font-awesome-icon :icon='isReverse ? "chevron-down" : "chevron-up"'/>
     </div>
     <div
       class='sub-event'
-      @click='remove'
+      @click='onClickRemove'
     >
       <font-awesome-icon icon='trash-alt'/>
     </div>
     <div
       class='sub-event'
-      @click='hide'
+      @click='onClickHide'
     >
       <font-awesome-icon :icon='isHiddenAll ? "eye-slash" : "eye"'/>
     </div>
@@ -23,8 +23,8 @@
       <li
         :class='[getBlockClassList(item.id)]'
         :data-id='item.id'
-        @click='click($event, item.id)'
-        v-for='item in sceneBoardColumnList'
+        @click='onClickBlock($event, item.id)'
+        v-for='item in columns'
         :key='item.id'
       >
         {{ item.id }}
@@ -103,7 +103,7 @@ export default {
   props: {
     columnCount: {
       type: Number,
-      default: 30
+      default: 0
     },
     isHiddenAll: {
       type: Boolean,
@@ -116,49 +116,46 @@ export default {
   },
   data() {
     return {
-      sceneBoardColumnList: []
+      columns: []
     }
   },
   mounted() {
-    for (let i = 1; i <= this.columnCount; i++)
-      this.sceneBoardColumnList.push({
-        id: i,
-        isViewed: i === 1
-      })
+    for (let id = 1; id <= this.columnCount; id++)
+      this.columns.push({id})
   },
   methods: {
     getBlockClassList(id) {
       let classList = []
-      const findIndex = this.sceneBoardColumnList
+      const findIndex = this.columns
         .findIndex(item => item.id === id)
       if (findIndex >= 0) {
-        const block = this.sceneBoardColumnList[findIndex]
-        if (block.isViewed)
+        const item = this.columns[findIndex]
+        if (!!item.isViewed)
           classList.push('view')
       }
       return classList
     },
-    click(event, id) {
-      for (let i = 0; i < this.sceneBoardColumnList.length; i++) {
-        const item = this.sceneBoardColumnList[i]
-        item.isViewed = item.id === id
+    onClickBlock(event, id) {
+      for (let i = 0; i < this.columns.length; i++) {
+        const item = this.columns[i]
+        item.id === id
+          ? item.isViewed = 1
+          : delete item.isViewed
       }
-      this.$eventBus.$emit('playSound', 'done.mp3')
-      this.$eventBus.$emit('view', id)
+      this.$forceUpdate()
+      this.$eventBus.$emit('sb.playSound', 'done.mp3')
+      this.$eventBus.$emit('sb.view', id)
     },
-    reverse() {
-      this.$eventBus.$emit('playSound', 'done.mp3')
-      this.$eventBus.$emit('reverse')
+    onClickReverse() {
+      this.$eventBus.$emit('sb.playSound', 'done.mp3')
+      this.$eventBus.$emit('sb.reverse')
     },
-    resize(event) {
-      console.log(event)
+    onClickHide() {
+      this.$eventBus.$emit('sb.playSound', 'done.mp3')
+      this.$eventBus.$emit('sb.hideAll', !this.isHiddenAll)
     },
-    remove() {
-      this.$eventBus.$emit('beforeRemoveAll')
-    },
-    hide() {
-      this.$eventBus.$emit('playSound', 'done.mp3')
-      this.$eventBus.$emit('hideAll', !this.isHiddenAll)
+    onClickRemove() {
+      this.$eventBus.$emit('sb.beforeRemoveAll')
     }
   }
 }

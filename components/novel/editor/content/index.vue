@@ -26,6 +26,8 @@
 import NovelEditorContentTop from '@/components/novel/editor/content/top'
 import NovelEditorContentPreview from '@/components/novel/editor/content/preview'
 
+const eventBusPrefix = 'c'
+
 export default {
   name: 'NovelEditorContent',
   components: {
@@ -33,10 +35,12 @@ export default {
     NovelEditorContentPreview
   },
   created() {
-    this.$eventBus.$on('zoom', value => this.setZoom(value))
+    const p = `${eventBusPrefix}.`
+    this.$eventBus.$on(`${p}zoom`, value => this.setZoom(value))
   },
   beforeDestroy() {
-    this.$eventBus.$off('zoom')
+    const p = `${eventBusPrefix}.`
+    this.$eventBus.$off(`${p}zoom`)
   },
   methods: {
     setZoom(value) {

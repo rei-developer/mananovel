@@ -10,7 +10,9 @@
         </div>
       </main>
       <section>
-        <novel-editor-sidebar-script-edit/>
+        <novel-editor-sidebar-script-edit
+          ref='sidebarScriptEdit'
+        />
       </section>
     </div>
   </client-only>
@@ -32,7 +34,7 @@
 
 <script>
 import NovelEditorContent from '@/components/novel/editor/content'
-import NovelEditorSidebarScriptEdit from '@/components/novel/editor/sidebar/script-edit'
+import NovelEditorSidebarScriptEdit from '~/components/novel/editor/sidebar/script-edit/index'
 import NovelEditorBottomSceneBoard from '@/components/novel/editor/bottom/scene-board'
 
 export default {

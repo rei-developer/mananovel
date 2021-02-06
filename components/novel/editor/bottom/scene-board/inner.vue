@@ -2,22 +2,23 @@
   <div class='e-scene-board-inner'>
     <div class='list'>
       <label>
+        {{ id }}:
         <input
           v-model='name'
-          :placeholder='`item${id}`'
+          :placeholder='savedName'
           @change='onChangeName'
         />
       </label>
     </div>
     <div
       class='sub-event'
-      @click='remove'
+      @click='onClickRemove'
     >
       <font-awesome-icon icon='trash-alt'/>
     </div>
     <div
       class='sub-event'
-      @click='hide(null, true)'
+      @click='onClickHide'
     >
       <font-awesome-icon :icon='isHidden ? "eye-slash" : "eye"'/>
     </div>
@@ -25,10 +26,10 @@
       <li
         :class='[getBlockClassList(item.id)]'
         :data-id='item.id'
-        @click='elementDrag'
-        @mousedown='dragMouseDown'
-        @dblclick='doubleClick($event, item.id)'
-        @contextmenu.self='contextmenu($event, item.id)'
+        @click='onClickBlock'
+        @dblclick='onDoubleClick($event, item.id)'
+        @contextmenu.self='onContextMenu($event, item.id)'
+        @mousedown='onMouseDown'
         v-for='item in columns'
         :key='item.id'
       />
@@ -70,7 +71,7 @@
     > label > input {
       width: 100%;
       height: auto;
-      margin: 0;
+      margin: 0 0 0 5px;
       padding: 0;
       border: 0;
       color: #FFF;
@@ -155,6 +156,10 @@ export default {
       type: Number,
       default: null
     },
+    type: {
+      type: String,
+      default: null
+    },
     pureName: {
       type: String,
       default: null
@@ -173,6 +178,7 @@ export default {
   data() {
     return {
       name: this.pureName,
+      savedName: this.pureName,
       columns: this.pureColumns,
       isHidden: this.isPureHidden
     }
@@ -195,20 +201,20 @@ export default {
         .findIndex(item => item.id === id)
       if (findIndex >= 0) {
         const block = this.columns[findIndex]
-        if (block.isViewed)
+        if (!!block.isViewed)
           classList.push('view')
         if (!this.isHidden) {
-          if (block.isStartLine)
+          if (!!block.isStart)
             classList.push('started')
-          if (block.isEndLine)
+          if (!!block.isEnd)
             classList.push('ended')
-          if (block.isVisible)
+          if (!!block.isVisible)
             classList.push('visible')
-          if (block.isDragged)
+          if (!!block.isDragged)
             classList.push('dragged')
-          if (block.isDraggedStartLine)
+          if (!!block.isDraggedStart)
             classList.push('dragged-started')
-          if (block.isDraggedEndLine)
+          if (!!block.isDraggedEnd)
             classList.push('dragged-ended')
         } else {
           classList.push('hide')
@@ -216,63 +222,67 @@ export default {
       }
       return classList
     },
-    dragMouseDown(event) {
+    onChangeName() {
+      this.$eventBus.$emit('sb.name', this.id, this.name)
+    },
+    onClickBlock(event) {
+      this.onMouseMove(event)
+    },
+    onClickHide() {
+      this.hide(null, true)
+    },
+    onClickRemove() {
+      this.remove()
+    },
+    onDoubleClick(event, id) {
+      if (this.isHidden)
+        return
+      this.release()
+      this.$eventBus.$emit('sb.openSidebar', this.id, id)
+    },
+    onContextMenu(event, id) {
+      console.log(id)
+    },
+    onMouseDown(event) {
       if (this.isHidden)
         return
       event.preventDefault()
-      document.onmousemove = this.elementDrag
-      document.onmouseup = this.closeDragElement
+      document.onmousemove = this.onMouseMove
+      document.onmouseup = this.onMouseUp
     },
-    elementDrag(event) {
+    onMouseMove(event) {
       if (this.isHidden)
         return
       event.preventDefault()
       const id = Number(event.target.getAttribute('data-id'))
       const findIndex = this.columns
-        .findIndex((item) => item.id === id)
+        .findIndex(item => item.id === id)
       if (findIndex >= 0) {
-        const block = this.columns[findIndex]
-        if (!block.isDragged)
-          block.isDragged = true
+        const item = this.columns[findIndex]
+        if (!item.isDragged)
+          item.isDragged = 1
       }
-      this.setStartAndEndLine()
+      this.setStartAndEnd()
     },
-    closeDragElement() {
+    onMouseUp() {
       document.onmouseup = null
       document.onmousemove = null
     },
     view(id) {
       for (let i = 0; i < this.columns.length; i++) {
         const item = this.columns[i]
-        item.isViewed = item.id === id
+        if (item.id === id)
+          item.isViewed = 1
+        else
+          delete item.isViewed
+        this.$forceUpdate()
       }
     },
-    doubleClick(event, id) {
-      if (this.isHidden)
-        return
-      alert(id)
-    },
-    onChangeName() {
-      this.$eventBus.$emit('name', this.id, this.name)
-    },
-    contextmenu(event, id) {
-      console.log(id)
-    },
-    remove() {
-      this.$eventBus.$emit('remove', this.id)
-    },
-    hide(flag, soundFlag = false) {
-      this.isHidden = flag ?? !this.isHidden
-      if (soundFlag)
-        this.$eventBus.$emit('playSound', 'done.mp3')
-      this.$eventBus.$emit('hide', this.id, this.isHidden)
-      this.release()
-    },
-    setStartAndEndLine() {
+    setStartAndEnd() {
       for (let i = 0; i < this.columns.length; i++) {
         const item = this.columns[i]
-        item.isDraggedStartLine = false
-        item.isDraggedEndLine = false
+        delete item.isDraggedStart
+        delete item.isDraggedEnd
       }
       for (let i = 0; i < this.columns.length; i++) {
         const item = this.columns[i]
@@ -283,21 +293,25 @@ export default {
           ? this.columns[i + 1]
           : false
         if ((!prevItem || !prevItem.isDragged) && item.isDragged)
-          item.isDraggedStartLine = true
+          item.isDraggedStart = 1
         if ((!nextItem || !nextItem.isDragged) && item.isDragged)
-          item.isDraggedEndLine = true
+          item.isDraggedEnd = 1
       }
+      this.$forceUpdate()
     },
     visible(flag) {
       for (let i = 0; i < this.columns.length; i++) {
         const item = this.columns[i]
-        if (item.isDragged)
-          item.isVisible = flag
-        item.isStartLine = false
-        item.isEndLine = false
-        item.isDragged = false
-        item.isDraggedStartLine = false
-        item.isDraggedEndLine = false
+        if (item.isDragged) {
+          flag
+            ? item.isVisible = 1
+            : delete item.isVisible
+        }
+        delete item.isStart
+        delete item.isEnd
+        delete item.isDragged
+        delete item.isDraggedStart
+        delete item.isDraggedEnd
       }
       for (let i = 0; i < this.columns.length; i++) {
         const item = this.columns[i]
@@ -308,27 +322,42 @@ export default {
           ? this.columns[i + 1]
           : false
         if ((!prevItem || !prevItem.isVisible) && item.isVisible)
-          item.isStartLine = true
+          item.isStart = 1
         if ((!nextItem || !nextItem.isVisible) && item.isVisible)
-          item.isEndLine = true
+          item.isEnd = 1
       }
+      this.$forceUpdate()
     },
     release() {
       this.columns = this.columns.map(item => {
-        item.isDragged = false
-        item.isDraggedStartLine = false
-        item.isDraggedEndLine = false
+        delete item.isDragged
+        delete item.isDraggedStart
+        delete item.isDraggedEnd
         return item
       })
+      this.$forceUpdate()
+    },
+    hide(flag, soundFlag = false) {
+      const isHidden = flag ?? !this.isHidden
+      isHidden
+        ? this.isHidden = isHidden
+        : delete this.isHidden
+      if (soundFlag)
+        this.$eventBus.$emit('sb.playSound', 'done.mp3')
+      this.$eventBus.$emit('sb.hide', this.id, this.isHidden)
+      this.release()
+    },
+    remove() {
+      this.$eventBus.$emit('sb.remove', this.id)
     },
     clear() {
       this.columns = this.columns.map(item => {
-        item.isStartLine = false
-        item.isEndLine = false
-        item.isDragged = false
-        item.isDraggedStartLine = false
-        item.isDraggedEndLine = false
-        item.isVisible = false
+        delete item.isStart
+        delete item.isEnd
+        delete item.isDragged
+        delete item.isDraggedStart
+        delete item.isDraggedEnd
+        delete item.isVisible
         return item
       })
     }

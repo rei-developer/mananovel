@@ -23,11 +23,14 @@
   > .zoom {
     border-right: 1px solid @primary;
     > label {
-      height: 23px;
-      line-height: 18px;
+      width: 80px;
+      height: 21px;
+      line-height: 19px;
       padding-left: 4px;
       color: #FFF;
       > input {
+        width: 45px;
+        margin-left: 4px;
         color: #FFF;
         text-align: right;
         border: 0;
@@ -55,7 +58,7 @@ export default {
   },
   watch: {
     zoom() {
-      this.$eventBus.$emit('zoom', this.zoom)
+      this.$eventBus.$emit('c.zoom', this.zoom)
     }
   }
 }

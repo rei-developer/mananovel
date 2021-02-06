@@ -2,7 +2,7 @@
   <div class='e-bottom-scene-board'>
     <Dialog ref='dialog'/>
     <div class='scene-board-box'>
-      <header :style='{marginLeft: `-${sceneBoardInnerBoxScrollLeft}px`}'>
+      <header :style='{marginLeft: `-${innerScrollLeft}px`}'>
         <novel-editor-bottom-scene-board-header
           :columnCount='columnCount'
           :isHiddenAll='isHiddenAll'
@@ -13,6 +13,7 @@
         <novel-editor-bottom-scene-board-inner
           ref='sceneBoard'
           :id='item.id'
+          :type='item.type'
           :pureName='item.name'
           :pureColumns='item.columns'
           :isPureHidden='item.isHidden'
@@ -67,6 +68,8 @@ import Dialog from '@/components/common/dialog'
 import NovelEditorBottomSceneBoardHeader from '@/components/novel/editor/bottom/scene-board/header'
 import NovelEditorBottomSceneBoardInner from '@/components/novel/editor/bottom/scene-board/inner'
 
+const eventBusPrefix = 'sb'
+
 export default {
   name: 'NovelEditorBottomSceneBoard',
   components: {
@@ -74,21 +77,14 @@ export default {
     NovelEditorBottomSceneBoardHeader,
     NovelEditorBottomSceneBoardInner
   },
-  props: {
-    pureDataSource: {
-      type: Array,
-      default() {
-        return []
-      }
-    }
-  },
   data() {
     return {
+      pageId: 0,
       viewId: 0,
-      rowCount: 5,
-      columnCount: 50,
-      sceneBoardInnerBoxScrollLeft: 0,
-      dataSource: this.pureDataSource,
+      rowCount: 1,
+      columnCount: 30,
+      innerScrollLeft: 0,
+      dataSource: [],
       bottomMenu: [
         {label: '목록 추가', function: () => this.beforeAddRow()},
         {label: '활성화', function: () => this.visible()},
@@ -96,49 +92,56 @@ export default {
         {label: '모두 해제', function: () => this.release()},
         {label: '모두 삭제', function: () => this.beforeClear()}
       ],
-      isHiddenAll: false,
-      isReverse: false
-    }
-  },
-  watch: {
-    pureDataSource() {
-      this.dataSource = this.pureDataSource
+      isReverse: false,
+      isHiddenAll: false
     }
   },
   async created() {
     await this.$nextTick()
     document.querySelector('.scene-board-box > .inner').addEventListener('scroll', this.handleInnerScroll)
-    this.$eventBus.$on('view', id => this.view(id))
-    this.$eventBus.$on('name', (id, name) => this.name(id, name))
-    this.$eventBus.$on('reverse', () => this.reverse())
-    this.$eventBus.$on('playSound', name => this.playSound(name))
-    this.$eventBus.$on('hide', (id, flag) => this.hide(id, flag))
-    this.$eventBus.$on('hideAll', flag => this.hideAll(flag))
-    this.$eventBus.$on('remove', id => this.remove(id))
-    this.$eventBus.$on('beforeRemoveAll', () => this.beforeRemoveAll())
-    this.$eventBus.$on('removeAll', () => this.removeAll())
-    this.$eventBus.$on('clear', () => this.clear())
+    const p = `${eventBusPrefix}.`
+    this.$eventBus.$on(`${p}view`, id => this.view(id))
+    this.$eventBus.$on(`${p}openSidebar`, (rowId, columnId) => this.openSidebar(rowId, columnId))
+    this.$eventBus.$on(`${p}name`, (id, name) => this.name(id, name))
+    this.$eventBus.$on(`${p}reverse`, () => this.reverse())
+    this.$eventBus.$on(`${p}playSound`, name => this.playSound(name))
+    this.$eventBus.$on(`${p}hide`, (id, flag) => this.hide(id, flag))
+    this.$eventBus.$on(`${p}hideAll`, flag => this.hideAll(flag))
+    this.$eventBus.$on(`${p}remove`, id => this.remove(id))
+    this.$eventBus.$on(`${p}beforeRemoveAll`, () => this.beforeRemoveAll())
+    this.$eventBus.$on(`${p}removeAll`, () => this.removeAll())
+    this.$eventBus.$on(`${p}clear`, () => this.clear())
+    this.$eventBus.$on(`${p}update`, (rowId, data) => this.update(rowId, data))
   },
   mounted() {
     this.changePage(1)
   },
   beforeDestroy() {
-    this.$eventBus.$off('view')
-    this.$eventBus.$off('name')
-    this.$eventBus.$off('reverse')
-    this.$eventBus.$off('playSound')
-    this.$eventBus.$off('hide')
-    this.$eventBus.$off('hideAll')
-    this.$eventBus.$off('remove')
-    this.$eventBus.$off('beforeRemoveAll')
-    this.$eventBus.$off('removeAll')
-    this.$eventBus.$off('clear')
+    const p = `${eventBusPrefix}.`
+    this.$eventBus.$off(`${p}view`)
+    this.$eventBus.$off(`${p}openSidebar`)
+    this.$eventBus.$off(`${p}name`)
+    this.$eventBus.$off(`${p}reverse`)
+    this.$eventBus.$off(`${p}playSound`)
+    this.$eventBus.$off(`${p}hide`)
+    this.$eventBus.$off(`${p}hideAll`)
+    this.$eventBus.$off(`${p}remove`)
+    this.$eventBus.$off(`${p}beforeRemoveAll`)
+    this.$eventBus.$off(`${p}removeAll`)
+    this.$eventBus.$off(`${p}clear`)
+    this.$eventBus.$off(`${p}update`)
   },
   async destroyed() {
     await this.$nextTick()
     document.querySelector('.scene-board-box > .inner').removeEventListener('scroll', this.handleInnerScroll)
   },
   methods: {
+    update(rowId, data) {
+      console.log('우케타마와리마시따')
+      console.log(
+        data
+      )
+    },
     getHideCount() {
       let count = 0
       this.dataSource
@@ -163,22 +166,15 @@ export default {
         this.view(this.viewId)
       this.playSound('done.mp3')
     },
-    addRow(rowId) {
+    addRow(rowId = 1, type = 'script') {
       let columns = []
-      for (let i = 1; i <= this.columnCount; i++)
-        columns.push({
-          id: i,
-          isViewed: false,
-          isStartLine: false,
-          isEndLine: false,
-          isDragged: false,
-          isDraggedStartLine: false,
-          isDraggedEndLine: false,
-          isVisible: false
-        })
+      for (let id = 1; id <= this.columnCount; id++)
+        columns.push({id})
+      const name = type.toUpperCase()
       this.dataSource.push({
         id: rowId,
-        name: `item${rowId}`,
+        type,
+        name,
         columns,
         isHidden: false
       })
@@ -190,13 +186,24 @@ export default {
       // TODO : 만약 현재 보고 있는 페이지가 있다면 일단 임시 저장
       this.savePage(id)
       // TODO : 데이터를 불러와서, 있으면 loadData 없으면 addRow
-      for (let i = 1; i <= this.rowCount; i++)
-        this.addRow(i)
+      this.addRow()
     },
     view(id) {
       this.viewId = id
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].view(id))
+    },
+    openSidebar(rowId, columnId) {
+      const findIndex = this.dataSource
+        .findIndex(item => item.id === rowId)
+      if (findIndex < 0)
+        return
+      const type = this.dataSource[findIndex].type
+      const columns = this.dataSource[findIndex].columns
+      const data = columns
+        .filter(item => item.id === columnId)
+      if (data.length > 0)
+        this.$eventBus.$emit('se.openSidebar', rowId, type, data[0])
     },
     name(id, name) {
       const findIndex = this.dataSource
@@ -253,7 +260,7 @@ export default {
       this.$refs.dialog.show({
         icon: 'exclamation-triangle',
         message: '정말로 모두 삭제하게?',
-        doEvent: 'removeAll'
+        doEvent: 'sb.removeAll'
       })
       this.playSound('warning.mp3')
     },
@@ -268,7 +275,7 @@ export default {
       this.$refs.dialog.show({
         icon: 'exclamation-triangle',
         message: '정말로 모두 삭제하게?',
-        doEvent: 'clear'
+        doEvent: 'sb.clear'
       })
       this.playSound('warning.mp3')
     },
@@ -278,7 +285,7 @@ export default {
       this.playSound('done.mp3')
     },
     handleInnerScroll(event) {
-      this.sceneBoardInnerBoxScrollLeft = event.target.scrollLeft
+      this.innerScrollLeft = event.target.scrollLeft
     }
   }
 }
