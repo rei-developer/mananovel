@@ -19,7 +19,7 @@
       class='sub-event'
       @click='hide(null, true)'
     >
-      <font-awesome-icon :icon='isHide ? "eye-slash" : "eye"'/>
+      <font-awesome-icon :icon='isHidden ? "eye-slash" : "eye"'/>
     </div>
     <ul>
       <li
@@ -29,7 +29,7 @@
         @mousedown='dragMouseDown'
         @dblclick='doubleClick($event, item.id)'
         @contextmenu.self='contextmenu($event, item.id)'
-        v-for='item in columnData'
+        v-for='item in columns'
         :key='item.id'
       />
     </ul>
@@ -159,13 +159,13 @@ export default {
       type: String,
       default: null
     },
-    pureColumnData: {
+    pureColumns: {
       type: Array,
       default() {
         return []
       }
     },
-    isPureHide: {
+    isPureHidden: {
       type: Boolean,
       default: false
     }
@@ -173,31 +173,31 @@ export default {
   data() {
     return {
       name: this.pureName,
-      columnData: this.pureColumnData,
-      isHide: this.isPureHide
+      columns: this.pureColumns,
+      isHidden: this.isPureHidden
     }
   },
   watch: {
     pureName() {
       this.name = this.pureName
     },
-    pureColumnData() {
-      this.columnData = this.pureColumnData
+    pureColumns() {
+      this.columns = this.pureColumns
     },
-    isPureHide() {
-      this.isHide = this.isPureHide
+    isPureHidden() {
+      this.isHidden = this.isPureHidden
     }
   },
   methods: {
     getBlockClassList(id) {
       let classList = []
-      const findIndex = this.columnData
+      const findIndex = this.columns
         .findIndex(item => item.id === id)
       if (findIndex >= 0) {
-        const block = this.columnData[findIndex]
-        if (block.isView)
+        const block = this.columns[findIndex]
+        if (block.isViewed)
           classList.push('view')
-        if (!this.isHide) {
+        if (!this.isHidden) {
           if (block.isStartLine)
             classList.push('started')
           if (block.isEndLine)
@@ -217,21 +217,21 @@ export default {
       return classList
     },
     dragMouseDown(event) {
-      if (this.isHide)
+      if (this.isHidden)
         return
       event.preventDefault()
       document.onmousemove = this.elementDrag
       document.onmouseup = this.closeDragElement
     },
     elementDrag(event) {
-      if (this.isHide)
+      if (this.isHidden)
         return
       event.preventDefault()
       const id = Number(event.target.getAttribute('data-id'))
-      const findIndex = this.columnData
+      const findIndex = this.columns
         .findIndex((item) => item.id === id)
       if (findIndex >= 0) {
-        const block = this.columnData[findIndex]
+        const block = this.columns[findIndex]
         if (!block.isDragged)
           block.isDragged = true
       }
@@ -242,13 +242,13 @@ export default {
       document.onmousemove = null
     },
     view(id) {
-      for (let i = 0; i < this.columnData.length; i++) {
-        const item = this.columnData[i]
-        item.isView = item.id === id
+      for (let i = 0; i < this.columns.length; i++) {
+        const item = this.columns[i]
+        item.isViewed = item.id === id
       }
     },
     doubleClick(event, id) {
-      if (this.isHide)
+      if (this.isHidden)
         return
       alert(id)
     },
@@ -262,25 +262,25 @@ export default {
       this.$eventBus.$emit('remove', this.id)
     },
     hide(flag, soundFlag = false) {
-      this.isHide = flag ?? !this.isHide
+      this.isHidden = flag ?? !this.isHidden
       if (soundFlag)
         this.$eventBus.$emit('playSound', 'done.mp3')
-      this.$eventBus.$emit('hide', this.id, this.isHide)
+      this.$eventBus.$emit('hide', this.id, this.isHidden)
       this.release()
     },
     setStartAndEndLine() {
-      for (let i = 0; i < this.columnData.length; i++) {
-        const item = this.columnData[i]
+      for (let i = 0; i < this.columns.length; i++) {
+        const item = this.columns[i]
         item.isDraggedStartLine = false
         item.isDraggedEndLine = false
       }
-      for (let i = 0; i < this.columnData.length; i++) {
-        const item = this.columnData[i]
+      for (let i = 0; i < this.columns.length; i++) {
+        const item = this.columns[i]
         const prevItem = i !== 0
-          ? this.columnData[i - 1]
+          ? this.columns[i - 1]
           : false
-        const nextItem = i !== this.columnData.length - 1
-          ? this.columnData[i + 1]
+        const nextItem = i !== this.columns.length - 1
+          ? this.columns[i + 1]
           : false
         if ((!prevItem || !prevItem.isDragged) && item.isDragged)
           item.isDraggedStartLine = true
@@ -289,8 +289,8 @@ export default {
       }
     },
     visible(flag) {
-      for (let i = 0; i < this.columnData.length; i++) {
-        const item = this.columnData[i]
+      for (let i = 0; i < this.columns.length; i++) {
+        const item = this.columns[i]
         if (item.isDragged)
           item.isVisible = flag
         item.isStartLine = false
@@ -299,13 +299,13 @@ export default {
         item.isDraggedStartLine = false
         item.isDraggedEndLine = false
       }
-      for (let i = 0; i < this.columnData.length; i++) {
-        const item = this.columnData[i]
+      for (let i = 0; i < this.columns.length; i++) {
+        const item = this.columns[i]
         const prevItem = i !== 0
-          ? this.columnData[i - 1]
+          ? this.columns[i - 1]
           : false
-        const nextItem = i !== this.columnData.length - 1
-          ? this.columnData[i + 1]
+        const nextItem = i !== this.columns.length - 1
+          ? this.columns[i + 1]
           : false
         if ((!prevItem || !prevItem.isVisible) && item.isVisible)
           item.isStartLine = true
@@ -314,7 +314,7 @@ export default {
       }
     },
     release() {
-      this.columnData = this.columnData.map(item => {
+      this.columns = this.columns.map(item => {
         item.isDragged = false
         item.isDraggedStartLine = false
         item.isDraggedEndLine = false
@@ -322,7 +322,7 @@ export default {
       })
     },
     clear() {
-      this.columnData = this.columnData.map(item => {
+      this.columns = this.columns.map(item => {
         item.isStartLine = false
         item.isEndLine = false
         item.isDragged = false

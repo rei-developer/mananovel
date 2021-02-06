@@ -17,7 +17,7 @@
       class='sub-event'
       @click='hide'
     >
-      <font-awesome-icon :icon='isAllHide ? "eye-slash" : "eye"'/>
+      <font-awesome-icon :icon='isHiddenAll ? "eye-slash" : "eye"'/>
     </div>
     <ul>
       <li
@@ -105,7 +105,7 @@ export default {
       type: Number,
       default: 30
     },
-    isAllHide: {
+    isHiddenAll: {
       type: Boolean,
       default: false
     },
@@ -123,7 +123,7 @@ export default {
     for (let i = 1; i <= this.columnCount; i++)
       this.sceneBoardColumnList.push({
         id: i,
-        isView: i === 1
+        isViewed: i === 1
       })
   },
   methods: {
@@ -133,7 +133,7 @@ export default {
         .findIndex(item => item.id === id)
       if (findIndex >= 0) {
         const block = this.sceneBoardColumnList[findIndex]
-        if (block.isView)
+        if (block.isViewed)
           classList.push('view')
       }
       return classList
@@ -141,7 +141,7 @@ export default {
     click(event, id) {
       for (let i = 0; i < this.sceneBoardColumnList.length; i++) {
         const item = this.sceneBoardColumnList[i]
-        item.isView = item.id === id
+        item.isViewed = item.id === id
       }
       this.$eventBus.$emit('playSound', 'done.mp3')
       this.$eventBus.$emit('view', id)
@@ -154,11 +154,11 @@ export default {
       console.log(event)
     },
     remove() {
-      this.$eventBus.$emit('beforeAllRemove')
+      this.$eventBus.$emit('beforeRemoveAll')
     },
     hide() {
       this.$eventBus.$emit('playSound', 'done.mp3')
-      this.$eventBus.$emit('allHide', !this.isAllHide)
+      this.$eventBus.$emit('hideAll', !this.isHiddenAll)
     }
   }
 }
