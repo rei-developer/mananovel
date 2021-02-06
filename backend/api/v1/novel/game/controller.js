@@ -35,8 +35,7 @@ module.exports.getNovelScript = async ctx => {
     case 'CHOICE':
       const distanceSelectList = await getNovelSelectList(id, version, pageId, scriptIdOrSortNo)
       if (distanceSelectList) {
-        const select = distanceSelectList
-          ?.find(item => item.id === selectId)
+        const select = distanceSelectList.find(item => item.id === selectId)
         purePageId = select.novelPageMoveId
         pureScriptIdOrSortNo = select.novelScriptMoveId
       }
