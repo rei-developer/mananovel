@@ -1,16 +1,14 @@
 <template>
-  <div>
-    <header>
-      <ul>
-        <li>프로젝트(<u>P</u>)</li>
-        <li>편집(<u>E</u>)</li>
-        <li>보기(<u>V</u>)</li>
-        <li>게임(<u>G</u>)</li>
-        <li>도구(<u>T</u>)</li>
-        <li>도움말(<u>H</u>)</li>
-      </ul>
-    </header>
-  </div>
+  <header class='e-header'>
+    <ul>
+      <li>프로젝트(<u>P</u>)</li>
+      <li>편집(<u>E</u>)</li>
+      <li>보기(<u>V</u>)</li>
+      <li>게임(<u>G</u>)</li>
+      <li>도구(<u>T</u>)</li>
+      <li>도움말(<u>H</u>)</li>
+    </ul>
+  </header>
 </template>
 
 <style lang='less' scoped>
@@ -18,7 +16,7 @@
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
 
-header {
+header.e-header {
   width: 100%;
   color: #FFF;
   font-size: 13px;

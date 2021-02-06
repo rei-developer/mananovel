@@ -1,5 +1,5 @@
 <template>
-  <div class='content-box'>
+  <div class='e-sidebar-script-edit'>
     슬라이드바
   </div>
 </template>
@@ -9,7 +9,7 @@
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
 
-.content-box {
+.e-sidebar-script-edit {
   width: 400px;
   padding: .5rem;
   color: @font-color;

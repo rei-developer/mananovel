@@ -1,5 +1,5 @@
 <template>
-  <div class='bottom-box'>
+  <div class='e-scene-board-header'>
     <div
       class='list'
       @click='reverse'
@@ -39,7 +39,7 @@
 @view: #B2CCFF;
 @font-color: #EDE3EB;
 
-.bottom-box {
+.e-scene-board-header {
   display: flex;
   color: #fff;
   font-size: 12px;

@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <header>
-      <ul>
-        <li @contextmenu.prevent='test'>테스트</li>
-        <li>테스트</li>
-        <li class='active'>테스트</li>
-        <li>테스트</li>
-        <li>테스트</li>
-      </ul>
-    </header>
-  </div>
+  <header class='e-header-page'>
+    <ul>
+      <li @contextmenu.prevent='test'>테스트</li>
+      <li>테스트</li>
+      <li class='active'>테스트</li>
+      <li>테스트</li>
+      <li>테스트</li>
+    </ul>
+  </header>
 </template>
 
 <style lang='less' scoped>
@@ -17,7 +15,7 @@
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
 
-header {
+header.e-header-page {
   width: 100%;
   color: #FFF;
   font-size: 13px;

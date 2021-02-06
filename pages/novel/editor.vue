@@ -1,29 +1,29 @@
 <template>
-  <div @contextmenu.prevent>
-    <div class='content-box'>
+  <client-only @contextmenu.prevent>
+    <div class='e-content-box'>
       <main>
-        <div class='content'>
-          <novel-game-preview/>
+        <div class='e-content-wrapper'>
+          <novel-editor-content/>
         </div>
-        <div class='bottom'>
+        <div>
           <novel-editor-bottom-scene-board/>
         </div>
       </main>
-      <section class='sidebar'>
+      <section>
         <novel-editor-sidebar-script-edit/>
       </section>
     </div>
-  </div>
+  </client-only>
 </template>
 
 <style lang='less' scoped>
-.content-box {
+.e-content-box {
   display: flex;
   > main {
     flex: 1;
-    > .content {min-height: calc(100vh - 192px - 56px)}
+    > .e-content-wrapper {min-height: calc(100vh - 192px - 56px)}
   }
-  > section.sidebar {
+  > section {
     display: flex;
     justify-content: flex-end;
   }
@@ -31,15 +31,15 @@
 </style>
 
 <script>
-import NovelGamePreview from '@/components/novel/game/preview'
+import NovelEditorContent from '@/components/novel/editor/content'
 import NovelEditorSidebarScriptEdit from '@/components/novel/editor/sidebar/script-edit'
-import NovelEditorBottomSceneBoard from '~/components/novel/editor/bottom/scene-board'
+import NovelEditorBottomSceneBoard from '@/components/novel/editor/bottom/scene-board'
 
 export default {
   name: 'NovelEditor',
   layout: 'editor',
   components: {
-    NovelGamePreview,
+    NovelEditorContent,
     NovelEditorSidebarScriptEdit,
     NovelEditorBottomSceneBoard
   }

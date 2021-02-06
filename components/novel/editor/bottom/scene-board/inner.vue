@@ -1,6 +1,14 @@
 <template>
-  <div class='bottom-box'>
-    <div class='list'>{{ name }}</div>
+  <div class='e-scene-board-inner'>
+    <div class='list'>
+      <label>
+        <input
+          v-model='name'
+          :placeholder='`item${id}`'
+          @change='onChangeName'
+        />
+      </label>
+    </div>
     <div
       class='sub-event'
       @click='remove'
@@ -35,7 +43,7 @@
 @view-overlay: #B5B2FF;
 @font-color: #EDE3EB;
 
-.bottom-box {
+.e-scene-board-inner {
   display: flex;
   color: #fff;
   font-size: 12px;
@@ -53,11 +61,22 @@
     border-bottom: 1px dashed @primary;
   }
   > .list {
+    width: 100px;
     min-width: 100px;
     line-height: 21px;
     padding: 0 3px;
     border-right: 1px dashed @primary;
     border-bottom: 1px dashed @primary;
+    > label > input {
+      width: 100%;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      color: #FFF;
+      background-color: transparent;
+      outline: none;
+    }
   }
   > .sub-event {
     display: flex;
@@ -75,6 +94,7 @@
     list-style: none;
     cursor: cell;
     > li {
+      position: relative;
       width: 21px;
       height: 21px;
       border-right: 1px dashed @primary;
@@ -135,20 +155,37 @@ export default {
       type: Number,
       default: null
     },
-    name: {
+    pureName: {
       type: String,
       default: null
     },
-    columnData: {
+    pureColumnData: {
       type: Array,
       default() {
         return []
       }
+    },
+    isPureHide: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      isHide: false
+      name: this.pureName,
+      columnData: this.pureColumnData,
+      isHide: this.isPureHide
+    }
+  },
+  watch: {
+    pureName() {
+      this.name = this.pureName
+    },
+    pureColumnData() {
+      this.columnData = this.pureColumnData
+    },
+    isPureHide() {
+      this.isHide = this.isPureHide
     }
   },
   methods: {
@@ -215,6 +252,9 @@ export default {
         return
       alert(id)
     },
+    onChangeName() {
+      this.$eventBus.$emit('name', this.id, this.name)
+    },
     contextmenu(event, id) {
       console.log(id)
     },
@@ -225,7 +265,7 @@ export default {
       this.isHide = flag ?? !this.isHide
       if (soundFlag)
         this.$eventBus.$emit('playSound', 'done.mp3')
-      this.$eventBus.$emit('hide')
+      this.$eventBus.$emit('hide', this.id, this.isHide)
       this.release()
     },
     setStartAndEndLine() {
