@@ -67,8 +67,13 @@ import Dialog from '@/components/common/dialog'
 import NovelEditorBottomSceneBoardHeader from '@/components/novel/editor/bottom/scene-board/header'
 import NovelEditorBottomSceneBoardInner from '@/components/novel/editor/bottom/scene-board/inner'
 import EButton from '@/components/novel/editor/common/button'
+import indexedDB from '@/util/indexed-db'
 
-const eventBusPrefix = 'sb'
+const DATABASE = 'mananovel'
+const DB_VERSION = 1
+const EVENT_BUS_PREFIX = 'sb'
+
+let db
 
 export default {
   name: 'NovelEditorBottomSceneBoard',
@@ -80,13 +85,14 @@ export default {
   },
   data() {
     return {
-      pageId: 0,
+      pageId: 1,
       viewId: 0,
       rowCount: 1,
       columnCount: 100,
       innerScrollLeft: 0,
       dataSource: [],
       bottomMenu: [
+        {label: '임시 저장', beep: true, function: () => this.savePage()},
         {label: '목록 추가', beep: true, function: () => this.beforeAddRow()},
         {label: '활성화', beep: true, function: () => this.visible()},
         {label: '비활성화', beep: true, function: () => this.visible(false)},
@@ -100,7 +106,7 @@ export default {
   async created() {
     await this.$nextTick()
     document.querySelector('.scene-board-box > .inner').addEventListener('scroll', this.handleInnerScroll)
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$on(`${p}view`, id => this.view(id))
     this.$eventBus.$on(`${p}openSidebar`, (rowId, columnId) => this.openSidebar(rowId, columnId))
     this.$eventBus.$on(`${p}name`, (id, name) => this.name(id, name))
@@ -114,12 +120,23 @@ export default {
     this.$eventBus.$on(`${p}clear`, () => this.clear())
     this.$eventBus.$on(`${p}update`, (rowId, columnId, data, isAllApplyWithVisible) => this.update(rowId, columnId, data, isAllApplyWithVisible))
   },
-  mounted() {
-    this.changePage(1)
+  async mounted() {
+    const doInit = await indexedDB.init('PAGE')
+    if (doInit.status === 'FAIL') {
+      alert(doInit.message)
+      return window.close()
+    }
+    db = doInit.result
+    console.log(doInit.result)
+    const doLoadPage = await this.loadPage()
+    if (doLoadPage.status === 'DONE')
+      this.dataSource = doLoadPage.result.data
+    else
+      this.addRow()
     this.commit('setLoading', false)
   },
   beforeDestroy() {
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$off(`${p}view`)
     this.$eventBus.$off(`${p}openSidebar`)
     this.$eventBus.$off(`${p}name`)
@@ -183,17 +200,24 @@ export default {
       if (!this.getState('isLoading'))
         this.commit('setUnsaved', true)
       this.$forceUpdate()
+      this.savePage()
       this.$eventBus.$emit('cs.console', 'success', `${rowId}번째 항목을 추가했습니다.`)
     },
-    savePage(id) {
-
+    async loadPage(id = this.pageId, isNowPageSave = false) {
+      if (isNowPageSave)
+        await this.savePage(this.pageId)
+      return await indexedDB.load(db, 'PAGE', id)
     },
-    changePage(id) {
-      this.$eventBus.$emit('cs.console', 'info', '페이지를 임시로 저장합니다.')
-      // TODO : 만약 현재 보고 있는 페이지가 있다면 일단 임시 저장
-      this.savePage(id)
-      // TODO : 데이터를 불러와서, 있으면 loadData 없으면 addRow
-      this.addRow()
+    async savePage(id = this.pageId) {
+      const doLoadPage = await this.loadPage(id)
+      if (doLoadPage.status === 'DONE')
+        await this.deletePage(doLoadPage.result.id)
+      const insertId = await indexedDB.save(db, 'PAGE', id, this.dataSource)
+      if (!insertId)
+        return this.$eventBus.$emit('cs.console', 'error', `${id}번째 페이지 저장 실패`)
+    },
+    async deletePage(id = this.pageId) {
+      return await indexedDB.delete(db, 'PAGE', id)
     },
     view(id) {
       this.viewId = id
@@ -346,12 +370,14 @@ export default {
         delete data.id
         delete data.isOpened
         item.columns = item.columns.map(column => {
-          column = {
-            id: column.id || savedColumnId,
-            ...data
+          if (column.isVisible) {
+            column = {
+              id: column.id || savedColumnId,
+              ...data
+            }
+            if (column.id === columnId)
+              column.isOpened = 1
           }
-          if (column.id === columnId)
-            column.isOpened = 1
           return column
         })
       } else {

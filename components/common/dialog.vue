@@ -18,6 +18,7 @@
           </div>
         </div>
         <div class='content'>
+          <slot v-if='!message'/>
           {{ message }}
         </div>
         <div class='footer'>

@@ -31,7 +31,7 @@
 <script>
 import NovelEditorSidebarScriptEditTemplateScript from '@/components/novel/editor/sidebar/script-edit/template/script'
 
-const eventBusPrefix = 'se'
+const EVENT_BUS_PREFIX = 'se'
 
 export default {
   name: 'NovelEditorSidebarScriptEdit',
@@ -46,11 +46,11 @@ export default {
     }
   },
   created() {
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$on(`${p}openSidebar`, (rowId, type, data) => this.openSidebar(rowId, type, data))
   },
   beforeDestroy() {
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$off(`${p}openSidebar`)
   },
   methods: {

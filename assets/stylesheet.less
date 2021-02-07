@@ -71,6 +71,39 @@ span.highlight {
   &:hover {color: transparent}
 }
 
+.e-section-body {
+  > .item {
+    &:not(:last-child) {margin-bottom: .5rem}
+    > .label {
+      display: flex;
+      height: 24px;
+      margin: 0 0 5px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, .2);
+      > .right {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+        > .e-button:not(:last-child) {margin-right: 5px}
+      }
+    }
+    &.accordion {
+      > .label {
+        border-bottom: 1px dashed rgba(255, 255, 255, .2);
+        > svg {margin: 4px 0 0 4px}
+      }
+      &.hide {
+        > .label > .right,
+        > .content {display: none}
+      }
+    }
+  }
+  > hr {
+    margin: 0 0 5px;
+    border-top: 1px solid rgba(255, 255, 255, .2);
+  }
+}
+
 .e-button-group {
   display: flex;
   &.right {

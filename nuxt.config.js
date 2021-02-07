@@ -24,6 +24,7 @@ module.exports = {
     {src: '@/plugins/toast'},
     {src: '@/plugins/vue-uuid'},
     {src: '@/plugins/vue-hcaptcha'},
+    {src: '@/plugins/vue-cryptojs'},
     {src: '@/plugins/v-viewer.js', mode: 'client'}
   ],
   components: true,

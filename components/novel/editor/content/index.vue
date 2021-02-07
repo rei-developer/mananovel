@@ -26,7 +26,7 @@
 import NovelEditorContentTop from '@/components/novel/editor/content/top'
 import NovelEditorContentPreview from '@/components/novel/editor/content/preview'
 
-const eventBusPrefix = 'c'
+const EVENT_BUS_PREFIX = 'c'
 
 export default {
   name: 'NovelEditorContent',
@@ -35,11 +35,11 @@ export default {
     NovelEditorContentPreview
   },
   created() {
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$on(`${p}zoom`, value => this.setZoom(value))
   },
   beforeDestroy() {
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$off(`${p}zoom`)
   },
   methods: {

@@ -94,7 +94,7 @@
 </style>
 
 <script>
-const eventBusPrefix = 'cs'
+const EVENT_BUS_PREFIX = 'cs'
 
 export default {
   name: 'NovelEditorSidebarConsole',
@@ -113,14 +113,14 @@ export default {
     }
   },
   created() {
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$on(`${p}getPage`, page => this.getPage(page))
     this.$eventBus.$on(`${p}getRow`, row => this.getRow(row))
     this.$eventBus.$on(`${p}getRowAndSceneId`, (row, sceneId) => this.getRowAndSceneId(row, sceneId))
     this.$eventBus.$on(`${p}console`, (type = 'info', text = '', color = null) => this.console(type, text, color))
   },
   beforeDestroy() {
-    const p = `${eventBusPrefix}.`
+    const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$off(`${p}getPage`)
     this.$eventBus.$off(`${p}getRow`)
     this.$eventBus.$off(`${p}getRowAndSceneId`)
