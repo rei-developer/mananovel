@@ -22,11 +22,6 @@ header.e-header {
   font-size: 13px;
   background: @primary;
   cursor: default;
-  -ms-user-select: none;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
   > ul {
     display: flex;
     height: 28px;
@@ -37,6 +32,7 @@ header.e-header {
     list-style: none;
     > li {
       padding: 0 .4rem;
+      color: #333;
       &:active, &.active {
         color: @font-color;
         background: @primary-hover;

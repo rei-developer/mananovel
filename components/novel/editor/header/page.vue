@@ -21,11 +21,6 @@ header.e-header-page {
   font-size: 13px;
   background: @primary;
   cursor: default;
-  -ms-user-select: none;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
   > ul {
     display: flex;
     height: 28px;
@@ -36,14 +31,13 @@ header.e-header-page {
     border-bottom: 1px solid @primary-hover;
     > li {
       padding: 0 .4rem;
+      color: #333;
       &:active, &.active {
         margin-bottom: -1px;
         color: @primary-hover;
         background: rgba(255, 255, 255, .4);
       }
-      &.active {
-        border-bottom: 4px solid @primary-hover;
-      }
+      &.active {border-bottom: 4px solid @primary-hover}
       &:hover {background: rgba(255, 255, 255, .2)}
     }
   }

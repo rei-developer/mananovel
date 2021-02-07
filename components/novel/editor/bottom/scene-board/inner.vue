@@ -52,11 +52,6 @@
   color: #fff;
   font-size: 12px;
   background: #333;
-  -ms-user-select: none;
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
   > .list,
   > .sub-event {
     min-width: 21px;
