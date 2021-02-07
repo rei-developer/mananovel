@@ -138,13 +138,6 @@ export default {
       return classList
     },
     onClickBlock(id, soundFlag = true) {
-      for (let i = 0; i < this.columns.length; i++) {
-        const item = this.columns[i]
-        item.id === id
-          ? item.isViewed = 1
-          : delete item.isViewed
-      }
-      this.$forceUpdate()
       if (soundFlag)
         this.$eventBus.$emit('sb.playSound', 'done.mp3')
       this.$eventBus.$emit('sb.view', id)
@@ -159,6 +152,15 @@ export default {
     },
     onClickRemove() {
       this.$eventBus.$emit('sb.beforeRemoveAll')
+    },
+    view(id) {
+      for (let i = 0; i < this.columns.length; i++) {
+        const item = this.columns[i]
+        item.id === id
+          ? item.isViewed = 1
+          : delete item.isViewed
+      }
+      this.$forceUpdate()
     },
     onKeyPress(keyCode) {
       const item = this.columns

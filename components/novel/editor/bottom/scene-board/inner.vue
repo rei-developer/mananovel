@@ -265,8 +265,9 @@ export default {
     onDoubleClick(event, id) {
       if (this.isHidden)
         return
-      this.$eventBus.$emit('cs.getRowAndSceneId', {id: this.id, name: this.name}, id)
+      this.$eventBus.$emit('sb.view', id)
       this.$eventBus.$emit('sb.openSidebar', this.id, id)
+      this.$eventBus.$emit('cs.getRowAndSceneId', {id: this.id, name: this.name}, id)
     },
     onContextMenu(event, id) {
       console.log(id)

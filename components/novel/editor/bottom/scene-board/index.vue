@@ -4,6 +4,7 @@
     <div class='scene-board-box'>
       <header :style='{marginLeft: `-${innerScrollLeft}px`}'>
         <novel-editor-bottom-scene-board-header
+          ref='sceneBoardHeader'
           :columnCount='columnCount'
           :isHiddenAll='isHiddenAll'
           :isReverse='isReverse'
@@ -223,6 +224,7 @@ export default {
       this.viewId = id
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].view(id))
+      this.$refs.sceneBoardHeader.view(id)
     },
     openSidebar(rowId, columnId) {
       const item = this.dataSource

@@ -340,7 +340,7 @@ export default {
           path: '/novel/editor',
           query: {'gameId': 'test'}
         })
-      window.open(routeData.href, '_blank', 'width=1280,height=720,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0')
+      window.open(routeData.href, '_blank', `width=${screen.width},height=${screen.height}`)
     },
     onSidebarClick() {
       this.isSidebar = !this.isSidebar
