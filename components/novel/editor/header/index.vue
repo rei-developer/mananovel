@@ -28,7 +28,7 @@ header.e-header {
     line-height: 26px;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid @primary-hover;
+    border-bottom: 1px solid #333;
     list-style: none;
     > li {
       padding: 0 .4rem;

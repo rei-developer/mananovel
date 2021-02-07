@@ -12,7 +12,7 @@
 .e-content {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 192px - 56px);
+  height: calc(100vh - 189px - 56px);
   > .content-preview-wrapper {
     display: flex;
     flex: 1;

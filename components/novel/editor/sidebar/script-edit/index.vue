@@ -1,5 +1,5 @@
 <template>
-  <div class='e-sidebar-script-edit'>
+  <div class='e-sidebar-script-edit custom-scroll-box'>
     <novel-editor-sidebar-script-edit-template-script
       :rowId='rowId'
       :type='type'
@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: calc(100vh - 192px - 56px);
+  height: calc(100vh - 189px - 56px);
   padding: .5rem;
   color: @font-color;
   font-size: 13px;

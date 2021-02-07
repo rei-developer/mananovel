@@ -71,6 +71,15 @@ span.highlight {
   &:hover {color: transparent}
 }
 
+.e-button-group {
+  display: flex;
+  &.right {
+    flex: 1;
+    justify-content: flex-end;
+  }
+  > .e-button:not(:last-child) {margin-right: 5px}
+}
+
 @keyframes fadein {
   from {opacity: 0}
   to {opacity: 1}

@@ -24,17 +24,17 @@
       </div>
     </div>
     <footer>
-      <b-button
-        squared
-        size='sm'
-        variant='primary'
-        @click='item.function'
-        v-for='(item, index) in bottomMenu'
-        :key='index'
-      >
-        {{ item.label }}
-      </b-button>
-      {{ $store.state.novel.editor.isLoading }}
+      <div class='e-button-group'>
+        <e-button
+          size='lg'
+          :beep='item.beep'
+          @click='item.function'
+          v-for='(item, index) in bottomMenu'
+          :key='index'
+        >
+          {{ item.label }}
+        </e-button>
+      </div>
     </footer>
   </div>
 </template>
@@ -57,10 +57,7 @@
     }
     > .inner {height: 120px}
   }
-  > footer {
-    padding: .5rem;
-    > button:not(:last-child) {margin-right: .25rem}
-  }
+  > footer {padding: .5rem}
 }
 </style>
 
@@ -69,6 +66,7 @@ import _ from 'lodash'
 import Dialog from '@/components/common/dialog'
 import NovelEditorBottomSceneBoardHeader from '@/components/novel/editor/bottom/scene-board/header'
 import NovelEditorBottomSceneBoardInner from '@/components/novel/editor/bottom/scene-board/inner'
+import EButton from '@/components/novel/editor/common/button'
 
 const eventBusPrefix = 'sb'
 
@@ -77,7 +75,8 @@ export default {
   components: {
     Dialog,
     NovelEditorBottomSceneBoardHeader,
-    NovelEditorBottomSceneBoardInner
+    NovelEditorBottomSceneBoardInner,
+    EButton
   },
   data() {
     return {
@@ -88,11 +87,11 @@ export default {
       innerScrollLeft: 0,
       dataSource: [],
       bottomMenu: [
-        {label: '목록 추가', function: () => this.beforeAddRow()},
-        {label: '활성화', function: () => this.visible()},
-        {label: '비활성화', function: () => this.visible(false)},
-        {label: '모두 비활성화', function: () => this.beforeClear()},
-        {label: '드래그 해제', function: () => this.release()}
+        {label: '목록 추가', beep: true, function: () => this.beforeAddRow()},
+        {label: '활성화', beep: true, function: () => this.visible()},
+        {label: '비활성화', beep: true, function: () => this.visible(false)},
+        {label: '모두 비활성화', beep: false, function: () => this.beforeClear()},
+        {label: '드래그 해제', beep: true, function: () => this.release()}
       ],
       isReverse: false,
       isHiddenAll: false
@@ -167,7 +166,6 @@ export default {
       this.getHideCount()
       if (this.viewId > 0)
         this.view(this.viewId)
-      this.playSound('done.mp3')
     },
     addRow(rowId = 1, type = 'script', isRequired = true) {
       let columns = []
@@ -233,14 +231,12 @@ export default {
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].visible(flag))
       this.commit('setUnsaved', true)
-      this.playSound('done.mp3')
       this.$eventBus.$emit('cs.console', 'success', `드래그한 컬럼들을 ${flag ? '' : '비'}활성화했습니다.`)
     },
     release() {
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].release())
       this.commit('setUnsaved', true)
-      this.playSound('done.mp3')
       this.$eventBus.$emit('cs.console', 'success', '드래그를 모두 해제했습니다.')
     },
     reverse() {
@@ -292,7 +288,6 @@ export default {
         this.rowCount = this.dataSource.length
       }
       this.commit('setUnsaved', true)
-      this.playSound('done.mp3')
       this.$eventBus.$emit('cs.console', 'success', `${id}번째 항목을 삭제했습니다.`)
     },
     beforeRemoveAll() {
@@ -325,7 +320,6 @@ export default {
       this.rowCount = this.dataSource.length
       this.isHiddenAll = false
       this.commit('setUnsaved', true)
-      this.playSound('done.mp3')
       this.$eventBus.$emit('cs.console', 'success', '모든 항목을 삭제했습니다.')
     },
     beforeClear() {
@@ -340,7 +334,6 @@ export default {
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].clear())
       this.commit('setUnsaved', true)
-      this.playSound('done.mp3')
       this.$eventBus.$emit('cs.console', 'success', '모든 항목을 비활성화했습니다.')
     },
     update(rowId, columnId, data, isAllApplyWithVisible) {

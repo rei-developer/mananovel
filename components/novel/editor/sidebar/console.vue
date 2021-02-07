@@ -36,14 +36,14 @@
 @font-color: #EDE3EB;
 
 .e-sidebar-console {
-  height: 192px;
+  height: 189px;
   border: 1px solid @primary;
   background-color: #333;
   > .content {
-    height: 159px;
+    height: 156px;
     margin: 5px;
     padding: 3px;
-    border: 1px solid @primary;
+    border: 3px double @primary;
     > ul {
       display: flex;
       margin: 0 0 2px;

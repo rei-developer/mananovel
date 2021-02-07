@@ -1,9 +1,9 @@
 <template>
   <header class='e-header-page'>
     <ul>
-      <li @contextmenu.prevent='test'>테스트</li>
+      <li class='active' @contextmenu.prevent='test'>테스트</li>
       <li>테스트</li>
-      <li class='active'>테스트</li>
+      <li>테스트</li>
       <li>테스트</li>
       <li>테스트</li>
     </ul>
@@ -28,7 +28,7 @@ header.e-header-page {
     margin: 0;
     padding: 0;
     list-style: none;
-    border-bottom: 1px solid @primary-hover;
+    border-bottom: 1px solid #333;
     > li {
       padding: 0 .4rem;
       color: #333;
@@ -37,7 +37,10 @@ header.e-header-page {
         color: @primary-hover;
         background: rgba(255, 255, 255, .4);
       }
-      &.active {border-bottom: 4px solid @primary-hover}
+      &.active {
+        font-weight: bold;
+        border-bottom: 4px solid @primary-hover;
+      }
       &:hover {background: rgba(255, 255, 255, .2)}
     }
   }

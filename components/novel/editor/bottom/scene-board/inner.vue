@@ -189,6 +189,7 @@ export default {
   },
   data() {
     return {
+      tempClickedId: 1,
       name: this.pureName,
       savedName: this.pureName,
       columns: this.pureColumns,
@@ -241,7 +242,19 @@ export default {
       this.$eventBus.$emit('sb.name', this.id, this.name)
     },
     onClickBlock(event) {
-      this.onMouseMove(event)
+      const id = Number(event.target.getAttribute('data-id'))
+      if (event.shiftKey) {
+        const startId = Math.min(id, this.tempClickedId)
+        const endId = Math.max(id, this.tempClickedId)
+        this.columns.map(item => {
+          if (item.id >= startId && item.id <= endId && !item.isDragged)
+            item.isDragged = 1
+        })
+        this.setStartAndEnd()
+      } else {
+        this.tempClickedId = id
+        this.onMouseMove(event)
+      }
     },
     onClickHide() {
       this.hide(null, true)

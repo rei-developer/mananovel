@@ -11,17 +11,23 @@
         autofocus
       />
     </div>
-    <b-button
-      @click='onClickSave'
-    >
-      저장
-    </b-button>
+    <hr/>
     <b-form-checkbox
       v-model='isAllApplyWithVisible'
       value='accepted'
+      switch
     >
       활성화된 모든 컬럼에 동일하게 적용
     </b-form-checkbox>
+    <div class='e-button-group right'>
+      <e-button
+        icon='save'
+        @click='onClickSave'
+        beep
+      >
+        적용
+      </e-button>
+    </div>
     {{ data }}
   </div>
 </template>
@@ -50,12 +56,19 @@
       &:focus {border-style: dashed}
     }
   }
+  > hr {
+    margin: 0 0 5px;
+    border-top: 1px solid rgba(255, 255, 255, .2);
+  }
 }
 </style>
 
 <script>
+import EButton from '@/components/novel/editor/common/button'
+
 export default {
   name: 'NovelEditorSidebarScriptEditTemplateScript',
+  components: {EButton},
   props: {
     rowId: {
       type: Number,

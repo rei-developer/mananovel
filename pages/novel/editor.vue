@@ -29,7 +29,7 @@
   > main,
   > section {
     flex: 1;
-    > .e-content-wrapper {min-height: calc(100vh - 192px - 56px)}
+    > .e-content-wrapper {min-height: calc(100vh - 189px - 56px)}
   }
 }
 </style>

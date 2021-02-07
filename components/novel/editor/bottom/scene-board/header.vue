@@ -23,7 +23,7 @@
       <li
         :class='[getBlockClassList(item.id)]'
         :data-id='item.id'
-        @click='onClickBlock($event, item.id)'
+        @click='onClickBlock(item.id)'
         v-for='item in columns'
         :key='item.id'
       >
@@ -117,6 +117,13 @@ export default {
   mounted() {
     for (let id = 1; id <= this.columnCount; id++)
       this.columns.push({id})
+    const self = this
+    window.addEventListener('keydown', event => {
+      if (event.keyCode === 37)
+        self.onKeyPress('LEFT')
+      if (event.keyCode === 39)
+        self.onKeyPress('RIGHT')
+    })
   },
   methods: {
     getBlockClassList(id) {
@@ -130,7 +137,7 @@ export default {
       }
       return classList
     },
-    onClickBlock(event, id) {
+    onClickBlock(id, soundFlag = true) {
       for (let i = 0; i < this.columns.length; i++) {
         const item = this.columns[i]
         item.id === id
@@ -138,7 +145,8 @@ export default {
           : delete item.isViewed
       }
       this.$forceUpdate()
-      this.$eventBus.$emit('sb.playSound', 'done.mp3')
+      if (soundFlag)
+        this.$eventBus.$emit('sb.playSound', 'done.mp3')
       this.$eventBus.$emit('sb.view', id)
     },
     onClickReverse() {
@@ -151,6 +159,16 @@ export default {
     },
     onClickRemove() {
       this.$eventBus.$emit('sb.beforeRemoveAll')
+    },
+    onKeyPress(keyCode) {
+      const item = this.columns
+        .find(item => item.isViewed)
+      if (!item)
+        return
+      const moveId = keyCode === 'LEFT' ? item.id - 1 : item.id + 1
+      if (moveId < 1 || moveId > this.columnCount)
+        return
+      this.onClickBlock(moveId, false)
     }
   }
 }

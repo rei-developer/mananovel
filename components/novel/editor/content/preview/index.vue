@@ -1,7 +1,7 @@
 <template>
   <div class='e-content-preview'>
     <div :style='{zoom}'>
-      테스트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다트입니다
+      본 화면은 테스트입니다. (화면 미리보기 개발중)
     </div>
   </div>
 </template>
