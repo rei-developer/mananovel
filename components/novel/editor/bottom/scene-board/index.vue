@@ -26,11 +26,25 @@
     </div>
     <footer>
       <div class='e-button-group'>
+        <e-select
+          size='lg'
+          v-model='selectedAddRow'
+          @change='onChangeAddRow'
+        >
+          <option :value='null'>새 액션</option>
+          <option
+            :value='item.value'
+            v-for='(item, index) in addRowOptionList'
+            :key='index'
+          >
+            {{ item.label }}
+          </option>
+        </e-select>
         <e-button
           size='lg'
           :beep='item.beep'
           @click='item.function'
-          v-for='(item, index) in bottomMenu'
+          v-for='(item, index) in bottomMenuList'
           :key='index'
         >
           {{ item.label }}
@@ -58,7 +72,10 @@
     }
     > .inner {height: 120px}
   }
-  > footer {padding: .5rem}
+  > footer {
+    padding: .5rem;
+    > .e-button-group > select {margin-right: 5px}
+  }
 }
 </style>
 
@@ -67,11 +84,11 @@ import _ from 'lodash'
 import Dialog from '@/components/common/dialog'
 import NovelEditorBottomSceneBoardHeader from '@/components/novel/editor/bottom/scene-board/header'
 import NovelEditorBottomSceneBoardInner from '@/components/novel/editor/bottom/scene-board/inner'
+import ESelect from '@/components/novel/editor/common/select'
 import EButton from '@/components/novel/editor/common/button'
+import NovelEditorConsole from '@/mixins/novel/editor/console'
 import indexedDB from '@/util/indexed-db'
 
-const DATABASE = 'mananovel'
-const DB_VERSION = 1
 const EVENT_BUS_PREFIX = 'sb'
 
 let db
@@ -82,8 +99,10 @@ export default {
     Dialog,
     NovelEditorBottomSceneBoardHeader,
     NovelEditorBottomSceneBoardInner,
+    ESelect,
     EButton
   },
+  mixins: [NovelEditorConsole],
   data() {
     return {
       pageId: 1,
@@ -92,14 +111,19 @@ export default {
       columnCount: 100,
       innerScrollLeft: 0,
       dataSource: [],
-      bottomMenu: [
-        {label: '임시 저장', beep: true, function: () => this.savePage()},
-        {label: '목록 추가', beep: true, function: () => this.beforeAddRow()},
+      addRowOptionList: [
+        {label: '액터', value: 'actor', max: 4},
+        {label: '자바스크립트', value: 'js', max: 1}
+      ],
+      bottomMenuList: [
+        {label: '추가', beep: true, function: () => this.beforeAddRow()},
+        {label: '저장', beep: true, function: () => this.savePage()},
         {label: '활성화', beep: true, function: () => this.visible()},
         {label: '비활성화', beep: true, function: () => this.visible(false)},
         {label: '모두 비활성화', beep: false, function: () => this.beforeClear()},
         {label: '드래그 해제', beep: true, function: () => this.release()}
       ],
+      selectedAddRow: null,
       isReverse: false,
       isHiddenAll: false
     }
@@ -108,18 +132,21 @@ export default {
     await this.$nextTick()
     document.querySelector('.scene-board-box > .inner').addEventListener('scroll', this.handleInnerScroll)
     const p = `${EVENT_BUS_PREFIX}.`
-    this.$eventBus.$on(`${p}view`, id => this.view(id))
-    this.$eventBus.$on(`${p}openSidebar`, (rowId, columnId) => this.openSidebar(rowId, columnId))
-    this.$eventBus.$on(`${p}name`, (id, name) => this.name(id, name))
-    this.$eventBus.$on(`${p}reverse`, () => this.reverse())
-    this.$eventBus.$on(`${p}playSound`, name => this.playSound(name))
-    this.$eventBus.$on(`${p}hide`, (id, flag) => this.hide(id, flag))
-    this.$eventBus.$on(`${p}hideAll`, flag => this.hideAll(flag))
-    this.$eventBus.$on(`${p}remove`, id => this.remove(id))
-    this.$eventBus.$on(`${p}beforeRemoveAll`, () => this.beforeRemoveAll())
-    this.$eventBus.$on(`${p}removeAll`, () => this.removeAll())
-    this.$eventBus.$on(`${p}clear`, () => this.clear())
-    this.$eventBus.$on(`${p}update`, (rowId, columnId, data, isAllApplyWithVisible) => this.update(rowId, columnId, data, isAllApplyWithVisible))
+    const onEventBusList = [
+      ['view', id => this.view(id)],
+      ['openSidebar', (rowId, columnId) => this.openSidebar(rowId, columnId)],
+      ['name', (id, name) => this.name(id, name)],
+      ['reverse', () => this.reverse()],
+      ['playSound', name => this.playSound(name)],
+      ['hide', (id, flag) => this.hide(id, flag)],
+      ['hideAll', flag => this.hideAll(flag)],
+      ['remove', id => this.remove(id)],
+      ['beforeRemoveAll', () => this.beforeRemoveAll()],
+      ['removeAll', () => this.removeAll()],
+      ['clear', () => this.clear()],
+      ['update', (rowId, columnId, data, isAllApplyWithVisible) => this.update(rowId, columnId, data, isAllApplyWithVisible)]
+    ]
+    onEventBusList.map(item => this.$eventBus.$on(`${p}${item[0]}`, item[1]))
   },
   async mounted() {
     const doInit = await indexedDB.init('PAGE')
@@ -130,26 +157,15 @@ export default {
     db = doInit.result
     console.log(doInit.result)
     const doLoadPage = await this.loadPage()
-    if (doLoadPage.status === 'DONE')
-      this.dataSource = doLoadPage.result.data
-    else
-      this.addRow()
+    doLoadPage.status === 'DONE'
+      ? this.dataSource = doLoadPage.result.data
+      : this.addRow(true)
     this.commit('setLoading', false)
   },
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
-    this.$eventBus.$off(`${p}view`)
-    this.$eventBus.$off(`${p}openSidebar`)
-    this.$eventBus.$off(`${p}name`)
-    this.$eventBus.$off(`${p}reverse`)
-    this.$eventBus.$off(`${p}playSound`)
-    this.$eventBus.$off(`${p}hide`)
-    this.$eventBus.$off(`${p}hideAll`)
-    this.$eventBus.$off(`${p}remove`)
-    this.$eventBus.$off(`${p}beforeRemoveAll`)
-    this.$eventBus.$off(`${p}removeAll`)
-    this.$eventBus.$off(`${p}clear`)
-    this.$eventBus.$off(`${p}update`)
+    const offEventBusList = ['view', 'openSidebar', 'name', 'reverse', 'playSound', 'hide', 'hideAll', 'remove', 'beforeRemoveAll', 'removeAll', 'clear', 'update']
+    offEventBusList.map(item => this.$eventBus.$off(`${p}${item}`))
   },
   async destroyed() {
     await this.$nextTick()
@@ -171,21 +187,29 @@ export default {
       this.$store.commit(`novel/editor/${key}`, value)
     },
     async beforeAddRow() {
-      if (this.rowCount >= 15) {
-        this.playSound('error.mp3')
-        return this.$toast.error('15개까지만 생성할 수 있어.')
-      }
+      if (this.rowCount >= 15)
+        return this.throwConsole('error', '액션은 최대 15개까지 생성할 수 있어.')
+      if (!this.selectedAddRow)
+        return this.throwConsole('error', '새 액션을 선택하지 않았잖아.')
+      const findItem = this.addRowOptionList
+        .find(item => item.value === this.selectedAddRow)
+      if (!findItem)
+        return
+      const count = this.dataSource
+        .filter(item => item.type === this.selectedAddRow)?.length
+      if (!!findItem.max && count >= findItem?.max)
+        return this.throwConsole('error', `${findItem?.label} 액션은 ${findItem?.max}개 이상 생성할 수 없어.`)
       const id = this.dataSource.length > 0
         ? _.maxBy(this.dataSource, 'id').id
         : this.dataSource.length
-      this.addRow(id + 1, 'empty', false)
+      this.addRow(id + 1, this.selectedAddRow)
       await this.$nextTick()
       this.rowCount = this.dataSource.length
       this.getHideCount()
       if (this.viewId > 0)
         this.view(this.viewId)
     },
-    addRow(rowId = 1, type = 'script', isRequired = true) {
+    addRow(rowId = 1, type = 'script', isRequired = false) {
       let columns = []
       for (let id = 1; id <= this.columnCount; id++)
         columns.push({id})
@@ -202,7 +226,7 @@ export default {
         this.commit('setUnsaved', true)
       this.$forceUpdate()
       this.savePage()
-      this.$eventBus.$emit('cs.console', 'success', `${rowId}번째 항목을 추가했습니다.`)
+      this.$eventBus.$emit('cs.console', 'success', `${rowId}번째 액션을 추가했습니다.`)
     },
     async loadPage(id = this.pageId, isNowPageSave = false) {
       if (isNowPageSave)
@@ -251,13 +275,13 @@ export default {
         return
       item.name = name
       this.commit('setUnsaved', true)
-      this.$eventBus.$emit('cs.console', 'success', `${id}번째 항목의 이름을 ${name}(으)로 수정했습니다.`)
+      this.$eventBus.$emit('cs.console', 'success', `${id}번째 액션의 이름을 ${name}(으)로 수정했습니다.`)
     },
     visible(flag = true) {
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].visible(flag))
       this.commit('setUnsaved', true)
-      this.$eventBus.$emit('cs.console', 'success', `드래그한 컬럼들을 ${flag ? '' : '비'}활성화했습니다.`)
+      this.$eventBus.$emit('cs.console', 'success', `드래그한 씬들을 ${flag ? '' : '비'}활성화했습니다.`)
     },
     release() {
       this.dataSource
@@ -269,7 +293,7 @@ export default {
       this.isReverse = !this.isReverse
       this.dataSource = this.dataSource.reverse()
       this.commit('setUnsaved', true)
-      this.$eventBus.$emit('cs.console', 'success', `항목을 ${this.isReverse ? '내림' : '오름'}차순으로 변경했습니다.`)
+      this.$eventBus.$emit('cs.console', 'success', `액션을 ${this.isReverse ? '내림' : '오름'}차순으로 변경했습니다.`)
     },
     playSound(name) {
       const sound = new Audio(`/sound/${name}`)
@@ -283,7 +307,7 @@ export default {
       item.isHidden = flag
       this.commit('setUnsaved', true)
       this.getHideCount()
-      this.$eventBus.$emit('cs.console', 'success', `${id}번째 항목을 ${flag ? '보이게 했' : '가렸'}습니다.`)
+      this.$eventBus.$emit('cs.console', 'success', `${id}번째 액션을 ${flag ? '보이게 했' : '가렸'}습니다.`)
     },
     hideAll(flag) {
       if (this.rowCount < 1) {
@@ -293,7 +317,7 @@ export default {
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].hide(flag))
       this.commit('setUnsaved', true)
-      this.$eventBus.$emit('cs.console', 'success', `모든 항목을 ${flag ? '보이게 했' : '가렸'}습니다.`)
+      this.$eventBus.$emit('cs.console', 'success', `모든 액션을 ${flag ? '보이게 했' : '가렸'}습니다.`)
     },
     remove(id) {
       const item = this.dataSource
@@ -314,7 +338,7 @@ export default {
         this.rowCount = this.dataSource.length
       }
       this.commit('setUnsaved', true)
-      this.$eventBus.$emit('cs.console', 'success', `${id}번째 항목을 삭제했습니다.`)
+      this.$eventBus.$emit('cs.console', 'success', `${id}번째 액션을 삭제했습니다.`)
     },
     beforeRemoveAll() {
       if (this.rowCount < 1) {
@@ -323,7 +347,7 @@ export default {
       }
       this.$refs.dialog.show({
         icon: 'exclamation-triangle',
-        message: '정말로 모든 항목을 삭제할거니?',
+        message: '정말로 모든 액션을 삭제할거니?',
         doEvent: 'sb.removeAll'
       })
       this.playSound('warning.mp3')
@@ -346,12 +370,12 @@ export default {
       this.rowCount = this.dataSource.length
       this.isHiddenAll = false
       this.commit('setUnsaved', true)
-      this.$eventBus.$emit('cs.console', 'success', '모든 항목을 삭제했습니다.')
+      this.$eventBus.$emit('cs.console', 'success', '모든 액션을 삭제했습니다.')
     },
     beforeClear() {
       this.$refs.dialog.show({
         icon: 'exclamation-triangle',
-        message: '정말로 모든 컬럼을 비활성화할거니?',
+        message: '정말로 모든 씬을 비활성화할거니?',
         doEvent: 'sb.clear'
       })
       this.playSound('warning.mp3')
@@ -360,7 +384,7 @@ export default {
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].clear())
       this.commit('setUnsaved', true)
-      this.$eventBus.$emit('cs.console', 'success', '모든 항목을 비활성화했습니다.')
+      this.$eventBus.$emit('cs.console', 'success', '모든 액션을 비활성화했습니다.')
     },
     update(rowId, columnId, data, isAllApplyWithVisible) {
       const savedColumnId = columnId
@@ -390,6 +414,9 @@ export default {
         item.columns[findIndex] = data
       }
       this.commit('setUnsaved', true)
+    },
+    onChangeAddRow(event) {
+      this.selectedAddRow = event.target.value
     },
     handleInnerScroll(event) {
       this.innerScrollLeft = event.target.scrollLeft

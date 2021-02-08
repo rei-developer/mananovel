@@ -23,7 +23,7 @@
     <div class='bottom'>
       <ul>
         <li v-if='page.id > 0'>페이지 : ({{ page.id }}, {{ page.name }})</li>
-        <li v-if='row.id > 0'>항목 : ({{ row.id }}, {{ row.name }})</li>
+        <li v-if='row.id > 0'>액션 : ({{ row.id }}, {{ row.name }})</li>
         <li v-if='sceneId > 0'>씬 ID : {{ sceneId }}</li>
       </ul>
     </div>
@@ -65,9 +65,10 @@
           line-height: 1.2;
           font-weight: bold;
           &.info {background-color: #9FC93C}
+          &.success {background-color: #B2CCFF}
           &.warning {background-color: #FFBB00}
           &.error {background-color: red}
-          &.success {background-color: #B2CCFF}
+          &.help {background-color: #B5B2FF}
         }
         &.time {
           color: @primary-hover;
@@ -117,7 +118,8 @@ export default {
     this.$eventBus.$on(`${p}getPage`, page => this.getPage(page))
     this.$eventBus.$on(`${p}getRow`, row => this.getRow(row))
     this.$eventBus.$on(`${p}getRowAndSceneId`, (row, sceneId) => this.getRowAndSceneId(row, sceneId))
-    this.$eventBus.$on(`${p}console`, (type = 'info', text = '', color = null) => this.console(type, text, color))
+    this.$eventBus.$on(`${p}console`, (type = 'info', text = '') => this.console(type, text))
+    this.$eventBus.$on(`${p}clear`, () => this.clear())
   },
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
@@ -125,6 +127,7 @@ export default {
     this.$eventBus.$off(`${p}getRow`)
     this.$eventBus.$off(`${p}getRowAndSceneId`)
     this.$eventBus.$off(`${p}console`)
+    this.$eventBus.$off(`${p}clear`)
   },
   methods: {
     getPage(page) {
@@ -146,15 +149,17 @@ export default {
         : row.name
       this.sceneId = sceneId
     },
-    async console(type, text, color) {
+    async console(type, text) {
       this.stacks.push({
         type,
         text,
-        color,
         time: this.$moment().format('HH:mm:ss')
       })
       await this.$nextTick()
       this.$refs.console.scrollTop = this.$refs.console.scrollHeight
+    },
+    clear() {
+      this.stacks = []
     }
   }
 }

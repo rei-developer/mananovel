@@ -17,6 +17,7 @@ module.exports = {
   loading: {color: '#EDA7B2'},
   css: [
     '@/assets/bootstrap',
+    '@/assets/prism-editor',
     '@/assets/stylesheet'
   ],
   plugins: [

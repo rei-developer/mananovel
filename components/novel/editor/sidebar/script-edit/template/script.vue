@@ -112,7 +112,7 @@
       value='accepted'
       switch
     >
-      활성화된 모든 컬럼에 동일하게 적용
+      활성화된 모든 씬에 동일하게 적용
     </b-form-checkbox>
     <div class='e-button-group right'>
       <e-button

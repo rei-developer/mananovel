@@ -52,8 +52,8 @@
 </style>
 
 <script>
-import NovelEditorHeader from '~/components/novel/editor/header'
-import NovelEditorHeaderPage from '~/components/novel/editor/header/page'
+import NovelEditorHeader from '@/components/novel/editor/header'
+import NovelEditorHeaderPage from '@/components/novel/editor/header/page'
 
 export default {
   name: 'NovelEditor',

@@ -10,18 +10,18 @@
         v-for='(item, index) in data'
         :key='index'
       >
-        <NuxtLink
+        <nuxt-link
           class='thumb'
           :style='{backgroundImage: item.uuid ? `url("https://cdn.mananovel.com/thumb/${item.uuid}.jpg")` : undefined}'
           :to='`/${item.id}`'
           v-if='type === "magazine"'
         />
-        <NuxtLink
+        <nuxt-link
           class='title'
           :to='`/${item.id}`'
         >
           {{ item.title }}
-        </NuxtLink>
+        </nuxt-link>
       </li>
     </ul>
   </div>
