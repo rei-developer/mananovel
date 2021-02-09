@@ -6,7 +6,7 @@ export default {
         let filename
         switch (type) {
           case 'info':
-            filename = ''
+            filename = 'done'
             break
           case 'success':
             filename = ''

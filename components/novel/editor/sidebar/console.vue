@@ -1,26 +1,52 @@
 <template>
-  <div class='e-sidebar-console'>
-    <div
-      ref='console'
-      class='content custom-scroll-box'
-    >
-      <ul
-        v-for='(item, index) in stacks'
-        :key='index'
-      >
-        <li
+  <div>
+    <div class='e-sidebar-console'>
+      <div class='side'>
+        <div
+          class='button'
+          @click='toBottom'
+        >
+          <font-awesome-icon icon='caret-square-down'/>
+        </div>
+        <div
+          class='button'
+          @click='clear'
+        >
+          <font-awesome-icon icon='trash-alt'/>
+        </div>
+        <hr/>
+        <div
           :class='[
+            "button",
+            isFixed ? "fixed" : undefined
+          ]'
+          @click='fixing'
+        >
+          <font-awesome-icon icon='thumbtack'/>
+        </div>
+      </div>
+      <div
+        ref='console'
+        class='content custom-scroll-box'
+      >
+        <ul
+          v-for='(item, index) in stacks'
+          :key='index'
+        >
+          <li
+            :class='[
             "type",
             item.type
           ]'
-        >
-          {{ item.type.toUpperCase() }}
-        </li>
-        <li class='time'>{{ item.time }}</li>
-        <li>: {{ item.text }}</li>
-      </ul>
+          >
+            {{ item.type.toUpperCase() }}
+          </li>
+          <li class='time'>{{ item.time }}</li>
+          <li>: {{ item.text }}</li>
+        </ul>
+      </div>
     </div>
-    <div class='bottom'>
+    <div class='e-sidebar-console-bottom'>
       <ul>
         <li>마우스 좌표 : ({{ pos.x }}, {{ pos.y }})</li>
         <li v-if='row.id > 0'>액션 : ({{ row.id }}, {{ row.name }})</li>
@@ -36,11 +62,32 @@
 @font-color: #EDE3EB;
 
 .e-sidebar-console {
-  height: 189px;
+  display: flex;
+  height: 167px;
   border: 1px solid @primary;
   background-color: #333;
+  > .side {
+    margin: 5px 0 5px 5px;
+    > .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 19px;
+      height: 19px;
+      color: @primary;
+      font-size: 13px;
+      border-radius: 2px;
+      &:hover {background-color: rgba(255, 255, 255, .1)}
+      &.fixed {opacity: .5}
+    }
+    > hr {
+      margin: 5px 0;
+      border-color: rgba(255, 255, 255, .1);
+    }
+  }
   > .content {
-    height: 156px;
+    flex: 1;
+    height: 155px;
     margin: 5px;
     padding: 3px;
     border: 3px double @primary;
@@ -77,19 +124,20 @@
       }
     }
   }
-  > .bottom {
-    height: 22px;
-    background-color: @primary;
-    > ul {
-      display: flex;
-      justify-content: flex-end;
-      margin: 0 5px 0;
-      padding: 0;
-      color: #333;
-      font-size: 13px;
-      list-style: none;
-      > li:not(:first-child) {margin-left: .75rem}
-    }
+}
+
+.e-sidebar-console-bottom {
+  height: 22px;
+  background-color: @primary;
+  > ul {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 5px 0;
+    padding: 0;
+    color: #333;
+    font-size: 13px;
+    list-style: none;
+    > li:not(:first-child) {margin-left: .75rem}
   }
 }
 </style>
@@ -110,7 +158,8 @@ export default {
         name: '?'
       },
       sceneId: 0,
-      stacks: []
+      stacks: [],
+      isFixed: false
     }
   },
   created() {
@@ -147,17 +196,24 @@ export default {
         : row.name
       this.sceneId = sceneId
     },
-    async console(type, text) {
+    console(type, text) {
       this.stacks.push({
         type,
         text,
         time: this.$moment().format('HH:mm:ss')
       })
+      if (!this.isFixed)
+        this.toBottom()
+    },
+    async toBottom() {
       await this.$nextTick()
       this.$refs.console.scrollTop = this.$refs.console.scrollHeight
     },
     clear() {
       this.stacks = []
+    },
+    fixing() {
+      this.isFixed = !this.isFixed
     }
   }
 }

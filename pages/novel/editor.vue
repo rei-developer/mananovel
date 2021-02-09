@@ -88,6 +88,7 @@ import NovelEditorContent from '@/components/novel/editor/content'
 import NovelEditorSidebarScriptEdit from '@/components/novel/editor/sidebar/script-edit/index'
 import NovelEditorSidebarConsole from '@/components/novel/editor/sidebar/console'
 import NovelEditorBottomSceneBoard from '@/components/novel/editor/bottom/scene-board'
+import NovelEditorConsole from '@/mixins/novel/editor/console'
 
 export default {
   name: 'NovelEditor',
@@ -98,6 +99,7 @@ export default {
     NovelEditorSidebarConsole,
     NovelEditorBottomSceneBoard
   },
+  mixins: [NovelEditorConsole],
   data() {
     return {
       isSceneBoardTooltipOpened: false
@@ -106,7 +108,7 @@ export default {
   mounted() {
     window.addEventListener('keydown', e => {
       if (e.keyCode === 113)
-        this.onClickToggleSceneBoard()
+        this.onClickToggleSceneBoard(false)
     })
   },
   computed: {
@@ -115,8 +117,10 @@ export default {
     }
   },
   methods: {
-    onClickToggleSceneBoard() {
+    onClickToggleSceneBoard(info = true) {
       this.$store.commit(`novel/editor/toggleHiddenSceneBoard`)
+      if (info)
+        this.throwConsole('info', '씬 보드는 F2로 접거나 펼칠 수 있어.')
     },
     onMouseEnterSceneBoard() {
       this.isSceneBoardTooltipOpened = true
