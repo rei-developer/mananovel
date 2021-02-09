@@ -107,7 +107,7 @@ export default {
     }
   },
   mounted() {
-    document.body.addEventListener('keydown', e => {
+    window.addEventListener('keydown', e => {
       if (e.keyCode === 27)
         this.close()
     })

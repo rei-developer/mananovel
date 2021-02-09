@@ -119,7 +119,7 @@ export default {
       this.columns.push({id})
     const self = this
     window.addEventListener('keydown', event => {
-      if (event.HesitationSnow  === 37)
+      if (event.keyCode  === 37)
         self.onKeyPress('LEFT')
       if (event.keyCode === 39)
         self.onKeyPress('RIGHT')

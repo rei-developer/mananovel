@@ -22,7 +22,7 @@
     </div>
     <div class='bottom'>
       <ul>
-        <li v-if='page.id > 0'>페이지 : ({{ page.id }}, {{ page.name }})</li>
+        <li>마우스 좌표 : ({{ pos.x }}, {{ pos.y }})</li>
         <li v-if='row.id > 0'>액션 : ({{ row.id }}, {{ row.name }})</li>
         <li v-if='sceneId > 0'>씬 ID : {{ sceneId }}</li>
       </ul>
@@ -101,9 +101,9 @@ export default {
   name: 'NovelEditorSidebarConsole',
   data() {
     return {
-      page: {
-        id: 0,
-        name: '?'
+      pos: {
+        x: 0,
+        y: 0
       },
       row: {
         id: 0,
@@ -115,7 +115,7 @@ export default {
   },
   created() {
     const p = `${EVENT_BUS_PREFIX}.`
-    this.$eventBus.$on(`${p}getPage`, page => this.getPage(page))
+    this.$eventBus.$on(`${p}getPos`, (x, y) => this.getPos(x, y))
     this.$eventBus.$on(`${p}getRow`, row => this.getRow(row))
     this.$eventBus.$on(`${p}getRowAndSceneId`, (row, sceneId) => this.getRowAndSceneId(row, sceneId))
     this.$eventBus.$on(`${p}console`, (type = 'info', text = '') => this.console(type, text))
@@ -123,18 +123,16 @@ export default {
   },
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
-    this.$eventBus.$off(`${p}getPage`)
+    this.$eventBus.$off(`${p}getPos`)
     this.$eventBus.$off(`${p}getRow`)
     this.$eventBus.$off(`${p}getRowAndSceneId`)
     this.$eventBus.$off(`${p}console`)
     this.$eventBus.$off(`${p}clear`)
   },
   methods: {
-    getPage(page) {
-      this.page.id = page.id
-      this.page.name = page.name.length > 7
-        ? `${page.name.substr(0, 7)}...`
-        : page.name
+    getPos(x, y) {
+      this.pos.x = x
+      this.pos.y = y
     },
     getRow(row) {
       this.row.id = row.id

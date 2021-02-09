@@ -8,6 +8,7 @@
     <novel-editor-content-top/>
     <novel-editor-content-preview
       ref='contentPreview'
+      id='content-preview-wrapper'
       class='content-preview-wrapper custom-scroll-box'
     />
   </div>
@@ -25,7 +26,6 @@
     width: calc(100vw - 400px);
     border: 1px solid #333;
     border-left: 0;
-    background-color: rgba(237, 167, 178, .1);
     overflow: scroll;
   }
 }

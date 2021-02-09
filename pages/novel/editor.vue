@@ -12,9 +12,12 @@
           <div
             class='toggle-scene-board'
             @click='onClickToggleSceneBoard'
+            @mouseenter='onMouseEnterSceneBoard'
+            @mouseleave='onMouseLeaveSceneBoard'
           >
             <font-awesome-icon :icon='isSceneBoardOpened ? "chevron-up" : "chevron-down"'/>
           </div>
+          <div class='scene-board-tooltip' v-if='isSceneBoardTooltipOpened'>F2</div>
         </div>
         <div>
           <novel-editor-bottom-scene-board/>
@@ -46,11 +49,15 @@
       position: relative;
       min-height: calc(100vh - 189px - 56px);
       &.hide {min-height: calc(100vh - 56px)}
-      > .toggle-scene-board {
+      > .toggle-scene-board,
+      > .scene-board-tooltip {
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
+        z-index: 10;
+      }
+      > .toggle-scene-board {
         right: calc(11px + .5rem);
         bottom: 11px;
         width: 22px;
@@ -59,8 +66,17 @@
         border: 1px solid #333;
         border-bottom: 0;
         background-color: @primary;
-        z-index: 10;
         &:hover {opacity: .9}
+      }
+      > .scene-board-tooltip {
+        width: 30px;
+        height: 17px;
+        padding-bottom: 1px;
+        right: calc(7px + .5rem);
+        bottom: 28px;
+        color: #FFF;
+        font-size: 12px;
+        background-color: #333;
       }
     }
   }
@@ -82,6 +98,17 @@ export default {
     NovelEditorSidebarConsole,
     NovelEditorBottomSceneBoard
   },
+  data() {
+    return {
+      isSceneBoardTooltipOpened: false
+    }
+  },
+  mounted() {
+    window.addEventListener('keydown', e => {
+      if (e.keyCode === 113)
+        this.onClickToggleSceneBoard()
+    })
+  },
   computed: {
     isSceneBoardOpened() {
       return this.$store.state.novel.editor.isHiddenSceneBoard
@@ -90,6 +117,12 @@ export default {
   methods: {
     onClickToggleSceneBoard() {
       this.$store.commit(`novel/editor/toggleHiddenSceneBoard`)
+    },
+    onMouseEnterSceneBoard() {
+      this.isSceneBoardTooltipOpened = true
+    },
+    onMouseLeaveSceneBoard() {
+      this.isSceneBoardTooltipOpened = false
     }
   }
 }

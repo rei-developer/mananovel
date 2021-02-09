@@ -250,6 +250,7 @@ export default {
       this.dataSource
         .map((_, index) => this.$refs.sceneBoard[index].view(id))
       this.$refs.sceneBoardHeader.view(id)
+      this.$eventBus.$emit('cp.setData', id, this.dataSource)
     },
     openSidebar(rowId, columnId) {
       const item = this.dataSource
@@ -415,6 +416,7 @@ export default {
         item.columns[findIndex] = data
       }
       this.commit('setUnsaved', true)
+      this.$eventBus.$emit('cp.setData', columnId, this.dataSource)
     },
     onChangeAddRow(event) {
       this.selectedAddRow = event.target.value

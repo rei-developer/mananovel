@@ -120,7 +120,7 @@ export default {
     BGS = new Audio()
   },
   mounted() {
-    document.body.addEventListener('keydown', e => {
+    window.addEventListener('keydown', e => {
       if (e.keyCode === 27)
         this.close()
     })

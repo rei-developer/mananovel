@@ -60,6 +60,24 @@ export default {
     zoom() {
       this.$eventBus.$emit('c.zoom', this.zoom)
     }
+  },
+  mounted() {
+    window.addEventListener('mousewheel', this.onMouseWheel, {passive: false})
+    window.addEventListener('DOMMouseScroll', this.onMouseWheel, false)
+  },
+  methods: {
+    onMouseWheel(event) {
+      event.preventDefault()
+      if (!event.ctrlKey)
+        return
+      const zoom = event.deltaY > 0
+        ? this.zoom - 0.1
+        : this.zoom + 0.1
+      if (zoom < 0.1 || zoom > 10)
+        return
+      this.zoom = Number((zoom).toFixed(1))
+      this.$eventBus.$emit('c.zoom', this.zoom)
+    }
   }
 }
 </script>
