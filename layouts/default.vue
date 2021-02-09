@@ -52,13 +52,13 @@
   }
 
   > .background {
-    width: 4800px;
-    height: 4148px;
+    width: 100%;
+    height: 100%;
     position: fixed;
-    top: 8rem;
-    left: 0;
-    background-image: url('/background.jpg');
-    background-size: 25%;
+    top: 10rem;
+    background-image: url('/background-min.png');
+    background-size: 50%;
+    background-position: top center;
     opacity: .1;
     z-index: -1;
   }

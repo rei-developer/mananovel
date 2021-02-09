@@ -121,7 +121,8 @@ export default {
         {label: '활성화', beep: true, function: () => this.visible()},
         {label: '비활성화', beep: true, function: () => this.visible(false)},
         {label: '모두 비활성화', beep: false, function: () => this.beforeClear()},
-        {label: '드래그 해제', beep: true, function: () => this.release()}
+        {label: '드래그 해제', beep: true, function: () => this.release()},
+        {label: '감추기', beep: true, function: () => this.commit('toggleHiddenSceneBoard')}
       ],
       selectedAddRow: null,
       isReverse: false,

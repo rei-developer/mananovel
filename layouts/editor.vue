@@ -13,7 +13,6 @@
         <novel-editor-header/>
         <novel-editor-header-page/>
         <Nuxt/>
-        <div class='background'/>
       </div>
     </b-overlay>
   </div>
@@ -36,18 +35,6 @@
 .wrapper {
   height: 100vh;
   overflow: hidden;
-}
-
-.background {
-  width: 4800px;
-  height: 4148px;
-  position: fixed;
-  top: 3rem;
-  left: -1.25rem;
-  background-image: url('/background.jpg');
-  background-size: 20%;
-  opacity: .1;
-  z-index: -1;
 }
 </style>
 
