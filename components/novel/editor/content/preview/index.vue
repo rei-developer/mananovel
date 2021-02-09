@@ -116,7 +116,11 @@ export default {
       this.viewId = id
       this.dataSource = JSON.parse(JSON.stringify(data))
         .map(item => {
-          item.columns = item.columns.filter(i => i.id === this.viewId)
+          if (!!item.columns) {
+            item.column = item.columns
+              .filter(i => i.id === this.viewId)[0]
+            delete item.columns
+          }
           return item
         })
     }

@@ -2,14 +2,19 @@
   <div>
     <input
       ref='input'
-      class='e-input'
+      :class='[
+        "e-input",
+        block ? "block" : undefined,
+        readonly ? "readonly" : undefined
+      ]'
       :type='type'
       :value='value'
       :placeholder='placeholder'
       :maxlength='maxlength'
+      :readonly='readonly'
       @input='onInput'
     />
-    <span v-if='maxlength && value && value.length > 0'>
+    <span v-if='display && maxlength && value && value.length > 0'>
       {{ value.length }}/{{ maxlength }}
     </span>
   </div>
@@ -24,7 +29,13 @@ input.e-input {
   border: 1px solid @primary;
   background: transparent;
   outline: none;
-  &:focus {border-style: dashed}
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
+  &:not(.readonly):focus {border-style: dashed}
+  &.block {width: 100%}
   &[type='color'] {
     width: 19px;
     height: 19px;
@@ -54,14 +65,49 @@ export default {
       type: String,
       default: null
     },
+    min: {
+      type: Number,
+      default: null
+    },
+    max: {
+      type: Number,
+      default: null
+    },
     maxlength: {
       type: Number,
       default: null
+    },
+    display: {
+      type: Boolean,
+      default: false
+    },
+    block: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     onInput(event) {
-      this.$emit('input', event.target.value)
+      let value = event.target.value
+      try {
+        if (this.type === 'number') {
+          if (this.min && Number(value) < this.min) {
+            value = (this.min).toString()
+            event.target.value = this.min
+          }
+          if (this.max && Number(value) > this.max) {
+            value = (this.max).toString()
+            event.target.value = this.max
+          }
+        }
+        this.$emit('input', value)
+      } catch (error) {
+        throw new Error(error)
+      }
     },
     focus() {
       this.$refs.input.focus()

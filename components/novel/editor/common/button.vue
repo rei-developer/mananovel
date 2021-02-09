@@ -3,7 +3,8 @@
     :class='[
       "e-button",
       variant,
-      size
+      size,
+      block ? "block" : undefined
     ]'
     @click='onClick'
   >
@@ -31,9 +32,10 @@
       background-color: @primary-hover;
     }
   }
+  &.block {width: 100%}
   &.md {
-    height: 24px;
-    line-height: 22px;
+    height: 23px;
+    line-height: 21px;
   }
   &.lg {
     height: 28px;
@@ -63,6 +65,10 @@ export default {
     label: {
       type: String,
       default: null
+    },
+    block: {
+      type: Boolean,
+      default: false
     },
     beep: {
       type: Boolean,

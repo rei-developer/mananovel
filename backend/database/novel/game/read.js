@@ -98,7 +98,7 @@ module.exports.getNovelActor = async id => {
   }
 }
 
-module.exports.getNovelBackground = async id => {
+module.exports.getNovelPicture = async id => {
   try {
     const result = await pool.query(
       `

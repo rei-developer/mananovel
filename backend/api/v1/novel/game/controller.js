@@ -2,7 +2,7 @@ const {
   getNovelPageStartId,
   getNovelScript,
   getNovelActor,
-  getNovelBackground,
+  getNovelPicture,
   getNovelBGM,
   getNovelBGS,
   getNovelSound,
@@ -56,7 +56,7 @@ module.exports.getNovelScript = async ctx => {
     ? await getNovelActor(script.novelActorId)
     : undefined
   const background = script.novelPictureId
-    ? await getNovelBackground(script.novelPictureId)
+    ? await getNovelPicture(script.novelPictureId)
     : undefined
   const bgm = script.novelBGMId
     ? await getNovelBGM(script.novelBGMId)

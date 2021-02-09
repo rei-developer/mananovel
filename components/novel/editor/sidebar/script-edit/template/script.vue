@@ -19,6 +19,7 @@
           v-model='bookmark'
           placeholder='책갈피 이름'
           :maxlength='20'
+          display
         />
       </div>
     </div>
@@ -39,6 +40,7 @@
         v-model='name'
         placeholder='액터 이름'
         :maxlength='20'
+        display
       />
     </div>
     <div class='item'>
@@ -103,6 +105,7 @@
           v-model='name'
           placeholder='선택지 1'
           :maxlength='20'
+          display
         />
       </div>
     </div>

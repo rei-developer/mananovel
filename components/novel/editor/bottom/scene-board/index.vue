@@ -113,6 +113,7 @@ export default {
       dataSource: [],
       addRowOptionList: [
         {label: '액터', value: 'actor', max: 4},
+        {label: '배경', value: 'bg', max: 1},
         {label: '자바스크립트', value: 'js', max: 1}
       ],
       bottomMenuList: [

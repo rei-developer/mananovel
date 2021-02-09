@@ -6,6 +6,12 @@
       :pureData='data'
       v-if='type === "script"'
     />
+    <novel-editor-sidebar-script-edit-template-bg
+      :rowId='rowId'
+      :type='type'
+      :pureData='data'
+      v-if='type === "bg"'
+    />
     <novel-editor-sidebar-script-edit-template-js
       :rowId='rowId'
       :type='type'
@@ -36,6 +42,7 @@
 
 <script>
 import NovelEditorSidebarScriptEditTemplateScript from '@/components/novel/editor/sidebar/script-edit/template/script'
+import NovelEditorSidebarScriptEditTemplateBg from '@/components/novel/editor/sidebar/script-edit/template/bg'
 import NovelEditorSidebarScriptEditTemplateJs from '@/components/novel/editor/sidebar/script-edit/template/js'
 
 const EVENT_BUS_PREFIX = 'se'
@@ -44,6 +51,7 @@ export default {
   name: 'NovelEditorSidebarScriptEdit',
   components: {
     NovelEditorSidebarScriptEditTemplateScript,
+    NovelEditorSidebarScriptEditTemplateBg,
     NovelEditorSidebarScriptEditTemplateJs
   },
   data() {

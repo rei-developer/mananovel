@@ -10,22 +10,47 @@
     @mouseup='onMouseUp'
     v-if='viewId'
   >
-    {{ getScriptData }}
+    <div class='content'>
+      {{ dataSource }}
+    </div>
+    <div
+      class='background'
+      :style='getCustomCSSOptions("bg")'
+    />
   </div>
 </template>
 
 <style lang='less' scoped>
 .e-content-preview-in-game {
+  position: absolute;
   color: #FFF;
-  background: #000;
+  background-color: #000;
+  overflow: hidden;
   cursor: grab;
   &.grabbing {cursor: grabbing}
+  > .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  > .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
 </style>
 
 <script>
+import NovelCommon from '@/mixins/novel/common'
+import {getBGPos} from '@/util/common'
+
+import {CDN_HOST} from '@/data/config.json'
+
 export default {
   name: 'NovelEditorContentPreviewInGame',
+  mixins: [NovelCommon],
   props: {
     viewId: {
       type: Number,
@@ -45,24 +70,54 @@ export default {
     },
     pureDataSource: {
       type: Array,
-      default: () => []
+      default() {
+        return []
+      }
     }
   },
   data() {
     return {
       dataSource: [],
+      backgroundInfo: {},
       grabbing: false
     }
   },
   watch: {
-    pureDataSource() {
+    async pureDataSource() {
       this.dataSource = this.pureDataSource
+      const bgData = this.getBackgroundData.column
+      this.backgroundInfo = {
+        imageUrl: !!bgData.bg
+          ? await this.getBackgroundImageUrl(bgData.bg.id)
+          : undefined,
+        pos: !!bgData.bg
+          ? bgData.bg.pos
+          : undefined,
+        w: !!bgData.bg
+          ? bgData.bg.w
+          : undefined,
+        h: !!bgData.bg
+          ? bgData.bg.h
+          : undefined,
+        x: !!bgData.bg
+          ? bgData.bg.x
+          : undefined,
+        y: !!bgData.bg
+          ? bgData.bg.y
+          : undefined,
+        z: !!bgData.bg
+          ? bgData.bg.z
+          : undefined
+      }
     }
   },
   computed: {
     getScriptData() {
+
+    },
+    getBackgroundData() {
       return this.dataSource
-        .filter(item => item.type === 'script')
+        .find(item => item.type === 'bg')
     }
   },
   methods: {
@@ -72,6 +127,15 @@ export default {
           width: `${this.w}px`,
           height: `${this.h}px`,
           zoom: this.zoom
+        },
+        bg: {
+          width: `${this.backgroundInfo.w || this.w}px`,
+          height: `${this.backgroundInfo.h || this.h}px`,
+          backgroundImage: this.backgroundInfo.imageUrl,
+          backgroundPosition: getBGPos(this.backgroundInfo.pos),
+          left: `${this.backgroundInfo.x || 0}px`,
+          top: `${this.backgroundInfo.y || 0}px`,
+          zIndex: `${this.backgroundInfo.z || 0}`
         }
       }
       return data[part] || undefined
