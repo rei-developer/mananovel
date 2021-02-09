@@ -128,6 +128,11 @@ export default {
     onMouseLeaveSceneBoard() {
       this.isSceneBoardTooltipOpened = false
     }
+  },
+  head() {
+    return {
+      title: '마나노벨 스튜디오 - 베타 (ver. 1.0.0)'
+    }
   }
 }
 </script>

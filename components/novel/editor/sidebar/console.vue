@@ -18,7 +18,7 @@
         <div
           :class='[
             "button",
-            isFixed ? "fixed" : undefined
+            isFixed ? undefined : "fixed"
           ]'
           @click='fixing'
         >
