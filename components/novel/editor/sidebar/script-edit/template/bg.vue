@@ -1,12 +1,12 @@
 <template>
   <div class='e-section-body'>
     <div class='item'>
-      <div class='label'>그림 ID</div>
+      <div class='label'>데이터베이스</div>
       <div class='content'>
         <div class='rows'>
           <div class='cols'>
             <div class='cols-row'>
-              <div class='label'>그림 ID</div>
+              <div class='label'>ID</div>
               <div class='content'>
                 <e-input
                   type='number'
@@ -35,16 +35,60 @@
       </div>
     </div>
     <div class='item'>
-      <div class='label'>배경 영역</div>
+      <div class='label'>영역</div>
       <div class='content'>
         <div class='rows'>
           <div class='cols'>
             <div class='cols-row'>
-              <div class='label'>너비</div>
+              <div class='label'>크기</div>
+              <div class='content'>
+                <e-select
+                  v-model='sizeOptions'
+                  block
+                  @change='onChangeBgSize'
+                >
+                  <option :value='null'>선택</option>
+                  <option
+                    :value='item.value'
+                    v-for='(item, index) in sizeOptions'
+                    :key='index'
+                  >
+                    {{ item.label }}
+                  </option>
+                </e-select>
+              </div>
+            </div>
+          </div>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>반복</div>
+              <div class='content'>
+                <e-select
+                  v-model='repeatOptions'
+                  block
+                  @change='onChangeBgRepeat'
+                >
+                  <option :value='null'>선택</option>
+                  <option
+                    :value='item.value'
+                    v-for='(item, index) in repeatOptions'
+                    :key='index'
+                  >
+                    {{ item.label }}
+                  </option>
+                </e-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='rows' v-if='isPossibleControlBgSize'>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>가로</div>
               <div class='content'>
                 <e-input
                   type='number'
-                  v-model='w'
+                  v-model='sizeW'
                   placeholder='기본값: 화면 너비'
                   :min='-9999'
                   :max='9999'
@@ -55,14 +99,159 @@
           </div>
           <div class='cols'>
             <div class='cols-row'>
-              <div class='label'>높이</div>
+              <div class='label'>세로</div>
               <div class='content'>
                 <e-input
                   type='number'
-                  v-model='w'
+                  v-model='sizeH'
                   placeholder='기본값: 화면 높이'
                   :min='-9999'
                   :max='9999'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      :class='[
+        "item",
+        "accordion",
+        isVisibleFilterOption ? undefined : "hide"
+      ]'
+    >
+      <div
+        class='label'
+        @click.self='onClickFilterOption'
+      >
+        필터
+        <font-awesome-icon :icon='isVisibleFilterOption ? "chevron-up" : "chevron-down"'/>
+      </div>
+      <div class='content'>
+        <div class='rows'>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>흐림</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='blur'
+                  placeholder='기본값: 0'
+                  :min='-9999'
+                  :max='9999'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>밝기</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='bright'
+                  placeholder='기본값: 1'
+                  :min='-9999'
+                  :max='9999'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='rows'>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>대비</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='contrast'
+                  placeholder='기본값: 100'
+                  :min='0'
+                  :max='100'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>흑백</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='gray'
+                  placeholder='기본값: 0'
+                  :min='0'
+                  :max='100'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='rows'>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>색조 회전</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='hue'
+                  placeholder='기본값: 0'
+                  :min='-9999'
+                  :max='9999'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>반전</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='invert'
+                  placeholder='기본값: 0'
+                  :min='0'
+                  :max='100'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='rows'>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>채도</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='saturate'
+                  placeholder='기본값: 100'
+                  :min='0'
+                  :max='100'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>세피아</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='sepia'
+                  placeholder='기본값: 0'
+                  :min='0'
+                  :max='100'
                   block
                 />
               </div>
@@ -80,9 +269,9 @@
     >
       <div
         class='label'
-        @click.self='onClickDetailOptionVisible'
+        @click.self='onClickDetailOption'
       >
-        배경 상세설정
+        상세설정
         <font-awesome-icon :icon='isVisibleDetailOption ? "chevron-up" : "chevron-down"'/>
       </div>
       <div class='content'>
@@ -175,11 +364,75 @@
             </div>
           </div>
         </div>
+        <div class='rows'>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>확대</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='zoom'
+                  placeholder='기본값: 1'
+                  :min='0'
+                  :max='9999'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>반지름</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='radius'
+                  placeholder='기본값: 0'
+                  :min='0'
+                  :max='9999'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='rows'>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>회전</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='rotate'
+                  placeholder='기본값: 0'
+                  :min='-360'
+                  :max='360'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+          <div class='cols'>
+            <div class='cols-row'>
+              <div class='label'>투명도</div>
+              <div class='content'>
+                <e-input
+                  type='number'
+                  v-model='opacity'
+                  placeholder='기본값: 100'
+                  :min='0'
+                  :max='100'
+                  block
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <hr/>
     <b-form-checkbox
-      v-model='isAllApplyWithVisible'
+      v-model='isApplyAllVisibleColumns'
       value='accepted'
       switch
     >
@@ -215,7 +468,7 @@
             &:not(:last-child) {margin-bottom: 5px}
             > .label {min-width: 60px}
             > .content {
-              width: 100%;
+              width: 126px;
               > .position-box {
                 display: flex;
                 flex-flow: row wrap;
@@ -249,13 +502,41 @@
 <script>
 import EInput from '@/components/novel/editor/common/input'
 import ETextarea from '@/components/novel/editor/common/textarea'
+import ESelect from '@/components/novel/editor/common/select'
 import EButton from '@/components/novel/editor/common/button'
+
+const attrList = [
+  'id',
+  'sizeType',
+  'sizeW',
+  'sizeH',
+  'repeatType',
+  'pos',
+  'zoom',
+  'radius',
+  'rotate',
+  'opacity',
+  'w',
+  'h',
+  'x',
+  'y',
+  'z',
+  'blur',
+  'bright',
+  'contrast',
+  'gray',
+  'hue',
+  'invert',
+  'saturate',
+  'sepia'
+]
 
 export default {
   name: 'NovelEditorSidebarScriptEditTemplateBg',
   components: {
     EInput,
     ETextarea,
+    ESelect,
     EButton
   },
   props: {
@@ -273,29 +554,29 @@ export default {
     }
   },
   data() {
+    const data = this.pureData
+    const attr = {}
+    attrList.map(item => attr[item] = !!data.bg ? data.bg[item] : undefined)
     return {
-      data: this.pureData,
-      id: !!this.pureData.bg
-        ? this.pureData.bg.id
-        : undefined,
-      pos: !!this.pureData.bg
-        ? this.pureData.bg.pos
-        : undefined,
-      w: !!this.pureData.bg
-        ? this.pureData.bg.w
-        : undefined,
-      h: !!this.pureData.bg
-        ? this.pureData.bg.h
-        : undefined,
-      x: !!this.pureData.bg
-        ? this.pureData.bg.x
-        : undefined,
-      y: !!this.pureData.bg
-        ? this.pureData.bg.y
-        : undefined,
-      z: !!this.pureData.bg
-        ? this.pureData.bg.z
-        : undefined,
+      data,
+      ...attr,
+      sizeOptions: [
+        {label: '자동', value: 'auto'},
+        {label: '포함', value: 'contain'},
+        {label: '커버', value: 'cover'},
+        {label: '상속', value: 'inherit'},
+        {label: 'PX', value: 'px', ctrl: true},
+        {label: 'EM/REM', value: 'rem', ctrl: true}
+      ],
+      repeatOptions: [
+        {label: '상속', value: 'inherit'},
+        {label: '반복 없음', value: 'no-repeat'},
+        {label: '반복', value: 'repeat'},
+        {label: 'X축 반복', value: 'repeat-x'},
+        {label: 'Y축 반복', value: 'repeat-y'},
+        {label: '원형', value: 'round'},
+        {label: '간격', value: 'space'}
+      ],
       posList: [
         {label: 'TL', value: 1},
         {label: 'TC', value: 2},
@@ -307,55 +588,42 @@ export default {
         {label: 'BC', value: 8},
         {label: 'BR', value: 9}
       ],
-      isVisibleDetailOption: true,
-      isAllApplyWithVisible: false
+      isVisibleFilterOption: false,
+      isVisibleDetailOption: false,
+      isApplyAllVisibleColumns: false
     }
   },
   watch: {
     pureData() {
       this.data = this.pureData
-      this.id = !!this.pureData.bg
-        ? this.pureData.bg.id
-        : undefined
-      this.pos = !!this.pureData.bg
-        ? this.pureData.bg.pos
-        : undefined
-      this.w = !!this.pureData.bg
-        ? this.pureData.bg.w
-        : undefined
-      this.h = !!this.pureData.bg
-        ? this.pureData.bg.h
-        : undefined
-      this.x = !!this.pureData.bg
-        ? this.pureData.bg.x
-        : undefined
-      this.y = !!this.pureData.bg
-        ? this.pureData.bg.y
-        : undefined
-      this.z = !!this.pureData.bg
-        ? this.pureData.bg.z
-        : undefined
-      this.isAllApplyWithVisible = false
+      attrList.map(item => this[item] = !!this.pureData.bg ? this.pureData.bg[item] : undefined)
+      this.isApplyAllVisibleColumns = false
     }
   },
   computed: {
     isAllEmpty() {
-      return (
-        !this.id &&
-        !this.pos &&
-        !this.w &&
-        !this.h &&
-        !this.x &&
-        !this.y &&
-        !this.z
-      )
+      return JSON.parse(JSON.stringify(attrList))
+        .filter(item => this[item])?.length < 1
+    },
+    isPossibleControlBgSize() {
+      return this.sizeOptions
+        .find(item => item.value === this.sizeType)?.ctrl
     }
   },
   methods: {
     onClickSearch() {
 
     },
-    onClickDetailOptionVisible() {
+    onChangeBgSize(event) {
+      this.sizeType = event.target.value
+    },
+    onChangeBgRepeat(event) {
+      this.repeatType = event.target.value
+    },
+    onClickFilterOption() {
+      this.isVisibleFilterOption = !this.isVisibleFilterOption
+    },
+    onClickDetailOption() {
       this.isVisibleDetailOption = !this.isVisibleDetailOption
     },
     onClickBackgroundPos(pos) {
@@ -364,26 +632,13 @@ export default {
       this.pos = pos
     },
     onClickSave() {
-      if (this.isAllEmpty) {
+      if (this.isAllEmpty)
         delete this.data.bg
-      } else {
+      else {
         this.data.bg = {}
-        if (this.id)
-          this.data.bg.id = this.id
-        if (this.pos)
-          this.data.bg.pos = this.pos
-        if (this.w)
-          this.data.bg.w = this.w
-        if (this.h)
-          this.data.bg.h = this.h
-        if (this.x)
-          this.data.bg.x = this.x
-        if (this.y)
-          this.data.bg.y = this.y
-        if (this.z)
-          this.data.bg.z = this.z
+        attrList.map(item => this[item] ? this.data.bg[item] = this[item] : undefined)
       }
-      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isAllApplyWithVisible)
+      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllVisibleColumns)
       this.$forceUpdate()
     }
   }

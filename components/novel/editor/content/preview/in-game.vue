@@ -44,9 +44,6 @@
 
 <script>
 import NovelCommon from '@/mixins/novel/common'
-import {getBGPos} from '@/util/common'
-
-import {CDN_HOST} from '@/data/config.json'
 
 export default {
   name: 'NovelEditorContentPreviewInGame',
@@ -90,8 +87,26 @@ export default {
         imageUrl: !!bgData.bg
           ? await this.getBackgroundImageUrl(bgData.bg.id)
           : undefined,
+        size: !!bgData.bg
+          ? this.getBackgroundSize(bgData.bg.sizeType, bgData.bg.sizeW, bgData.bg.sizeH)
+          : undefined,
+        repeat: !!bgData.bg
+          ? bgData.bg.repeatType
+          : undefined,
         pos: !!bgData.bg
-          ? bgData.bg.pos
+          ? this.getBackgroundPosition(bgData.bg.pos)
+          : undefined,
+        zoom: !!bgData.bg
+          ? bgData.bg.zoom
+          : undefined,
+        radius: !!bgData.bg
+          ? bgData.bg.radius
+          : undefined,
+        rotate: !!bgData.bg
+          ? this.getBackgroundRotate(bgData.bg.rotate)
+          : undefined,
+        opacity: !!bgData.bg
+          ? (bgData.bg.opacity / 100).toFixed(2)
           : undefined,
         w: !!bgData.bg
           ? bgData.bg.w
@@ -107,6 +122,9 @@ export default {
           : undefined,
         z: !!bgData.bg
           ? bgData.bg.z
+          : undefined,
+        filter: !!bgData.bg
+          ? this.getBackgroundFilter(bgData.bg)
           : undefined
       }
     }
@@ -131,10 +149,17 @@ export default {
         bg: {
           width: `${this.backgroundInfo.w || this.w}px`,
           height: `${this.backgroundInfo.h || this.h}px`,
-          backgroundImage: this.backgroundInfo.imageUrl,
-          backgroundPosition: getBGPos(this.backgroundInfo.pos),
           left: `${this.backgroundInfo.x || 0}px`,
           top: `${this.backgroundInfo.y || 0}px`,
+          borderRadius: `${this.backgroundInfo.radius}px`,
+          backgroundImage: this.backgroundInfo.imageUrl,
+          backgroundSize: this.backgroundInfo.size,
+          backgroundRepeat: this.backgroundInfo.repeat,
+          backgroundPosition: this.backgroundInfo.pos,
+          transform: this.backgroundInfo.rotate,
+          filter: this.backgroundInfo.filter,
+          opacity: this.backgroundInfo.opacity,
+          zoom: this.backgroundInfo.zoom,
           zIndex: `${this.backgroundInfo.z || 0}`
         }
       }

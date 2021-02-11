@@ -1,22 +1,10 @@
 <template>
   <div class='e-sidebar-script-edit custom-scroll-box'>
-    <novel-editor-sidebar-script-edit-template-script
+    <div
+      :is='getComponent'
       :rowId='rowId'
       :type='type'
       :pureData='data'
-      v-if='type === "script"'
-    />
-    <novel-editor-sidebar-script-edit-template-bg
-      :rowId='rowId'
-      :type='type'
-      :pureData='data'
-      v-if='type === "bg"'
-    />
-    <novel-editor-sidebar-script-edit-template-js
-      :rowId='rowId'
-      :type='type'
-      :pureData='data'
-      v-if='type === "js"'
     />
   </div>
 </template>
@@ -68,6 +56,17 @@ export default {
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
     this.$eventBus.$off(`${p}openSidebar`)
+  },
+  computed: {
+    getComponent() {
+      const componentList = [
+        {type: 'script', component: NovelEditorSidebarScriptEditTemplateScript},
+        {type: 'bg', component: NovelEditorSidebarScriptEditTemplateBg},
+        {type: 'js', component: NovelEditorSidebarScriptEditTemplateJs}
+      ]
+      return componentList
+        .find(item => item.type === this.type)?.component
+    }
   },
   methods: {
     openSidebar(rowId, type, data) {

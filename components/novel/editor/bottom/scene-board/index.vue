@@ -146,7 +146,7 @@ export default {
       ['beforeRemoveAll', () => this.beforeRemoveAll()],
       ['removeAll', () => this.removeAll()],
       ['clear', () => this.clear()],
-      ['update', (rowId, columnId, data, isAllApplyWithVisible) => this.update(rowId, columnId, data, isAllApplyWithVisible)]
+      ['update', (rowId, columnId, data, isApplyAllVisibleColumns) => this.update(rowId, columnId, data, isApplyAllVisibleColumns)]
     ]
     onEventBusList.map(item => this.$eventBus.$on(`${p}${item[0]}`, item[1]))
   },
@@ -389,23 +389,34 @@ export default {
       this.commit('setUnsaved', true)
       this.$eventBus.$emit('cs.console', 'success', '모든 액션을 비활성화했습니다.')
     },
-    update(rowId, columnId, data, isAllApplyWithVisible) {
-      const savedColumnId = columnId
+    update(rowId, columnId, data, isApplyAllVisibleColumns) {
+      const pureData = JSON.parse(JSON.stringify(data))
       const item = this.dataSource
         .find(item => item.id === rowId)
       if (!item)
         return
-      if (isAllApplyWithVisible) {
-        delete data.id
-        delete data.isOpened
+      if (isApplyAllVisibleColumns) {
+        delete pureData.id
+        delete pureData.isViewed
+        delete pureData.isOpened
+        delete pureData.isStart
+        delete pureData.isEnd
         item.columns = item.columns.map(column => {
-          if (column.isVisible) {
+          if (column.id === columnId || column.isDragged) {
+            const isStart = column.isStart || column.isDraggedStart
+            const isEnd = column.isEnd || column.isDraggedEnd
             column = {
-              id: column.id || savedColumnId,
-              ...data
+              id: column.id,
+              ...pureData
             }
-            if (column.id === columnId)
+            if (column.id === columnId) {
+              column.isViewed = 1
               column.isOpened = 1
+            }
+            if (isStart)
+              column.isStart = isStart
+            if (isEnd)
+              column.isEnd = isEnd
           }
           return column
         })

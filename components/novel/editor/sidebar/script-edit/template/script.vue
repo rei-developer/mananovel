@@ -111,7 +111,7 @@
     </div>
     <hr/>
     <b-form-checkbox
-      v-model='isAllApplyWithVisible'
+      v-model='isApplyAllVisibleColumns'
       value='accepted'
       switch
     >
@@ -178,7 +178,7 @@ export default {
       color: '#000',
       isVisibleBookmark: false,
       isVisibleChoice: false,
-      isAllApplyWithVisible: false,
+      isApplyAllVisibleColumns: false,
 
       enc: null,
       dec: null
@@ -197,7 +197,7 @@ export default {
         ? this.pureData.script.text
         : ''
       this.color = '#000'
-      this.isAllApplyWithVisible = false
+      this.isApplyAllVisibleColumns = false
       this.$refs.textarea.focus()
     }
   },
@@ -238,7 +238,7 @@ export default {
         if (this.text)
           this.data.script.text = this.text
       }
-      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isAllApplyWithVisible)
+      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllVisibleColumns)
       this.$forceUpdate()
 
       console.log(

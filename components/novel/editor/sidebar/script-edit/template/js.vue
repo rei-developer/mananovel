@@ -23,7 +23,7 @@
     </div>
     <hr/>
     <b-form-checkbox
-      v-model='isAllApplyWithVisible'
+      v-model='isApplyAllVisibleColumns'
       value='accepted'
       switch
     >
@@ -86,7 +86,7 @@ export default {
       text: !!this.pureData.js
         ? this.pureData.js.text
         : defaultCode,
-      isAllApplyWithVisible: false
+      isApplyAllVisibleColumns: false
     }
   },
   watch: {
@@ -145,7 +145,7 @@ export default {
         if (this.text)
           this.data.js.text = this.text
       }
-      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isAllApplyWithVisible)
+      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllVisibleColumns)
       this.$forceUpdate()
     }
   }
