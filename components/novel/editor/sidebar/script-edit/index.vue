@@ -19,7 +19,6 @@
   flex-direction: column;
   width: 400px;
   height: calc(100vh - 189px - 56px);
-  padding: .5rem;
   color: @font-color;
   font-size: 13px;
   border: 1px solid @primary;
@@ -30,7 +29,8 @@
 
 <script>
 import NovelEditorSidebarScriptEditTemplateScript from '@/components/novel/editor/sidebar/script-edit/template/script'
-import NovelEditorSidebarScriptEditTemplateBg from '@/components/novel/editor/sidebar/script-edit/template/bg'
+import NovelEditorSidebarScriptEditTemplateBcg from '~/components/novel/editor/sidebar/script-edit/template/bcg'
+import NovelEditorSidebarScriptEditTemplateScg from '~/components/novel/editor/sidebar/script-edit/template/scg'
 import NovelEditorSidebarScriptEditTemplateJs from '@/components/novel/editor/sidebar/script-edit/template/js'
 
 const EVENT_BUS_PREFIX = 'se'
@@ -39,7 +39,8 @@ export default {
   name: 'NovelEditorSidebarScriptEdit',
   components: {
     NovelEditorSidebarScriptEditTemplateScript,
-    NovelEditorSidebarScriptEditTemplateBg,
+    NovelEditorSidebarScriptEditTemplateBcg,
+    NovelEditorSidebarScriptEditTemplateScg,
     NovelEditorSidebarScriptEditTemplateJs
   },
   data() {
@@ -61,7 +62,8 @@ export default {
     getComponent() {
       const componentList = [
         {type: 'script', component: NovelEditorSidebarScriptEditTemplateScript},
-        {type: 'bg', component: NovelEditorSidebarScriptEditTemplateBg},
+        {type: 'bcg', component: NovelEditorSidebarScriptEditTemplateBcg},
+        {type: 'scg', component: NovelEditorSidebarScriptEditTemplateScg},
         {type: 'js', component: NovelEditorSidebarScriptEditTemplateJs}
       ]
       return componentList

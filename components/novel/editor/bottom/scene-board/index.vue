@@ -31,7 +31,7 @@
           v-model='selectedAddRow'
           @change='onChangeAddRow'
         >
-          <option :value='null'>새 액션</option>
+          <option :value='null'>새 액션 선택</option>
           <option
             :value='item.value'
             v-for='(item, index) in addRowOptionList'
@@ -112,8 +112,8 @@ export default {
       innerScrollLeft: 0,
       dataSource: [],
       addRowOptionList: [
-        {label: '액터', value: 'actor', max: 4},
-        {label: '배경', value: 'bg', max: 1},
+        {label: '백그라운드 (BCG)', value: 'bcg', max: 1},
+        {label: '스탠딩 (SCG)', value: 'scg', max: 4},
         {label: '자바스크립트', value: 'js', max: 1}
       ],
       bottomMenuList: [
@@ -215,7 +215,7 @@ export default {
       let columns = []
       for (let id = 1; id <= this.columnCount; id++)
         columns.push({id})
-      const name = type.toUpperCase()
+      const name = `새 ${type.toUpperCase()}`
       this.dataSource.push({
         id: rowId,
         type,
@@ -239,7 +239,19 @@ export default {
       const doLoadPage = await this.loadPage(id)
       if (doLoadPage.status === 'DONE')
         await this.deletePage(doLoadPage.result.id)
-      const insertId = await indexedDB.save(db, 'PAGE', id, this.dataSource)
+      const dataSource = this.dataSource
+        .map(item => {
+          item.columns
+            .map(i => {
+              if (i.isViewed)
+                delete i.isViewed
+              if (i.isOpened)
+                delete i.isOpened
+              return i
+            })
+          return item
+        })
+      const insertId = await indexedDB.save(db, 'PAGE', id, dataSource)
       if (!insertId)
         return this.$eventBus.$emit('cs.console', 'error', `${id}번째 페이지 저장 실패`)
     },

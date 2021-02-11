@@ -83,48 +83,49 @@ export default {
     async pureDataSource() {
       this.dataSource = this.pureDataSource
       const bgData = this.getBackgroundData.column
+      const cgData = this.getStandingData.column
       this.backgroundInfo = {
-        imageUrl: !!bgData.bg
-          ? await this.getBackgroundImageUrl(bgData.bg.id, bgData.bg.url)
+        imageUrl: !!bgData.bcg
+          ? await this.getBackgroundImageUrl(bgData.bcg.id, bgData.bcg.url)
           : undefined,
-        size: !!bgData.bg
-          ? this.getSize(bgData.bg.sizeType, bgData.bg.sizeW, bgData.bg.sizeH)
+        size: !!bgData.bcg
+          ? this.getSize(bgData.bcg.sizeType, bgData.bcg.sizeW, bgData.bcg.sizeH)
           : undefined,
-        repeat: !!bgData.bg
-          ? bgData.bg.repeatType
+        repeat: !!bgData.bcg
+          ? bgData.bcg.repeatType
           : undefined,
-        pos: !!bgData.bg
-          ? this.getPosition(bgData.bg.pos)
+        pos: !!bgData.bcg
+          ? this.getPosition(bgData.bcg.pos)
           : undefined,
-        zoom: !!bgData.bg
-          ? bgData.bg.zoom
+        zoom: !!bgData.bcg
+          ? bgData.bcg.zoom
           : undefined,
-        radius: !!bgData.bg
-          ? bgData.bg.radius
+        radius: !!bgData.bcg
+          ? bgData.bcg.radius
           : undefined,
-        rotate: !!bgData.bg
-          ? this.getRotate(bgData.bg.rotate)
+        rotate: !!bgData.bcg
+          ? this.getRotate(bgData.bcg.rotate)
           : undefined,
-        opacity: !!bgData.bg
-          ? (bgData.bg.opacity / 100).toFixed(2)
+        opacity: !!bgData.bcg
+          ? (bgData.bcg.opacity / 100).toFixed(2)
           : undefined,
-        w: !!bgData.bg
-          ? bgData.bg.w
+        w: !!bgData.bcg
+          ? bgData.bcg.w
           : undefined,
-        h: !!bgData.bg
-          ? bgData.bg.h
+        h: !!bgData.bcg
+          ? bgData.bcg.h
           : undefined,
-        x: !!bgData.bg
-          ? bgData.bg.x
+        x: !!bgData.bcg
+          ? bgData.bcg.x
           : undefined,
-        y: !!bgData.bg
-          ? bgData.bg.y
+        y: !!bgData.bcg
+          ? bgData.bcg.y
           : undefined,
-        z: !!bgData.bg
-          ? bgData.bg.z
+        z: !!bgData.bcg
+          ? bgData.bcg.z
           : undefined,
-        filter: !!bgData.bg
-          ? this.getFilter(bgData.bg)
+        filter: !!bgData.bcg
+          ? this.getFilter(bgData.bcg)
           : undefined
       }
     }
@@ -135,7 +136,11 @@ export default {
     },
     getBackgroundData() {
       return this.dataSource
-        .find(item => item.type === 'bg')
+        .find(item => item.type === 'bcg')
+    },
+    getStandingData() {
+      return this.dataSource
+        .find(item => item.type === 'scg')
     }
   },
   methods: {

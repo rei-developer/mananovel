@@ -1,5 +1,9 @@
 <template>
   <div class='e-section-body'>
+    <div class='title'>
+      <font-awesome-icon icon='image'/>
+      백그라운드 CG 설정
+    </div>
     <div class='item'>
       <div class='label'>데이터베이스</div>
       <div class='content'>
@@ -356,7 +360,7 @@
           </div>
           <div class='cols'>
             <div class='cols-row'>
-              <div class='label'>포지션</div>
+              <div class='label'>배치</div>
               <div class='content'>
                 <div class='position-box'>
                   <div
@@ -458,7 +462,7 @@
             <div class='e-button-group right'>
               <e-button
                 variant='gray'
-                icon='broom'
+                icon='minus-square'
                 @click='onClickClear'
                 beep
               >
@@ -553,7 +557,7 @@ const attrList = [
 ]
 
 export default {
-  name: 'NovelEditorSidebarScriptEditTemplateBg',
+  name: 'NovelEditorSidebarScriptEditTemplateBcg',
   components: {
     EInput,
     ETextarea,
@@ -577,7 +581,7 @@ export default {
   data() {
     const data = this.pureData
     const attr = {}
-    attrList.map(item => attr[item] = !!data.bg ? data.bg[item] : undefined)
+    attrList.map(item => attr[item] = !!data.bcg ? data.bcg[item] : undefined)
     return {
       data,
       ...attr,
@@ -617,7 +621,7 @@ export default {
   watch: {
     pureData() {
       this.data = this.pureData
-      attrList.map(item => this[item] = !!this.pureData.bg ? this.pureData.bg[item] : undefined)
+      attrList.map(item => this[item] = !!this.pureData.bcg ? this.pureData.bcg[item] : undefined)
     }
   },
   computed: {
@@ -653,15 +657,15 @@ export default {
     },
     onClickClear() {
       attrList.map(item => this[item] = undefined)
-      delete this.data.bg
+      delete this.data.bcg
       this.submit()
     },
     onClickSave() {
       if (this.isAllEmpty)
-        delete this.data.bg
+        delete this.data.bcg
       else {
-        this.data.bg = {}
-        attrList.map(item => this[item] ? this.data.bg[item] = this[item] : undefined)
+        this.data.bcg = {}
+        attrList.map(item => this[item] ? this.data.bcg[item] = this[item] : undefined)
       }
       this.submit()
     },

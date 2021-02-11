@@ -136,6 +136,8 @@
       &.view.dragged:before {background-color: @view}
       &.view.visible,
       &.view.visible:before {background-color: @view-overlay}
+      &.view.visible.dragged,
+      &.view.visible.dragged:before {background-color: blue}
       &.hide {
         background-color: #666;
         cursor: not-allowed;

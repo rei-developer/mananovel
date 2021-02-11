@@ -15,7 +15,7 @@
 
 .e-content-top {
   display: flex;
-  height: 23px;
+  height: 24px;
   font-size: 13px;
   border: 1px solid @primary;
   border-right: 0;
