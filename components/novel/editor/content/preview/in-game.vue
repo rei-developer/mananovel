@@ -10,9 +10,6 @@
     @mouseup='onMouseUp'
     v-if='viewId'
   >
-    <div class='content'>
-      <!--      {{ isCompleted }}-->
-    </div>
     <div
       :class='[
         "background",
@@ -20,9 +17,9 @@
       ]'
       :style='{
         ...getCustomCSSOptions("bcg"),
-        boxShadow: `0 0 0 1px ${getDebugColor(backgroundInfo.id)[0]} inset`
+        boxShadow: isDebug ? `0 0 0 1px ${getDebugColor(backgroundInfo.id)[0]} inset` : undefined
       }'
-      v-if='isCompleted && backgroundInfo.isVisible'
+      v-if='backgroundInfo && backgroundInfo.isVisible'
     >
       <div
         class='label'
@@ -41,11 +38,11 @@
       ]'
       :style='{
         ...getCustomCSSOptions("scg", index),
-        boxShadow: `0 0 0 1px ${getDebugColor(item.id)[0]} inset`
+        boxShadow: isDebug ? `0 0 0 1px ${getDebugColor(item.id)[0]} inset` : undefined
       }'
       v-for='(item, index) in standingInfo'
       :key='index'
-      v-if='isCompleted && item.isVisible'
+      v-if='item && item.isVisible'
     >
       <div
         class='label'
@@ -55,6 +52,31 @@
         }'
       >
         [{{ item.id }}] {{ item.name }}
+      </div>
+    </div>
+    <div
+      :class='[
+        "script",
+        isDebug ? "debug" : undefined
+      ]'
+      :style='{
+        ...getCustomCSSOptions("script"),
+        boxShadow: isDebug ? `0 0 0 1px ${getDebugColor(scriptInfo.id)[0]} inset` : undefined
+      }'
+      v-if='scriptInfo && scriptInfo.isVisible'
+    >
+      <div
+        class='label'
+        :style='{
+          color: getDebugColor(scriptInfo.id)[1],
+          backgroundColor: getDebugColor(scriptInfo.id)[0]
+        }'
+      >
+        [{{ scriptInfo.id }}] {{ scriptInfo.name }}
+      </div>
+      <div class='content'>
+        <div class='name'>{{ scriptInfo.author }}</div>
+        <p v-html='previewText'/>
       </div>
     </div>
   </div>
@@ -70,19 +92,35 @@
   overflow: hidden;
   cursor: grab;
   &.grabbing {cursor: grabbing}
-  > .content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
   > .background,
-  > .standing {
+  > .standing,
+  > .script {
     position: absolute;
     top: 0;
     left: 0;
-    > .label {visibility: hidden}
-    &.debug > .label {visibility: visible}
+    > .label {display: none}
+    &.debug > .label {display: block}
+  }
+  > .script {
+    width: calc(100% - 1rem);
+    min-height: 130px;
+    padding: .25rem .5rem;
+    position: absolute;
+    top: unset;
+    left: .5rem;
+    bottom: .5rem;
+    border: 1px solid #FFF;
+    background: rgba(0, 0, 0, .6);
+    > .content {
+      color: #FFF;
+      text-shadow: 1px 1px #000;
+      > .name {
+        color: @primary;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      > p {margin: 0}
+    }
   }
   .debug > .label {
     display: flex;
@@ -99,6 +137,8 @@
 
 <script>
 import NovelCommon from '@/mixins/novel/common'
+
+let timer
 
 export default {
   name: 'NovelEditorContentPreviewInGame',
@@ -125,22 +165,41 @@ export default {
       default() {
         return []
       }
+    },
+    isDebug: {
+      type: Boolean,
+      default: null
     }
   },
   data() {
     return {
       dataSource: [],
+      scriptInfo: {},
       backgroundInfo: {},
       standingInfo: [],
-      grabbing: false,
-      isCompleted: false,
-      isDebug: true
+      previewText: '',
+      grabbing: false
     }
   },
   watch: {
     async pureDataSource() {
-      this.isCompleted = false
       this.dataSource = this.pureDataSource
+      const {
+        id: scriptId,
+        name: scriptName,
+        column: scriptData
+      } = this.getScriptData
+      this.scriptInfo = {
+        id: scriptId,
+        name: scriptName,
+        author: !!scriptData.script
+          ? scriptData.script.author
+          : undefined,
+        text: !!scriptData.script
+          ? scriptData.script.text
+          : undefined,
+        isVisible: !!scriptData.script
+      }
       const {
         id: bcgId,
         name: bcgName,
@@ -266,13 +325,18 @@ export default {
           isVisible: !!scgData.scg
         }
       }))
-      this.isCompleted = true
       this.$forceUpdate()
+      if (timer) {
+        clearTimeout(timer)
+        timer = null
+      }
+      this.printText()
     }
   },
   computed: {
     getScriptData() {
-
+      return this.dataSource
+        .find(item => item.type === 'script')
     },
     getBackgroundData() {
       return this.dataSource
@@ -331,6 +395,25 @@ export default {
         }
       }
       return data[part] || undefined
+    },
+    printText(line = 0) {
+      if (!this.scriptInfo.text)
+        return this.previewText = ''
+      const textList = this.scriptInfo.text.split('\n')
+      if (textList.length <= line)
+        return
+      const text = textList[line]
+      for (let i = 0; i <= text.length; i++)
+        timer = setTimeout(() => {
+          const prefix = textList
+            .filter((item, index) => index < line)
+          const script = [text.substr(0, i)]
+          this.previewText = prefix
+            .concat(script)
+            .join('<br>')
+          if (i === text.length)
+            return this.printText(++line)
+        }, i * 30)
     },
     onMouseMove(event) {
       const realX = Math.floor(event.offsetX / this.zoom)

@@ -11,6 +11,7 @@
           :h='h'
           :zoom='zoom'
           :pureDataSource='dataSource'
+          :isDebug='isDebug'
         />
       </drag-it-dude>
     </div>
@@ -84,13 +85,15 @@ export default {
       h: 812,
       zoom: 1,
       viewId: 0,
-      dataSource: []
+      dataSource: [],
+      isDebug: true
     }
   },
   created() {
     const p = `${EVENT_BUS_PREFIX}.`
     const onEventBusList = [
-      ['setData', (id, data) => this.setData(id, data)]
+      ['setData', (id, data) => this.setData(id, data)],
+      ['toggleDebug', () => this.toggleDebug()]
     ]
     onEventBusList.map(item => this.$eventBus.$on(`${p}${item[0]}`, item[1]))
   },
@@ -105,7 +108,7 @@ export default {
   },
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
-    const offEventBusList = ['setData']
+    const offEventBusList = ['setData', 'toggleDebug']
     offEventBusList.map(item => this.$eventBus.$off(`${p}${item}`))
   },
   methods: {
@@ -123,6 +126,9 @@ export default {
           }
           return item
         })
+    },
+    toggleDebug() {
+      this.isDebug = !this.isDebug
     }
   }
 }

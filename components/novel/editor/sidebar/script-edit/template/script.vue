@@ -33,7 +33,7 @@
         <div class='right'>
           <e-button
             size='sm'
-            @click='onClickVariable("name", true)'
+            @click='onClickVariable("author", true)'
             beep
           >
             변수
@@ -41,7 +41,7 @@
         </div>
       </div>
       <e-input
-        v-model='name'
+        v-model='author'
         placeholder='액터 이름'
         :maxlength='20'
         display
@@ -97,7 +97,7 @@
         >
           <e-button
             size='sm'
-            @click='onClickVariable("name", true)'
+            @click='onClickVariable("author", true)'
             beep
           >
             변수
@@ -106,7 +106,7 @@
       </div>
       <div class='content'>
         <e-input
-          v-model='name'
+          v-model='author'
           placeholder='선택지 1'
           :maxlength='20'
           display
@@ -200,8 +200,8 @@ export default {
       bookmark: !!this.pureData.script
         ? this.pureData.script.bookmark
         : '',
-      name: !!this.pureData.script
-        ? this.pureData.script.name
+      author: !!this.pureData.script
+        ? this.pureData.script.author
         : '',
       text: !!this.pureData.script
         ? this.pureData.script.text
@@ -222,8 +222,8 @@ export default {
       this.bookmark = !!this.pureData.script
         ? this.pureData.script.bookmark
         : ''
-      this.name = !!this.pureData.script
-        ? this.pureData.script.name
+      this.author = !!this.pureData.script
+        ? this.pureData.script.author
         : ''
       this.text = !!this.pureData.script
         ? this.pureData.script.text
@@ -237,7 +237,7 @@ export default {
     isAllEmpty() {
       return (
         !this.bookmark &&
-        !this.name &&
+        !this.author &&
         !this.text
       )
     }
@@ -270,8 +270,8 @@ export default {
         this.data.script = {}
         if (this.bookmark)
           this.data.script.bookmark = this.bookmark
-        if (this.name)
-          this.data.script.name = this.name
+        if (this.author)
+          this.data.script.author = this.author
         if (this.text)
           this.data.script.text = this.text
       }

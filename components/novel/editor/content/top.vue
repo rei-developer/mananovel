@@ -1,10 +1,19 @@
 <template>
   <div class='e-content-top'>
-    <div class='zoom'>
+    <div class='item'>
       <label>
         확대
         <input type='number' step='0.1' min='0.1' max='10' v-model='zoom'/>
       </label>
+    </div>
+    <div class='item'>
+      <div
+        class='button'
+        @click='onClickDebug'
+      >
+        <font-awesome-icon icon='bug'/>
+        디버그
+      </div>
     </div>
   </div>
 </template>
@@ -20,13 +29,23 @@
   border: 1px solid @primary;
   border-right: 0;
   background-color: #333;
-  > .zoom {
+  > .item {
     border-right: 1px solid @primary;
+    > .button {
+      min-width: 22px;
+      height: 22px;
+      line-height: 20px;
+      padding: 0 5px;
+      color: @primary;
+      font-size: 13px;
+      &:hover {background-color: rgba(255, 255, 255, .1)}
+      &.fixed {opacity: .5}
+    }
     > label {
-      width: 80px;
-      height: 21px;
-      line-height: 19px;
-      padding-left: 4px;
+      min-width: 22px;
+      height: 22px;
+      line-height: 20px;
+      padding: 0 5px;
       color: #FFF;
       > input {
         width: 45px;
@@ -58,6 +77,7 @@ export default {
   },
   watch: {
     zoom() {
+      this.zoom = Number(this.zoom)
       this.$eventBus.$emit('c.zoom', this.zoom)
     }
   },
@@ -66,6 +86,9 @@ export default {
     window.addEventListener('DOMMouseScroll', this.onMouseWheel, false)
   },
   methods: {
+    onClickDebug() {
+      this.$eventBus.$emit('cp.toggleDebug')
+    },
     onMouseWheel(event) {
       event.preventDefault()
       if (!event.ctrlKey)
