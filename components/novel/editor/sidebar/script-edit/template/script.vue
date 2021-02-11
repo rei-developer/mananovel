@@ -1,5 +1,9 @@
 <template>
   <div class='e-section-body'>
+    <div class='title'>
+      <font-awesome-icon icon='scroll'/>
+      대사 설정
+    </div>
     <div
       :class='[
         "item",
@@ -110,21 +114,48 @@
       </div>
     </div>
     <hr/>
-    <b-form-checkbox
-      v-model='isApplyAllVisibleColumns'
-      value='accepted'
-      switch
-    >
-      활성화된 모든 씬에 동일하게 적용
-    </b-form-checkbox>
-    <div class='e-button-group right'>
-      <e-button
-        icon='save'
-        @click='onClickSave'
-        beep
-      >
-        적용
-      </e-button>
+    <div class='item'>
+      <div class='content'>
+        <div class='rows'>
+          <b-form-checkbox
+            v-model='isApplyAllDraggedColumns'
+            value='accepted'
+            switch
+          >
+            드래그된 씬에 모두 적용
+          </b-form-checkbox>
+        </div>
+        <div class='rows'>
+          <div class='cols'>
+            <b-form-checkbox
+              v-model='isApplyAllVisibleColumns'
+              value='accepted'
+              switch
+            >
+              활성화된 씬에 모두 적용
+            </b-form-checkbox>
+          </div>
+          <div class='cols'>
+            <div class='e-button-group right'>
+              <e-button
+                variant='gray'
+                icon='minus-square'
+                @click='onClickClear'
+                beep
+              >
+                초기화
+              </e-button>
+              <e-button
+                icon='save'
+                @click='onClickSave'
+                beep
+              >
+                적용
+              </e-button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     {{ enc }}
     {{ dec }}
@@ -178,6 +209,7 @@ export default {
       color: '#000',
       isVisibleBookmark: false,
       isVisibleChoice: false,
+      isApplyAllDraggedColumns: false,
       isApplyAllVisibleColumns: false,
 
       enc: null,
@@ -238,7 +270,7 @@ export default {
         if (this.text)
           this.data.script.text = this.text
       }
-      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllVisibleColumns)
+      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllDraggedColumns, this.isApplyAllVisibleColumns)
       this.$forceUpdate()
 
       console.log(

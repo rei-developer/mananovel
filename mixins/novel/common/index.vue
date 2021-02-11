@@ -3,12 +3,12 @@ import {CDN_HOST} from '@/data/config.json'
 
 export default {
   methods: {
-    async getBackgroundImageUrl(id, url) {
+    async getImageUrl(type, id, url) {
       if (url)
         return `url(${url})`
       const {background} = await this.$axios.$get(`/api/v1/novel/common/picture/${id}`)
       const imageUrl = background.imageUrl
-      return `url(${CDN_HOST}/novel/img/background/${imageUrl})`
+      return `url(${CDN_HOST}/novel/img/${type}/${imageUrl})`
     },
     getSize(type, width, height) {
       return type === 'px' || type === 'rem'
@@ -48,27 +48,24 @@ export default {
       }
       return result
     },
-    getRotate(deg) {
-      return `rotate(${deg}deg)`
-    },
-    getFilter(bgData) {
+    getFilter(data) {
       let result = []
-      if (bgData.blur)
-        result.push(`blur(${bgData.blur}px)`)
-      if (bgData.bright)
-        result.push(`brightness(${bgData.bright})`)
-      if (bgData.contrast)
-        result.push(`contrast(${bgData.contrast}%)`)
-      if (bgData.gray)
-        result.push(`grayscale(${bgData.gray}%)`)
-      if (bgData.hue)
-        result.push(`hue-rotate(${bgData.hue}deg)`)
-      if (bgData.invert)
-        result.push(`invert(${bgData.invert}%)`)
-      if (bgData.saturate)
-        result.push(`saturate(${bgData.saturate}%)`)
-      if (bgData.sepia)
-        result.push(`sepia(${bgData.sepia}%)`)
+      if (data.blur)
+        result.push(`blur(${data.blur}px)`)
+      if (data.bright)
+        result.push(`brightness(${data.bright})`)
+      if (data.contrast)
+        result.push(`contrast(${data.contrast}%)`)
+      if (data.gray)
+        result.push(`grayscale(${data.gray}%)`)
+      if (data.hue)
+        result.push(`hue-rotate(${data.hue}deg)`)
+      if (data.invert)
+        result.push(`invert(${data.invert}%)`)
+      if (data.saturate)
+        result.push(`saturate(${data.saturate}%)`)
+      if (data.sepia)
+        result.push(`sepia(${data.sepia}%)`)
       return result.join(' ')
     }
   }

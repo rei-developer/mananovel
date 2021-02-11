@@ -5,6 +5,7 @@
         size,
         block ? "block" : undefined
       ]'
+    :value='value'
     @change='onChange'
   >
     <slot/>
@@ -48,6 +49,10 @@
 export default {
   name: 'NovelEditorCommonSelect',
   props: {
+    value: {
+      type: String,
+      default: null
+    },
     size: {
       type: String,
       default: 'md'

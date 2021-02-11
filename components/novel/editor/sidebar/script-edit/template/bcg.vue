@@ -1,7 +1,7 @@
 <template>
   <div class='e-section-body'>
     <div class='title'>
-      <font-awesome-icon icon='image'/>
+      <font-awesome-icon icon='mountain'/>
       백그라운드 CG 설정
     </div>
     <div class='item'>
@@ -58,9 +58,9 @@
               <div class='label'>크기</div>
               <div class='content'>
                 <e-select
-                  v-model='sizeOptions'
+                  v-model='sizeType'
                   block
-                  @change='onChangeBgSize'
+                  @change='onChangeSize'
                 >
                   <option :value='null'>선택</option>
                   <option
@@ -79,9 +79,9 @@
               <div class='label'>반복</div>
               <div class='content'>
                 <e-select
-                  v-model='repeatOptions'
+                  v-model='repeatType'
                   block
-                  @change='onChangeBgRepeat'
+                  @change='onChangeRepeat'
                 >
                   <option :value='null'>선택</option>
                   <option
@@ -96,7 +96,7 @@
             </div>
           </div>
         </div>
-        <div class='rows' v-if='isPossibleControlBgSize'>
+        <div class='rows' v-if='isPossibleControlSize'>
           <div class='cols'>
             <div class='cols-row'>
               <div class='label'>가로</div>
@@ -449,13 +449,22 @@
     <div class='item'>
       <div class='content'>
         <div class='rows'>
+          <b-form-checkbox
+            v-model='isApplyAllDraggedColumns'
+            value='accepted'
+            switch
+          >
+            드래그된 씬에 모두 적용
+          </b-form-checkbox>
+        </div>
+        <div class='rows'>
           <div class='cols'>
             <b-form-checkbox
               v-model='isApplyAllVisibleColumns'
               value='accepted'
               switch
             >
-              드래그한 씬에 모두 적용
+              활성화된 씬에 모두 적용
             </b-form-checkbox>
           </div>
           <div class='cols'>
@@ -582,6 +591,7 @@ export default {
     const data = this.pureData
     const attr = {}
     attrList.map(item => attr[item] = !!data.bcg ? data.bcg[item] : undefined)
+    attr.repeatType = 'no-repeat'
     return {
       data,
       ...attr,
@@ -614,7 +624,8 @@ export default {
         {label: 'BR', value: 9}
       ],
       isVisibleFilterOption: false,
-      isVisibleDetailOption: true,
+      isVisibleDetailOption: false,
+      isApplyAllDraggedColumns: false,
       isApplyAllVisibleColumns: false
     }
   },
@@ -629,7 +640,7 @@ export default {
       return JSON.parse(JSON.stringify(attrList))
         .filter(item => this[item])?.length < 1
     },
-    isPossibleControlBgSize() {
+    isPossibleControlSize() {
       return this.sizeOptions
         .find(item => item.value === this.sizeType)?.ctrl
     }
@@ -638,10 +649,10 @@ export default {
     onClickSearch() {
 
     },
-    onChangeBgSize(event) {
+    onChangeSize(event) {
       this.sizeType = event.target.value
     },
-    onChangeBgRepeat(event) {
+    onChangeRepeat(event) {
       this.repeatType = event.target.value
     },
     onClickFilterOption() {
@@ -670,7 +681,7 @@ export default {
       this.submit()
     },
     submit() {
-      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllVisibleColumns)
+      this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllDraggedColumns, this.isApplyAllVisibleColumns)
       this.$forceUpdate()
     }
   }

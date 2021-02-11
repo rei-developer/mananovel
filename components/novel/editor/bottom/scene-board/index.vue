@@ -146,7 +146,7 @@ export default {
       ['beforeRemoveAll', () => this.beforeRemoveAll()],
       ['removeAll', () => this.removeAll()],
       ['clear', () => this.clear()],
-      ['update', (rowId, columnId, data, isApplyAllVisibleColumns) => this.update(rowId, columnId, data, isApplyAllVisibleColumns)]
+      ['update', (rowId, columnId, data, isApplyAllDraggedColumns, isApplyAllVisibleColumns) => this.update(rowId, columnId, data, isApplyAllDraggedColumns, isApplyAllVisibleColumns)]
     ]
     onEventBusList.map(item => this.$eventBus.$on(`${p}${item[0]}`, item[1]))
   },
@@ -401,20 +401,24 @@ export default {
       this.commit('setUnsaved', true)
       this.$eventBus.$emit('cs.console', 'success', '모든 액션을 비활성화했습니다.')
     },
-    update(rowId, columnId, data, isApplyAllVisibleColumns) {
+    update(rowId, columnId, data, isApplyAllDraggedColumns, isApplyAllVisibleColumns) {
       const pureData = JSON.parse(JSON.stringify(data))
       const item = this.dataSource
         .find(item => item.id === rowId)
       if (!item)
         return
-      if (isApplyAllVisibleColumns) {
+      if (isApplyAllDraggedColumns || isApplyAllVisibleColumns) {
         delete pureData.id
         delete pureData.isViewed
         delete pureData.isOpened
         delete pureData.isStart
         delete pureData.isEnd
         item.columns = item.columns.map(column => {
-          if (column.id === columnId || column.isDragged) {
+          if (
+            column.id === columnId ||
+            (isApplyAllDraggedColumns && column.isDragged) ||
+            (isApplyAllVisibleColumns && column.isVisible)
+          ) {
             const isStart = column.isStart || column.isDraggedStart
             const isEnd = column.isEnd || column.isDraggedEnd
             column = {
