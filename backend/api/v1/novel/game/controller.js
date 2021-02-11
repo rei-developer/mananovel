@@ -55,7 +55,7 @@ module.exports.getNovelScript = async ctx => {
   const actor = script.scriptType === 'ACTOR' && script.novelActorId
     ? await getNovelActor(script.novelActorId)
     : undefined
-  const background = script.novelPictureId
+  const picture = script.novelPictureId
     ? await getNovelPicture(script.novelPictureId)
     : undefined
   const bgm = script.novelBGMId
@@ -74,7 +74,7 @@ module.exports.getNovelScript = async ctx => {
     status: 'DONE',
     script,
     actor,
-    background,
+    picture,
     bgm,
     bgs,
     sound,

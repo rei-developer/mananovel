@@ -258,6 +258,11 @@ export default {
     onClickAddColor(target) {
       this[target] = this[target]?.concat(`[c=${this.color}]내용[/c]`)
     },
+    onClickClear() {
+      // attrList.map(item => this[item] = undefined)
+      delete this.data.script
+      this.submit()
+    },
     onClickSave() {
       if (this.isAllEmpty) {
         delete this.data.script
@@ -270,24 +275,13 @@ export default {
         if (this.text)
           this.data.script.text = this.text
       }
+      this.submit()
+      // this.enc = this.CryptoJS.AES.encrypt(JSON.stringify(this.data), CUSTOM_SECRET_KEY).toString()
+      // this.dec = JSON.parse(this.CryptoJS.AES.decrypt(this.enc, CUSTOM_SECRET_KEY).toString(this.CryptoJS.enc.Utf8))
+    },
+    submit() {
       this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllDraggedColumns, this.isApplyAllVisibleColumns)
       this.$forceUpdate()
-
-      console.log(
-        JSON.stringify(this.data).length
-      )
-
-      this.enc = this.CryptoJS.AES.encrypt(JSON.stringify(this.data), CUSTOM_SECRET_KEY).toString()
-
-      console.log(
-        this.enc.length
-      )
-
-      this.dec = JSON.parse(this.CryptoJS.AES.decrypt(this.enc, CUSTOM_SECRET_KEY).toString(this.CryptoJS.enc.Utf8))
-
-      console.log(
-        this.CryptoJS.AES.decrypt(this.enc, CUSTOM_SECRET_KEY).toString(this.CryptoJS.enc.Utf8).length
-      )
     }
   }
 }

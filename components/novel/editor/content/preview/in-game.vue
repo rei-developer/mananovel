@@ -11,17 +11,26 @@
     v-if='viewId'
   >
     <div class='content'>
-      <!--      {{ dataSource }}-->
+      <!--      {{ isCompleted }}-->
     </div>
     <div
       :class='[
         "background",
         isDebug ? "debug" : undefined
       ]'
-      :style='getCustomCSSOptions("bcg")'
-      v-if='backgroundInfo.isVisible'
+      :style='{
+        ...getCustomCSSOptions("bcg"),
+        boxShadow: `0 0 0 1px ${getDebugColor(backgroundInfo.id)[0]} inset`
+      }'
+      v-if='isCompleted && backgroundInfo.isVisible'
     >
-      <div class='label'>
+      <div
+        class='label'
+        :style='{
+          color: getDebugColor(backgroundInfo.id)[1],
+          backgroundColor: getDebugColor(backgroundInfo.id)[0]
+        }'
+      >
         [{{ backgroundInfo.id }}] {{ backgroundInfo.name }}
       </div>
     </div>
@@ -30,11 +39,22 @@
         "standing",
         isDebug ? "debug" : undefined
       ]'
-      :style='getCustomCSSOptions("scg")'
-      v-if='standingInfo.isVisible'
+      :style='{
+        ...getCustomCSSOptions("scg", index),
+        boxShadow: `0 0 0 1px ${getDebugColor(item.id)[0]} inset`
+      }'
+      v-for='(item, index) in standingInfo'
+      :key='index'
+      v-if='isCompleted && item.isVisible'
     >
-      <div class='label'>
-        [{{ standingInfo.id }}] {{ standingInfo.name }}
+      <div
+        class='label'
+        :style='{
+          color: getDebugColor(item.id)[1],
+          backgroundColor: getDebugColor(item.id)[0]
+        }'
+      >
+        [{{ item.id }}] {{ item.name }}
       </div>
     </div>
   </div>
@@ -62,10 +82,7 @@
     top: 0;
     left: 0;
     > .label {visibility: hidden}
-    &.debug {
-      box-shadow: 0 0 0 1px @primary inset;
-      > .label {visibility: visible}
-    }
+    &.debug > .label {visibility: visible}
   }
   .debug > .label {
     display: flex;
@@ -114,24 +131,21 @@ export default {
     return {
       dataSource: [],
       backgroundInfo: {},
-      standingInfo: {},
+      standingInfo: [],
       grabbing: false,
+      isCompleted: false,
       isDebug: true
     }
   },
   watch: {
     async pureDataSource() {
+      this.isCompleted = false
       this.dataSource = this.pureDataSource
       const {
         id: bcgId,
         name: bcgName,
         column: bcgData
       } = this.getBackgroundData
-      const {
-        id: scgId,
-        name: scgName,
-        column: scgData
-      } = this.getStandingData
       this.backgroundInfo = {
         id: bcgId,
         name: bcgName,
@@ -179,71 +193,81 @@ export default {
           : undefined,
         isVisible: !!bcgData.bcg
       }
-      this.standingInfo = {
-        id: scgId,
-        name: scgName,
-        imageUrl: !!scgData.scg
-          ? await this.getImageUrl('scg', scgData.scg.id, scgData.scg.url)
-          : undefined,
-        size: !!scgData.scg
-          ? this.getSize(scgData.scg.sizeType, scgData.scg.sizeW, scgData.scg.sizeH)
-          : undefined,
-        repeat: !!scgData.scg
-          ? scgData.scg.repeatType
-          : undefined,
-        pos: !!scgData.scg
-          ? this.getPosition(scgData.scg.pos)
-          : undefined,
-        zoom: !!scgData.scg
-          ? scgData.scg.zoom
-          : undefined,
-        radius: !!scgData.scg
-          ? scgData.scg.radius
-          : undefined,
-        rotate: !!scgData.scg
-          ? scgData.scg.rotate
-          : undefined,
-        opacity: !!scgData.scg
-          ? (scgData.scg.opacity / 100).toFixed(2)
-          : undefined,
-        w: !!scgData.scg
-          ? scgData.scg.w
-          : undefined,
-        h: !!scgData.scg
-          ? scgData.scg.h
-          : undefined,
-        x: !!scgData.scg
-          ? scgData.scg.x
-          : undefined,
-        y: !!scgData.scg
-          ? scgData.scg.y
-          : undefined,
-        z: !!scgData.scg
-          ? scgData.scg.z
-          : undefined,
-        filter: !!scgData.scg
-          ? this.getFilter(scgData.scg)
-          : undefined,
-        aniType: !!scgData.scg
-          ? scgData.scg.aniType
-          : undefined,
-        aniDur: !!scgData.scg
-          ? `${scgData.scg.aniDur}s`
-          : undefined,
-        aniDel: !!scgData.scg
-          ? `${scgData.scg.aniDel}s`
-          : undefined,
-        aniCnt: !!scgData.scg
-          ? scgData.scg.aniCnt
-          : undefined,
-        aniDir: !!scgData.scg
-          ? scgData.scg.aniDir
-          : undefined,
-        aniFunc: !!scgData.scg
-          ? scgData.scg.aniFunc
-          : undefined,
-        isVisible: !!scgData.scg
-      }
+      this.standingInfo = []
+      await Promise.all(this.getStandingData.map(async (item, index) => {
+        const {
+          id: scgId,
+          name: scgName,
+          column: scgData
+        } = item
+        this.standingInfo[index] = {
+          id: scgId,
+          name: scgName,
+          imageUrl: !!scgData.scg
+            ? await this.getImageUrl('scg', scgData.scg.id, scgData.scg.url)
+            : undefined,
+          size: !!scgData.scg
+            ? this.getSize(scgData.scg.sizeType, scgData.scg.sizeW, scgData.scg.sizeH)
+            : undefined,
+          repeat: !!scgData.scg
+            ? scgData.scg.repeatType
+            : undefined,
+          pos: !!scgData.scg
+            ? this.getPosition(scgData.scg.pos)
+            : undefined,
+          zoom: !!scgData.scg
+            ? scgData.scg.zoom
+            : undefined,
+          radius: !!scgData.scg
+            ? scgData.scg.radius
+            : undefined,
+          rotate: !!scgData.scg
+            ? scgData.scg.rotate
+            : undefined,
+          opacity: !!scgData.scg
+            ? (scgData.scg.opacity / 100).toFixed(2)
+            : undefined,
+          w: !!scgData.scg
+            ? scgData.scg.w
+            : undefined,
+          h: !!scgData.scg
+            ? scgData.scg.h
+            : undefined,
+          x: !!scgData.scg
+            ? scgData.scg.x
+            : undefined,
+          y: !!scgData.scg
+            ? scgData.scg.y
+            : undefined,
+          z: !!scgData.scg
+            ? scgData.scg.z
+            : undefined,
+          filter: !!scgData.scg
+            ? this.getFilter(scgData.scg)
+            : undefined,
+          aniType: !!scgData.scg
+            ? scgData.scg.aniType
+            : undefined,
+          aniDur: !!scgData.scg
+            ? `${scgData.scg.aniDur}s`
+            : undefined,
+          aniDel: !!scgData.scg
+            ? `${scgData.scg.aniDel}s`
+            : undefined,
+          aniCnt: !!scgData.scg
+            ? scgData.scg.aniCnt
+            : undefined,
+          aniDir: !!scgData.scg
+            ? scgData.scg.aniDir
+            : undefined,
+          aniFunc: !!scgData.scg
+            ? scgData.scg.aniFunc
+            : undefined,
+          isVisible: !!scgData.scg
+        }
+      }))
+      this.isCompleted = true
+      this.$forceUpdate()
     }
   },
   computed: {
@@ -256,11 +280,11 @@ export default {
     },
     getStandingData() {
       return this.dataSource
-        .find(item => item.type === 'scg')
+        .filter(item => item.type === 'scg')
     }
   },
   methods: {
-    getCustomCSSOptions(part) {
+    getCustomCSSOptions(part, index = 0) {
       const data = {
         content: {
           width: `${this.w}px`,
@@ -284,26 +308,26 @@ export default {
           zIndex: `${this.backgroundInfo.z || 0}`
         },
         scg: {
-          width: `${this.standingInfo.w || this.w}px`,
-          height: `${this.standingInfo.h || this.h}px`,
-          left: `${this.standingInfo.x || 0}px`,
-          top: `${this.standingInfo.y || 0}px`,
-          borderRadius: `${this.standingInfo.radius}px`,
-          backgroundImage: this.standingInfo.imageUrl,
-          backgroundSize: this.standingInfo.size,
-          backgroundRepeat: this.standingInfo.repeat,
-          backgroundPosition: this.standingInfo.pos,
-          transform: `rotate(${this.standingInfo.rotate}deg)`,
-          filter: this.standingInfo.filter,
-          animationName: `${this.standingInfo.aniType}`,
-          animationDuration: `${this.standingInfo.aniDur}`,
-          animationDelay: `${this.standingInfo.aniDel}`,
-          animationIterationCount: `${this.standingInfo.aniCnt}`,
-          animationDirection: `${this.standingInfo.aniDir}`,
-          animationTimingFunction: `${this.standingInfo.aniFunc}`,
-          opacity: this.standingInfo.opacity,
-          zoom: this.standingInfo.zoom,
-          zIndex: `${this.standingInfo.z || 0}`
+          width: `${this.standingInfo[index]?.w || this.w}px`,
+          height: `${this.standingInfo[index]?.h || this.h}px`,
+          left: `${this.standingInfo[index]?.x || 0}px`,
+          top: `${this.standingInfo[index]?.y || 0}px`,
+          borderRadius: `${this.standingInfo[index]?.radius}px`,
+          backgroundImage: this.standingInfo[index]?.imageUrl,
+          backgroundSize: this.standingInfo[index]?.size,
+          backgroundRepeat: this.standingInfo[index]?.repeat,
+          backgroundPosition: this.standingInfo[index]?.pos,
+          transform: `rotate(${this.standingInfo[index]?.rotate}deg)`,
+          filter: this.standingInfo[index]?.filter,
+          animationName: `${this.standingInfo[index]?.aniType}`,
+          animationDuration: `${this.standingInfo[index]?.aniDur}`,
+          animationDelay: `${this.standingInfo[index]?.aniDel}`,
+          animationIterationCount: `${this.standingInfo[index]?.aniCnt}`,
+          animationDirection: `${this.standingInfo[index]?.aniDir}`,
+          animationTimingFunction: `${this.standingInfo[index]?.aniFunc}`,
+          opacity: this.standingInfo[index]?.opacity,
+          zoom: this.standingInfo[index]?.zoom,
+          zIndex: `${this.standingInfo[index]?.z || 0}`
         }
       }
       return data[part] || undefined

@@ -6,8 +6,8 @@ export default {
     async getImageUrl(type, id, url) {
       if (url)
         return `url(${url})`
-      const {background} = await this.$axios.$get(`/api/v1/novel/common/picture/${id}`)
-      const imageUrl = background.imageUrl
+      const {picture} = await this.$axios.$get(`/api/v1/novel/common/picture/${id}`)
+      const imageUrl = picture.imageUrl
       return `url(${CDN_HOST}/novel/img/${type}/${imageUrl})`
     },
     getSize(type, width, height) {
@@ -67,6 +67,21 @@ export default {
       if (data.sepia)
         result.push(`sepia(${data.sepia}%)`)
       return result.join(' ')
+    },
+    getDebugColor(id) {
+      const colorList = [
+        ['#FF0000', '#FFF'],
+        ['#FF5E00', '#FFF'],
+        ['#FFBB00', '#333'],
+        ['#FFE400', '#333'],
+        ['#ABF200', '#333'],
+        ['#1DDB16', '#333'],
+        ['#00D8FF', '#333'],
+        ['#0054FF', '#FFF'],
+        ['#0100FF', '#FFF'],
+        ['#5F00FF', '#FFF']
+      ]
+      return colorList[id % 10]
     }
   }
 }

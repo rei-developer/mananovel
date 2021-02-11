@@ -4,9 +4,9 @@ const {
 
 module.exports.getNovelPictureImageUrl = async ctx => {
   const id = ctx.params.id
-  const background = await getNovelPicture(id)
+  const picture = await getNovelPicture(id)
   ctx.body = {
     status: 'DONE',
-    background
+    picture
   }
 }
