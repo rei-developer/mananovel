@@ -11,7 +11,7 @@
                 <e-input
                   type='number'
                   v-model='id'
-                  placeholder='그림 ID'
+                  placeholder='이미지 ID'
                   :maxlength='20'
                   block
                   readonly
@@ -29,7 +29,18 @@
               >
                 찾기
               </e-button>
+              <em>URL 주소 우선</em>
             </div>
+          </div>
+        </div>
+        <div class='rows'>
+          <div class='label'>또는 URL</div>
+          <div class='block'>
+            <e-input
+              v-model='url'
+              placeholder='이미지 URL 주소'
+              block
+            />
           </div>
         </div>
       </div>
@@ -431,23 +442,40 @@
       </div>
     </div>
     <hr/>
-    <b-form-checkbox
-      v-model='isApplyAllVisibleColumns'
-      value='accepted'
-      switch
-    >
-      활성화된 모든 씬에 동일하게 적용
-    </b-form-checkbox>
-    <div class='e-button-group right'>
-      <e-button
-        icon='save'
-        @click='onClickSave'
-        beep
-      >
-        적용
-      </e-button>
+    <div class='item'>
+      <div class='content'>
+        <div class='rows'>
+          <div class='cols'>
+            <b-form-checkbox
+              v-model='isApplyAllVisibleColumns'
+              value='accepted'
+              switch
+            >
+              드래그한 씬에 모두 적용
+            </b-form-checkbox>
+          </div>
+          <div class='cols'>
+            <div class='e-button-group right'>
+              <e-button
+                variant='gray'
+                icon='broom'
+                @click='onClickClear'
+                beep
+              >
+                초기화
+              </e-button>
+              <e-button
+                icon='save'
+                @click='onClickSave'
+                beep
+              >
+                적용
+              </e-button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    {{ data }}
   </div>
 </template>
 
@@ -458,17 +486,9 @@
   > .item {
     > .content {
       > .rows {
-        display: flex;
-        justify-content: space-between;
-        &:not(:last-child) {margin-bottom: 5px}
         > .cols {
-          width: calc(50% - 5px);
           > .cols-row {
-            display: inline-flex;
-            &:not(:last-child) {margin-bottom: 5px}
-            > .label {min-width: 60px}
             > .content {
-              width: 126px;
               > .position-box {
                 display: flex;
                 flex-flow: row wrap;
@@ -507,6 +527,7 @@ import EButton from '@/components/novel/editor/common/button'
 
 const attrList = [
   'id',
+  'url',
   'sizeType',
   'sizeW',
   'sizeH',
@@ -589,7 +610,7 @@ export default {
         {label: 'BR', value: 9}
       ],
       isVisibleFilterOption: false,
-      isVisibleDetailOption: false,
+      isVisibleDetailOption: true,
       isApplyAllVisibleColumns: false
     }
   },
@@ -597,7 +618,6 @@ export default {
     pureData() {
       this.data = this.pureData
       attrList.map(item => this[item] = !!this.pureData.bg ? this.pureData.bg[item] : undefined)
-      this.isApplyAllVisibleColumns = false
     }
   },
   computed: {
@@ -631,6 +651,11 @@ export default {
         return this.pos = 0
       this.pos = pos
     },
+    onClickClear() {
+      attrList.map(item => this[item] = undefined)
+      delete this.data.bg
+      this.submit()
+    },
     onClickSave() {
       if (this.isAllEmpty)
         delete this.data.bg
@@ -638,6 +663,9 @@ export default {
         this.data.bg = {}
         attrList.map(item => this[item] ? this.data.bg[item] = this[item] : undefined)
       }
+      this.submit()
+    },
+    submit() {
       this.$eventBus.$emit('sb.update', this.rowId, this.data.id, this.data, this.isApplyAllVisibleColumns)
       this.$forceUpdate()
     }

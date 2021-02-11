@@ -3,17 +3,19 @@ import {CDN_HOST} from '@/data/config.json'
 
 export default {
   methods: {
-    async getBackgroundImageUrl(id) {
+    async getBackgroundImageUrl(id, url) {
+      if (url)
+        return `url(${url})`
       const {background} = await this.$axios.$get(`/api/v1/novel/common/picture/${id}`)
       const imageUrl = background.imageUrl
       return `url(${CDN_HOST}/novel/img/background/${imageUrl})`
     },
-    getBackgroundSize(type, width, height) {
+    getSize(type, width, height) {
       return type === 'px' || type === 'rem'
         ? `${width || height}${type} ${height || width}${type}`
         : type
     },
-    getBackgroundPosition(pos) {
+    getPosition(pos) {
       let result = 'unset'
       switch (pos) {
         case 1:
@@ -46,10 +48,10 @@ export default {
       }
       return result
     },
-    getBackgroundRotate(deg) {
+    getRotate(deg) {
       return `rotate(${deg}deg)`
     },
-    getBackgroundFilter(bgData) {
+    getFilter(bgData) {
       let result = []
       if (bgData.blur)
         result.push(`blur(${bgData.blur}px)`)

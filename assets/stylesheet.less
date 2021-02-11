@@ -74,6 +74,16 @@ span.highlight {
 .e-section-body {
   > .item {
     &:not(:last-child) {margin-bottom: .5rem}
+    &.accordion {
+      > .label {
+        border-bottom: 1px dashed rgba(255, 255, 255, .2);
+        > svg {margin: 4px 0 0 4px}
+      }
+      &.hide {
+        > .label > .right,
+        > .content {display: none}
+      }
+    }
     > .label {
       display: flex;
       height: 24px;
@@ -87,14 +97,29 @@ span.highlight {
         > .e-button:not(:last-child) {margin-right: 5px}
       }
     }
-    &.accordion {
-      > .label {
-        border-bottom: 1px dashed rgba(255, 255, 255, .2);
-        > svg {margin: 4px 0 0 4px}
-      }
-      &.hide {
-        > .label > .right,
-        > .content {display: none}
+    > .content {
+      > .rows {
+        display: flex;
+        justify-content: space-between;
+        &:not(:last-child) {margin-bottom: 5px}
+        > .label {min-width: 60px}
+        > .block {width: 100%}
+        > .cols {
+          width: calc(50% - 5px);
+          > .content {
+            display: flex;
+            > em {
+              margin-left: 5px;
+              color: #999;
+            }
+          }
+          > .cols-row {
+            display: inline-flex;
+            &:not(:last-child) {margin-bottom: 5px}
+            > .label {min-width: 60px}
+            > .content {width: 126px}
+          }
+        }
       }
     }
   }

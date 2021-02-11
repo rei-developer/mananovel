@@ -32,6 +32,12 @@
       background-color: @primary-hover;
     }
   }
+  &.gray {
+    color: #FFF;
+    background-color: #666;
+    &:hover {opacity: .9}
+    &:active {background-color: @primary-hover}
+  }
   &.block {width: 100%}
   &.md {
     height: 23px;

@@ -85,16 +85,16 @@ export default {
       const bgData = this.getBackgroundData.column
       this.backgroundInfo = {
         imageUrl: !!bgData.bg
-          ? await this.getBackgroundImageUrl(bgData.bg.id)
+          ? await this.getBackgroundImageUrl(bgData.bg.id, bgData.bg.url)
           : undefined,
         size: !!bgData.bg
-          ? this.getBackgroundSize(bgData.bg.sizeType, bgData.bg.sizeW, bgData.bg.sizeH)
+          ? this.getSize(bgData.bg.sizeType, bgData.bg.sizeW, bgData.bg.sizeH)
           : undefined,
         repeat: !!bgData.bg
           ? bgData.bg.repeatType
           : undefined,
         pos: !!bgData.bg
-          ? this.getBackgroundPosition(bgData.bg.pos)
+          ? this.getPosition(bgData.bg.pos)
           : undefined,
         zoom: !!bgData.bg
           ? bgData.bg.zoom
@@ -103,7 +103,7 @@ export default {
           ? bgData.bg.radius
           : undefined,
         rotate: !!bgData.bg
-          ? this.getBackgroundRotate(bgData.bg.rotate)
+          ? this.getRotate(bgData.bg.rotate)
           : undefined,
         opacity: !!bgData.bg
           ? (bgData.bg.opacity / 100).toFixed(2)
@@ -124,7 +124,7 @@ export default {
           ? bgData.bg.z
           : undefined,
         filter: !!bgData.bg
-          ? this.getBackgroundFilter(bgData.bg)
+          ? this.getFilter(bgData.bg)
           : undefined
       }
     }
