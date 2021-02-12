@@ -6,10 +6,12 @@
     >
       <drag-it-dude id='preview' :style='{left: `${x}px`, top: `${y}px`}'>
         <novel-editor-content-preview-in-game
+          ref='preview-in-game'
           :viewId='viewId'
           :w='w'
           :h='h'
           :zoom='zoom'
+          :audio='audio'
           :pureDataSource='dataSource'
           :isDebug='isDebug'
         />
@@ -81,6 +83,7 @@ export default {
       w: 375,
       h: 812,
       zoom: 1,
+      audio: 1,
       viewId: 0,
       dataSource: [],
       isDebug: true
@@ -89,8 +92,9 @@ export default {
   created() {
     const p = `${EVENT_BUS_PREFIX}.`
     const onEventBusList = [
-      ['setPreviewPos', () => this.setPreviewPos()],
       ['setData', (id, data) => this.setData(id, data)],
+      ['setPreviewPos', () => this.setPreviewPos()],
+      ['setAudio', flag => this.setAudio(flag)],
       ['toggleDebug', () => this.toggleDebug()]
     ]
     onEventBusList.map(item => this.$eventBus.$on(`${p}${item[0]}`, item[1]))
@@ -106,20 +110,10 @@ export default {
   },
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
-    const offEventBusList = ['setPreviewPos', 'setData', 'toggleDebug']
+    const offEventBusList = ['setData', 'setPreviewPos', 'toggleDebug']
     offEventBusList.map(item => this.$eventBus.$off(`${p}${item}`))
   },
   methods: {
-    setZoom(value) {
-      this.zoom = value
-    },
-    setPreviewPos() {
-      const contentPreviewWrapper = document.getElementById('content-preview-wrapper')
-      const preview = document.getElementById('preview')
-      const {left, top} = preview.style
-      contentPreviewWrapper.scrollLeft = Number(left.replace(/[^0-9]+/g, ''))
-      contentPreviewWrapper.scrollTop = Number(top.replace(/[^0-9]+/g, ''))
-    },
     setData(id, data) {
       this.viewId = id
       this.dataSource = JSON.parse(JSON.stringify(data))
@@ -131,6 +125,20 @@ export default {
           }
           return item
         })
+    },
+    setZoom(value) {
+      this.zoom = value
+    },
+    setPreviewPos() {
+      const contentPreviewWrapper = document.getElementById('content-preview-wrapper')
+      const preview = document.getElementById('preview')
+      const {left, top} = preview.style
+      contentPreviewWrapper.scrollLeft = Number(left.replace(/[^0-9]+/g, ''))
+      contentPreviewWrapper.scrollTop = Number(top.replace(/[^0-9]+/g, ''))
+    },
+    setAudio(flag) {
+      this.audio = flag
+      this.$refs['preview-in-game'].pauseBGM(!flag)
     },
     toggleDebug() {
       this.isDebug = !this.isDebug

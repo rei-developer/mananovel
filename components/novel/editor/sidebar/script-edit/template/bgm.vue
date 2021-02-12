@@ -1,7 +1,7 @@
 <template>
   <div class='e-section-body'>
     <div class='title'>
-      <font-awesome-icon icon='street-view'/>
+      <font-awesome-icon icon='music'/>
       배경음악 설정
     </div>
     <div class='item'>

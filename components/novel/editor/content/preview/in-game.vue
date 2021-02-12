@@ -189,6 +189,10 @@ export default {
       type: Number,
       default: null
     },
+    audio: {
+      type: Number,
+      default: null
+    },
     pureDataSource: {
       type: Array,
       default() {
@@ -207,6 +211,7 @@ export default {
       particleInfo: {},
       backgroundInfo: {},
       standingInfo: [],
+      bgmInfo: {},
       previewText: '',
       grabbing: false
     }
@@ -403,6 +408,26 @@ export default {
           isHidden: scgIsHidden
         }
       }))
+      const {
+        id: bgmId,
+        name: bgmName,
+        column: bgmData,
+        isHidden: bgmIsHidden
+      } = this.getBGMData
+      this.bgmInfo = {
+        id: bgmId,
+        name: bgmName,
+        url: !!bgmData.bgm
+          ? await this.getAudioUrl('bgm', bgmData.bgm.id, bgmData.bgm.url)
+          : undefined,
+        isVisible: !!bgmData.bgm,
+        isHidden: bgmIsHidden
+      }
+      if (this.bgmInfo.url) {
+        if (BGM.src !== this.bgmInfo.url)
+          this.playBGM(this.bgmInfo.url)
+      } else
+        this.stopBGM()
       this.$forceUpdate()
       if (timer) {
         clearTimeout(timer)
@@ -431,6 +456,10 @@ export default {
     getStandingData() {
       return this.dataSource
         .filter(item => item.type === 'scg')
+    },
+    getBGMData() {
+      return this.dataSource
+        .find(item => item.type === 'bgm')
     }
   },
   methods: {
@@ -502,26 +531,43 @@ export default {
         }, i * 30)
     },
     playBGM(url) {
-      BGM.src = `${CDN_HOST}/novel/audio/bgm/${url}`
+      BGM.src = url
       BGM.loop = true
-      BGM.play()
+      if (this.audio && !!url)
+        BGM.play()
     },
     playBGS(url) {
-      BGS.src = `${CDN_HOST}/novel/audio/bgm/${url}`
+      BGS.src = url
       BGS.loop = true
-      BGS.play()
+      if (this.audio && !!url)
+        BGS.play()
     },
     playSound(url) {
       const sound = new Audio()
-      sound.src = `${CDN_HOST}/novel/audio/sound/${url}`
-      sound.play()
+      sound.src = url
+      if (this.audio && !!url)
+        sound.play()
+    },
+    pauseBGM(flag = true) {
+      if (!!BGM) {
+        flag
+          ? BGM.pause()
+          : BGM.play()
+      }
+    },
+    pauseBGS(flag = true) {
+      if (!!BGS) {
+        flag
+          ? BGS.pause()
+          : BGS.play()
+      }
     },
     stopBGM() {
-      BGM.pause()
+      this.pauseBGM()
       BGM = new Audio()
     },
     stopBGS() {
-      BGS.pause()
+      this.pauseBGS()
       BGS = new Audio()
     },
     onMouseMove(event) {

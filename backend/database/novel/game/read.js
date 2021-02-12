@@ -119,7 +119,7 @@ module.exports.getNovelPicture = async id => {
   }
 }
 
-module.exports.getNovelBGM = async id => {
+module.exports.getNovelAudio = async id => {
   try {
     const result = await pool.query(
       `

@@ -15,6 +15,18 @@ export default {
       localStorage.setItem(key, imageUrl)
       return imageUrl
     },
+    async getAudioUrl(type, id, url) {
+      if (url)
+        return url
+      const key = `audio${id}`
+      const item = localStorage.getItem(key)
+      if (item)
+        return item
+      const {audio} = await this.$axios.$get(`/api/v1/novel/common/audio/${id}`)
+      const audioUrl = `${CDN_HOST}/novel/audio/${type}/${audio.audioUrl}`
+      localStorage.setItem(key, audioUrl)
+      return audioUrl
+    },
     getSize(type, width, height) {
       return type === 'px' || type === 'rem'
         ? `${width || height}${type} ${height || width}${type}`

@@ -18,6 +18,15 @@
     <div class='item'>
       <div
         class='button'
+        @click='onClickAudio'
+      >
+        <font-awesome-icon :icon='audio ? "volume-up" : "volume-mute"'/>
+        소리
+      </div>
+    </div>
+    <div class='item'>
+      <div
+        class='button'
         @click='onClickDebug'
       >
         <font-awesome-icon icon='bug'/>
@@ -95,6 +104,7 @@ export default {
   data() {
     return {
       zoom: 1,
+      audio: 1,
       theme: '#EDA7B2'
     }
   },
@@ -106,12 +116,19 @@ export default {
   },
   mounted() {
     this.theme = localStorage.getItem('theme') || '#EDA7B2'
+    this.audio = Number(localStorage.getItem('audio')) ?? 1
+    this.$eventBus.$emit('cp.setAudio', this.audio)
     window.addEventListener('mousewheel', this.onMouseWheel, {passive: false})
     window.addEventListener('DOMMouseScroll', this.onMouseWheel, false)
   },
   methods: {
     onClickPreviewPos() {
       this.$eventBus.$emit('cp.setPreviewPos')
+    },
+    onClickAudio() {
+      this.audio = this.audio === 1 ? 0 : 1
+      this.$eventBus.$emit('cp.setAudio', this.audio)
+      localStorage.setItem('audio', this.audio)
     },
     onClickDebug() {
       this.$eventBus.$emit('cp.toggleDebug')
