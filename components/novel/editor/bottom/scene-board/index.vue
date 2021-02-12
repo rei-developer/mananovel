@@ -111,6 +111,7 @@ export default {
         {label: '백그라운드 (BCG)', value: 'bcg', max: 1},
         {label: '스탠딩 (SCG)', value: 'scg', max: 4},
         {label: '배경음악 (BGM)', value: 'bgm', max: 1},
+        {label: '보조 배경음악 (BGS)', value: 'bgs', max: 1},
         {label: '자바스크립트', value: 'js', max: 1},
         {label: '파티클', value: 'particle', max: 1}
       ],

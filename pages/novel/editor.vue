@@ -38,8 +38,6 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-
 .e-content-box {
   display: flex;
   > main,
@@ -65,7 +63,7 @@
         font-size: 13px;
         border: 1px solid #333;
         border-bottom: 0;
-        background-color: @primary;
+        background-color: var(--primary);
         &:hover {opacity: .9}
       }
       > .scene-board-tooltip {

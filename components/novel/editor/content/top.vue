@@ -6,6 +6,17 @@
         <input type='number' step='0.1' min='0.1' max='10' v-model='zoom'/>
       </label>
     </div>
+    <div class='item theme'>
+      <label>
+        테마
+        <e-input
+          size='sm'
+          type='color'
+          v-model='theme'
+          @input='onInputTheme'
+        />
+      </label>
+    </div>
     <div class='item'>
       <div
         class='button'
@@ -32,17 +43,6 @@
         <font-awesome-icon icon='bug'/>
         디버그
       </div>
-    </div>
-    <div class='item theme'>
-      <label>
-        테마
-        <e-input
-          size='sm'
-          type='color'
-          v-model='theme'
-          @input='onInputTheme'
-        />
-      </label>
     </div>
   </div>
 </template>

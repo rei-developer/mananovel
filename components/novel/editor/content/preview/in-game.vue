@@ -423,11 +423,31 @@ export default {
         isVisible: !!bgmData.bgm,
         isHidden: bgmIsHidden
       }
+      const {
+        id: bgsId,
+        name: bgsName,
+        column: bgsData,
+        isHidden: bgsIsHidden
+      } = this.getBGMData
+      this.bgsInfo = {
+        id: bgsId,
+        name: bgsName,
+        url: !!bgsData.bgs
+          ? await this.getAudioUrl('bgs', bgsData.bgs.id, bgsData.bgs.url)
+          : undefined,
+        isVisible: !!bgsData.bgs,
+        isHidden: bgsIsHidden
+      }
       if (this.bgmInfo.url) {
         if (BGM.src !== this.bgmInfo.url)
           this.playBGM(this.bgmInfo.url)
       } else
         this.stopBGM()
+      if (this.bgsInfo.url) {
+        if (BGM.src !== this.bgsInfo.url)
+          this.playBGS(this.bgsInfo.url)
+      } else
+        this.stopBGS()
       this.$forceUpdate()
       if (timer) {
         clearTimeout(timer)
