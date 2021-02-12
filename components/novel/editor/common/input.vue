@@ -4,6 +4,7 @@
       ref='input'
       :class='[
         "e-input",
+        size,
         block ? "block" : undefined,
         readonly ? "readonly" : undefined
       ]'
@@ -43,6 +44,20 @@ input.e-input {
   }
   &[type='color']::-webkit-color-swatch-wrapper {padding: 0}
   &[type='color']::-webkit-color-swatch {border: none}
+  &.xsm {
+    width: 18px;
+    height: 18px;
+  }
+  &.md {
+    height: 23px;
+    line-height: 21px;
+  }
+  &.lg {
+    height: 28px;
+    line-height: 26px;
+    padding: 0 10px;
+    font-size: 15px;
+  }
 }
 </style>
 
@@ -50,6 +65,10 @@ input.e-input {
 export default {
   name: 'NovelEditorCommonInput',
   props: {
+    size: {
+      type: String,
+      default: 'sm'
+    },
     type: {
       type: String,
       default: 'text'

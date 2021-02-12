@@ -48,6 +48,13 @@ export default {
     NovelEditorHeader,
     NovelEditorHeaderPage
   },
+  mounted() {
+    const theme = localStorage.getItem('theme')
+    if (!!theme) {
+      const style = document.documentElement.style
+      style.setProperty('--primary', theme)
+    }
+  },
   computed: {
     isLoading() {
       return this.$store.state['novel']['editor']['isLoading']

@@ -24,19 +24,32 @@
         디버그
       </div>
     </div>
+    <div class='item theme'>
+      <label>
+        테마
+        <e-input
+          size='xsm'
+          type='color'
+          v-model='theme'
+          @input='onInputTheme'
+        />
+      </label>
+    </div>
   </div>
 </template>
 
 <style lang='less' scoped>
 .e-content-top {
   display: flex;
+  justify-content: flex-end;
   height: 24px;
   font-size: 13px;
   border: 1px solid var(--primary);
   border-right: 0;
   background-color: #333;
   > .item {
-    border-right: 1px solid var(--primary);
+    border-left: 1px solid var(--primary);
+    &.theme > label > div {margin: 2px 0 0 4px}
     > .button {
       min-width: 22px;
       height: 22px;
@@ -74,11 +87,15 @@
 </style>
 
 <script>
+import EInput from '@/components/novel/editor/common/input'
+
 export default {
   name: 'NovelEditorContentTop',
+  components: {EInput},
   data() {
     return {
-      zoom: 1
+      zoom: 1,
+      theme: '#EDA7B2'
     }
   },
   watch: {
@@ -88,6 +105,7 @@ export default {
     }
   },
   mounted() {
+    this.theme = localStorage.getItem('theme') || '#EDA7B2'
     window.addEventListener('mousewheel', this.onMouseWheel, {passive: false})
     window.addEventListener('DOMMouseScroll', this.onMouseWheel, false)
   },
@@ -97,6 +115,11 @@ export default {
     },
     onClickDebug() {
       this.$eventBus.$emit('cp.toggleDebug')
+    },
+    onInputTheme(theme) {
+      const style = document.documentElement.style
+      style.setProperty('--primary', theme)
+      localStorage.setItem('theme', theme)
     },
     onMouseWheel(event) {
       event.preventDefault()
