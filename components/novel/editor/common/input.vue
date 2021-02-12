@@ -34,16 +34,6 @@ input.e-input {
   }
   &:not(.readonly):focus {border-style: dashed}
   &.block {width: 100%}
-  &[type='color'] {
-    width: 19px;
-    height: 19px;
-    margin: 0;
-    padding: 0;
-    border: 1px solid var(--primary);
-    -webkit-appearance: none;
-  }
-  &[type='color']::-webkit-color-swatch-wrapper {padding: 0}
-  &[type='color']::-webkit-color-swatch {border: none}
   &.xsm {
     width: 18px;
     height: 18px;
@@ -58,6 +48,20 @@ input.e-input {
     padding: 0 10px;
     font-size: 15px;
   }
+  &[type='color'] {
+    width: 19px;
+    height: 19px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--primary);
+    -webkit-appearance: none;
+    &.md {
+      width: 23px;
+      height: 23px;
+    }
+  }
+  &[type='color']::-webkit-color-swatch-wrapper {padding: 0}
+  &[type='color']::-webkit-color-swatch {border: none}
 }
 </style>
 

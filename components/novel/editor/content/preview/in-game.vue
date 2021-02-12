@@ -13,17 +13,21 @@
   >
     <div class='backdrop' v-if='isDebug'/>
     <vue-snowf
-      :amount='200'
-      :size='4'
-      :speed='10'
-      :wind='-1'
-      :opacity='0.1'
-      :swing='0'
-      :image='`/rain.png`'
-      :zIndex='100'
-      :resize='true'
-      color='#000'
-      v-if='isDebug'
+      :class='[
+        "particle",
+        isDebug ? "debug" : undefined
+      ]'
+      :amount='particleInfo.amount'
+      :size='particleInfo.size'
+      :speed='particleInfo.speed'
+      :wind='particleInfo.wind'
+      :opacity='particleInfo.opacity'
+      :swing='particleInfo.swing'
+      :image='particleInfo.url'
+      :zIndex='particleInfo.z'
+      :resize='particleInfo.isResize'
+      :color='particleInfo.color'
+      v-if='particleInfo && particleInfo.isVisible && !particleInfo.isHidden'
     />
     <div
       :class='[
@@ -114,6 +118,7 @@
   }
   > .background,
   > .standing,
+  > .particle,
   > .script {
     position: absolute;
     top: 0;
@@ -196,6 +201,7 @@ export default {
     return {
       dataSource: [],
       scriptInfo: {},
+      particleInfo: {},
       backgroundInfo: {},
       standingInfo: [],
       previewText: '',
@@ -222,6 +228,48 @@ export default {
           : undefined,
         isVisible: !!scriptData.script,
         isHidden: scriptIsHidden
+      }
+      const {
+        id: particleId,
+        name: particleName,
+        column: particleData,
+        isHidden: particleIsHidden
+      } = this.getParticleData
+      this.particleInfo = {
+        id: particleId,
+        name: particleName,
+        url: !!particleData.particle
+          ? particleData.particle.url
+          : undefined,
+        amount: !!particleData.particle
+          ? Number(particleData.particle.amount || 50)
+          : undefined,
+        size: !!particleData.particle
+          ? Number(particleData.particle.size || 5)
+          : undefined,
+        speed: !!particleData.particle
+          ? Number(particleData.particle.speed || 1.5)
+          : undefined,
+        wind: !!particleData.particle
+          ? Number(particleData.particle.wind || 0)
+          : undefined,
+        color: !!particleData.particle
+          ? particleData.particle.color
+          : undefined,
+        opacity: !!particleData.particle
+          ? Number(particleData.particle.opacity || 0.8)
+          : undefined,
+        swing: !!particleData.particle
+          ? Number(particleData.particle.swing || 1)
+          : undefined,
+        z: !!particleData.particle
+          ? Number(particleData.particle.z || 9999)
+          : undefined,
+        isResize: !!particleData.particle
+          ? particleData.particle.isResize
+          : undefined,
+        isVisible: !!particleData.particle,
+        isHidden: particleIsHidden
       }
       const {
         id: bcgId,
@@ -367,6 +415,10 @@ export default {
     getScriptData() {
       return this.dataSource
         .find(item => item.type === 'script')
+    },
+    getParticleData() {
+      return this.dataSource
+        .find(item => item.type === 'particle')
     },
     getBackgroundData() {
       return this.dataSource
