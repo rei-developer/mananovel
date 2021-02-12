@@ -163,8 +163,11 @@
 
 <script>
 import NovelCommon from '@/mixins/novel/common'
+import {CDN_HOST} from '~/data/config.json'
 
 let timer
+let BGM
+let BGS
 
 export default {
   name: 'NovelEditorContentPreviewInGame',
@@ -263,7 +266,7 @@ export default {
           ? Number(particleData.particle.swing || 1)
           : undefined,
         z: !!particleData.particle
-          ? Number(particleData.particle.z || 9999)
+          ? Number(particleData.particle.z || 100)
           : undefined,
         isResize: !!particleData.particle
           ? particleData.particle.isResize
@@ -409,7 +412,8 @@ export default {
     }
   },
   mounted() {
-
+    BGM = new Audio()
+    BGS = new Audio()
   },
   computed: {
     getScriptData() {
@@ -496,6 +500,29 @@ export default {
           if (i === text.length)
             return this.printText(++line)
         }, i * 30)
+    },
+    playBGM(url) {
+      BGM.src = `${CDN_HOST}/novel/audio/bgm/${url}`
+      BGM.loop = true
+      BGM.play()
+    },
+    playBGS(url) {
+      BGS.src = `${CDN_HOST}/novel/audio/bgm/${url}`
+      BGS.loop = true
+      BGS.play()
+    },
+    playSound(url) {
+      const sound = new Audio()
+      sound.src = `${CDN_HOST}/novel/audio/sound/${url}`
+      sound.play()
+    },
+    stopBGM() {
+      BGM.pause()
+      BGM = new Audio()
+    },
+    stopBGS() {
+      BGS.pause()
+      BGS = new Audio()
     },
     onMouseMove(event) {
       const realX = Math.floor(event.offsetX / this.zoom)

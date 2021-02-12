@@ -341,7 +341,7 @@ export default {
         this.swing = '0'
         this.url = '/rain.png'
       }
-      this.z = '9999'
+      this.z = '100'
       this.isResize = true
       this.color = undefined
       this.particleType = type

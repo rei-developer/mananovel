@@ -28,7 +28,7 @@
       <label>
         테마
         <e-input
-          size='xsm'
+          size='sm'
           type='color'
           v-model='theme'
           @input='onInputTheme'

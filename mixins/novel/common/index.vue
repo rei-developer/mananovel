@@ -6,9 +6,14 @@ export default {
     async getImageUrl(type, id, url) {
       if (url)
         return `url(${url})`
+      const key = `picture${id}`
+      const item = localStorage.getItem(key)
+      if (item)
+        return item
       const {picture} = await this.$axios.$get(`/api/v1/novel/common/picture/${id}`)
-      const imageUrl = picture.imageUrl
-      return `url(${CDN_HOST}/novel/img/${type}/${imageUrl})`
+      const imageUrl = `url(${CDN_HOST}/novel/img/${type}/${picture.imageUrl})`
+      localStorage.setItem(key, imageUrl)
+      return imageUrl
     },
     getSize(type, width, height) {
       return type === 'px' || type === 'rem'

@@ -27,6 +27,7 @@
 import NovelEditorSidebarScriptEditTemplateScript from '@/components/novel/editor/sidebar/script-edit/template/script'
 import NovelEditorSidebarScriptEditTemplateBcg from '~/components/novel/editor/sidebar/script-edit/template/bcg'
 import NovelEditorSidebarScriptEditTemplateScg from '~/components/novel/editor/sidebar/script-edit/template/scg'
+import NovelEditorSidebarScriptEditTemplateBgm from '~/components/novel/editor/sidebar/script-edit/template/bgm'
 import NovelEditorSidebarScriptEditTemplateJs from '@/components/novel/editor/sidebar/script-edit/template/js'
 import NovelEditorSidebarScriptEditTemplateParticle
   from '@/components/novel/editor/sidebar/script-edit/template/particle'
@@ -39,6 +40,7 @@ export default {
     NovelEditorSidebarScriptEditTemplateScript,
     NovelEditorSidebarScriptEditTemplateBcg,
     NovelEditorSidebarScriptEditTemplateScg,
+    NovelEditorSidebarScriptEditTemplateBgm,
     NovelEditorSidebarScriptEditTemplateJs,
     NovelEditorSidebarScriptEditTemplateParticle
   },
@@ -63,6 +65,7 @@ export default {
         {type: 'script', component: NovelEditorSidebarScriptEditTemplateScript},
         {type: 'bcg', component: NovelEditorSidebarScriptEditTemplateBcg},
         {type: 'scg', component: NovelEditorSidebarScriptEditTemplateScg},
+        {type: 'bgm', component: NovelEditorSidebarScriptEditTemplateBgm},
         {type: 'js', component: NovelEditorSidebarScriptEditTemplateJs},
         {type: 'particle', component: NovelEditorSidebarScriptEditTemplateParticle}
       ]

@@ -55,6 +55,10 @@ input.e-input {
     padding: 0;
     border: 1px solid var(--primary);
     -webkit-appearance: none;
+    &.sm {
+      width: 18px;
+      height: 18px;
+    }
     &.md {
       width: 23px;
       height: 23px;

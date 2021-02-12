@@ -286,7 +286,7 @@
         class='label'
         @click.self='onClickDetailOption'
       >
-        상세설정
+        상세 설정
         <font-awesome-icon :icon='isVisibleDetailOption ? "chevron-up" : "chevron-down"'/>
       </div>
       <div class='content'>

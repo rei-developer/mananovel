@@ -351,7 +351,7 @@
                 <e-input
                   type='number'
                   v-model='aniCnt'
-                  placeholder='기본값: 0'
+                  placeholder='기본값: 1'
                   :min='0'
                   :max='9999'
                   block
