@@ -12,15 +12,11 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-@font-color: #EDE3EB;
-
 header.e-header {
   width: 100%;
   color: #FFF;
   font-size: 13px;
-  background: @primary;
+  background: var(--primary);
   cursor: default;
   > ul {
     display: flex;
@@ -34,8 +30,8 @@ header.e-header {
       padding: 0 .4rem;
       color: #333;
       &:active, &.active {
-        color: @font-color;
-        background: @primary-hover;
+        color: #FFF;
+        background: var(--primary-hover);
       }
     }
   }

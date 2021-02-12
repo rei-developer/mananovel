@@ -98,8 +98,6 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-
 .e-content-preview-in-game {
   position: absolute;
   color: #FFF;
@@ -138,7 +136,7 @@
       color: #FFF;
       text-shadow: 1px 1px #000;
       > .name {
-        color: @primary;
+        color: var(--primary);
         font-size: 16px;
         font-weight: bold;
       }
@@ -153,7 +151,7 @@
     left: 0;
     color: #333;
     font-size: 11px;
-    background-color: @primary;
+    background-color: var(--primary);
   }
 }
 </style>

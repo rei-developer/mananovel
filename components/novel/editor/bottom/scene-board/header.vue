@@ -34,10 +34,7 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
 @view: #B2CCFF;
-@font-color: #EDE3EB;
 
 .e-scene-board-header {
   display: flex;
@@ -52,14 +49,14 @@
     height: 22px;
     line-height: 18px;
     font-weight: bold;
-    border-right: 1px solid @primary;
-    border-bottom: 1px solid @primary;
+    border-right: 1px solid var(--primary);
+    border-bottom: 1px solid var(--primary);
   }
   > .list {
     min-width: 100px;
     padding: 0 3px;
-    border-right: 1px dashed @primary;
-    border-bottom: 1px solid @primary;
+    border-right: 1px dashed var(--primary);
+    border-bottom: 1px solid var(--primary);
     > svg {margin: 4px 0 0 4px}
   }
   > .sub-event {
@@ -67,21 +64,21 @@
     align-items: center;
     justify-content: center;
     padding-bottom: 1px;
-    border-right: 1px solid @primary;
-    border-bottom: 1px solid @primary;
+    border-right: 1px solid var(--primary);
+    border-bottom: 1px solid var(--primary);
   }
   > ul {
     display: flex;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid @primary;
+    border-bottom: 1px solid var(--primary);
     list-style: none;
     > li {
       width: 21px;
       height: 21px;
       line-height: 20px;
       text-align: center;
-      border-right: 1px dashed @primary;
+      border-right: 1px dashed var(--primary);
       &.view {
         color: #333;
         font-weight: bold;
@@ -119,7 +116,7 @@ export default {
       this.columns.push({id})
     const self = this
     window.addEventListener('keydown', event => {
-      if (event.keyCode  === 37)
+      if (event.keyCode === 37)
         self.onKeyPress('LEFT')
       if (event.keyCode === 39)
         self.onKeyPress('RIGHT')

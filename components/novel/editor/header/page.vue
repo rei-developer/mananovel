@@ -11,15 +11,11 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-@font-color: #EDE3EB;
-
 header.e-header-page {
   width: 100%;
   color: #FFF;
   font-size: 13px;
-  background: @primary;
+  background: var(--primary);
   cursor: default;
   > ul {
     display: flex;
@@ -34,12 +30,12 @@ header.e-header-page {
       color: #333;
       &:active, &.active {
         margin-bottom: -1px;
-        color: @primary-hover;
+        color: var(--primary-hover);
         background: rgba(255, 255, 255, .4);
       }
       &.active {
         font-weight: bold;
-        border-bottom: 4px solid @primary-hover;
+        border-bottom: 4px solid var(--primary-hover);
       }
       &:hover {background: rgba(255, 255, 255, .2)}
     }

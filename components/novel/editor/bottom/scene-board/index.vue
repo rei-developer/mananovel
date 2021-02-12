@@ -55,16 +55,12 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-@font-color: #EDE3EB;
-
 .e-bottom-scene-board {
   background-color: #333;
-  border: 1px solid @primary;
+  border: 1px solid var(--primary);
   border-right: 0;
   .scene-board-box {
-    border-bottom: 1px solid @primary;
+    border-bottom: 1px solid var(--primary);
     > header,
     > .inner {
       width: calc(100vw - 401px);

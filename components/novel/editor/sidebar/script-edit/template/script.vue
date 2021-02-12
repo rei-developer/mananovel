@@ -162,10 +162,6 @@
   </div>
 </template>
 
-<style lang='less' scoped>
-
-</style>
-
 <script>
 import EInput from '@/components/novel/editor/common/input'
 import ETextarea from '@/components/novel/editor/common/textarea'

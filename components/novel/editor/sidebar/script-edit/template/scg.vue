@@ -624,8 +624,6 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-
 .e-section-body {
   > .item {
     > .content {
@@ -640,7 +638,7 @@
                 width: 126px;
                 height: 126px;
                 padding: 0 5px 5px 0;
-                border: 1px solid @primary;
+                border: 1px solid var(--primary);
                 > .cols {
                   flex-grow: 0;
                   flex-shrink: 0;
@@ -650,7 +648,7 @@
                   color: #333;
                   text-align: center;
                   background: rgba(255, 255, 255, .2);
-                  &.active {background: @primary}
+                  &.active {background: var(--primary)}
                   &:active {opacity: .9}
                 }
               }

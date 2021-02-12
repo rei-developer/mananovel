@@ -14,9 +14,6 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-
 .e-button {
   width: fit-content;
   height: 19px;
@@ -25,18 +22,18 @@
   color: #333;
   font-size: 13px;
   &.primary {
-    background-color: @primary;
+    background-color: var(--primary);
     &:hover {opacity: .9}
     &:active {
       color: #FFF;
-      background-color: @primary-hover;
+      background-color: var(--primary-hover);
     }
   }
   &.gray {
     color: #FFF;
     background-color: #666;
     &:hover {opacity: .9}
-    &:active {background-color: @primary-hover}
+    &:active {background-color: var(--primary-hover)}
   }
   &.block {width: 100%}
   &.md {

@@ -28,24 +28,21 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-focus: #5F5476;
-
 .e-content-top {
   display: flex;
   height: 24px;
   font-size: 13px;
-  border: 1px solid @primary;
+  border: 1px solid var(--primary);
   border-right: 0;
   background-color: #333;
   > .item {
-    border-right: 1px solid @primary;
+    border-right: 1px solid var(--primary);
     > .button {
       min-width: 22px;
       height: 22px;
       line-height: 20px;
       padding: 0 5px;
-      color: @primary;
+      color: var(--primary);
       font-size: 13px;
       &:hover {background-color: rgba(255, 255, 255, .1)}
       &.fixed {opacity: .5}
@@ -62,7 +59,7 @@
         color: #FFF;
         text-align: right;
         border: 0;
-        border-left: 1px dashed @primary;
+        border-left: 1px dashed var(--primary);
         background: transparent;
         outline: none;
         &::-webkit-outer-spin-button,

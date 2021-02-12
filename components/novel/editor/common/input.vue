@@ -21,12 +21,9 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-
 input.e-input {
   color: #FFF;
-  border: 1px solid @primary;
+  border: 1px solid var(--primary);
   background: transparent;
   outline: none;
   &::-webkit-outer-spin-button,
@@ -41,7 +38,7 @@ input.e-input {
     height: 19px;
     margin: 0;
     padding: 0;
-    border: 1px solid @primary;
+    border: 1px solid var(--primary);
     -webkit-appearance: none;
   }
   &[type='color']::-webkit-color-swatch-wrapper {padding: 0}

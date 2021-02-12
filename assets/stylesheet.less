@@ -1,6 +1,11 @@
 @primary: #EDA7B2;
 @primary-hover: #5F5476;
 
+:root {
+  --primary: @primary;
+  --primary-hover: @primary-hover;
+}
+
 @media (max-width: 1199px) {
   .desktop-only { display: none }
 }
@@ -50,11 +55,11 @@ span.highlight {
     &:hover {background-color: #444}
   }
   &::-webkit-scrollbar-track {
-    background-color: @primary;
+    background-color: var(--primary);
     box-shadow: inset 0 0 5px #333;
   }
   &::-webkit-scrollbar-corner {
-    background-color: @primary;
+    background-color: var(--primary);
     box-shadow: inset 0 0 10px #333;
   }
 }
@@ -78,7 +83,7 @@ span.highlight {
     margin-bottom: 5px;
     padding-left: .5rem;
     color: #333;
-    background-color: @primary;
+    background-color: var(--primary);
   }
   > .item {
     padding: 0 .5rem;

@@ -10,18 +10,14 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-@font-color: #EDE3EB;
-
 .e-sidebar-script-edit {
   display: flex;
   flex-direction: column;
   width: 400px;
   height: calc(100vh - 189px - 56px);
-  color: @font-color;
+  color: #FFF;
   font-size: 13px;
-  border: 1px solid @primary;
+  border: 1px solid var(--primary);
   border-bottom: 0;
   background: #333;
 }

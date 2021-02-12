@@ -12,13 +12,10 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-
 textarea.e-textarea {
   width: 100%;
   color: #FFF;
-  border: 1px solid @primary;
+  border: 1px solid var(--primary);
   background: transparent;
   outline: none;
   &:focus {border-style: dashed}

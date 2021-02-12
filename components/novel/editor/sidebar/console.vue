@@ -57,14 +57,10 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
-@primary-hover: #5F5476;
-@font-color: #EDE3EB;
-
 .e-sidebar-console {
   display: flex;
   height: 167px;
-  border: 1px solid @primary;
+  border: 1px solid var(--primary);
   background-color: #333;
   > .side {
     margin: 5px 0 5px 5px;
@@ -74,7 +70,7 @@
       justify-content: center;
       width: 19px;
       height: 19px;
-      color: @primary;
+      color: var(--primary);
       font-size: 13px;
       border-radius: 2px;
       &:hover {background-color: rgba(255, 255, 255, .1)}
@@ -90,7 +86,7 @@
     height: 155px;
     margin: 5px;
     padding: 3px;
-    border: 3px double @primary;
+    border: 3px double var(--primary);
     > ul {
       display: flex;
       margin: 0 0 2px;
@@ -118,8 +114,8 @@
           &.help {background-color: #B5B2FF}
         }
         &.time {
-          color: @primary-hover;
-          background-color: @font-color;
+          color: var(--primary-hover);
+          background-color: #FFF;
         }
       }
     }
@@ -128,7 +124,7 @@
 
 .e-sidebar-console-bottom {
   height: 22px;
-  background-color: @primary;
+  background-color: var(--primary);
   > ul {
     display: flex;
     justify-content: flex-end;
