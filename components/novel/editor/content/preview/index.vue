@@ -4,7 +4,7 @@
       id='content-wrapper'
       class='content-wrapper'
     >
-      <drag-it-dude :style='{left: `${x}px`, top: `${y}px`}'>
+      <drag-it-dude id='preview' :style='{left: `${x}px`, top: `${y}px`}'>
         <novel-editor-content-preview-in-game
           :viewId='viewId'
           :w='w'
@@ -92,6 +92,7 @@ export default {
   created() {
     const p = `${EVENT_BUS_PREFIX}.`
     const onEventBusList = [
+      ['setPreviewPos', () => this.setPreviewPos()],
       ['setData', (id, data) => this.setData(id, data)],
       ['toggleDebug', () => this.toggleDebug()]
     ]
@@ -108,12 +109,19 @@ export default {
   },
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
-    const offEventBusList = ['setData', 'toggleDebug']
+    const offEventBusList = ['setPreviewPos', 'setData', 'toggleDebug']
     offEventBusList.map(item => this.$eventBus.$off(`${p}${item}`))
   },
   methods: {
     setZoom(value) {
       this.zoom = value
+    },
+    setPreviewPos() {
+      const contentPreviewWrapper = document.getElementById('content-preview-wrapper')
+      const preview = document.getElementById('preview')
+      const {left, top} = preview.style
+      contentPreviewWrapper.scrollLeft = Number(left.replace(/[^0-9]+/g, ''))
+      contentPreviewWrapper.scrollTop = Number(top.replace(/[^0-9]+/g, ''))
     },
     setData(id, data) {
       this.viewId = id

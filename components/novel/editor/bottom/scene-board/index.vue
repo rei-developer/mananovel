@@ -114,7 +114,8 @@ export default {
       addRowOptionList: [
         {label: '백그라운드 (BCG)', value: 'bcg', max: 1},
         {label: '스탠딩 (SCG)', value: 'scg', max: 4},
-        {label: '자바스크립트', value: 'js', max: 1}
+        {label: '자바스크립트', value: 'js', max: 1},
+        {label: '파티클', value: 'particle', max: 1}
       ],
       bottomMenuList: [
         {label: '추가', beep: true, function: () => this.beforeAddRow()},
@@ -322,6 +323,7 @@ export default {
       item.isHidden = flag
       this.commit('setUnsaved', true)
       this.getHideCount()
+      this.$eventBus.$emit('cp.setData', this.viewId, this.dataSource)
       this.$eventBus.$emit('cs.console', 'success', `${id}번째 액션을 ${flag ? '보이게 했' : '가렸'}습니다.`)
     },
     hideAll(flag) {

@@ -1,8 +1,8 @@
 <template>
   <div class='e-section-body'>
     <div class='title'>
-      <font-awesome-icon icon='street-view'/>
-      스탠딩 CG 설정
+      <font-awesome-icon :icon="['fab', 'react']"/>
+      파티클 설정
     </div>
     <div class='item'>
       <div class='label'>데이터베이스</div>
@@ -279,137 +279,6 @@
       :class='[
         "item",
         "accordion",
-        isVisibleAniOption ? undefined : "hide"
-      ]'
-    >
-      <div
-        class='label'
-        @click.self='onClickAniOption'
-      >
-        애니메이션
-        <font-awesome-icon :icon='isVisibleAniOption ? "chevron-up" : "chevron-down"'/>
-      </div>
-      <div class='content'>
-        <div class='rows'>
-          <div class='cols'>
-            <div class='cols-row'>
-              <div class='label'>종류</div>
-              <div class='content'>
-                <e-select
-                  v-model='aniType'
-                  block
-                  @change='onChangeAni'
-                >
-                  <option :value='null'>선택</option>
-                  <option
-                    :value='item.value'
-                    v-for='(item, index) in aniOptions'
-                    :key='index'
-                  >
-                    {{ item.label }}
-                  </option>
-                </e-select>
-              </div>
-            </div>
-          </div>
-          <div class='cols'>
-            <div class='cols-row'>
-              <div class='label'>프레임</div>
-              <div class='content'>
-                <e-input
-                  type='number'
-                  v-model='aniDur'
-                  placeholder='기본값: 1'
-                  :min='0'
-                  :max='9999'
-                  block
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class='rows'>
-          <div class='cols'>
-            <div class='cols-row'>
-              <div class='label'>딜레이</div>
-              <div class='content'>
-                <e-input
-                  type='number'
-                  v-model='aniDel'
-                  placeholder='기본값: 0'
-                  :min='-9999'
-                  :max='9999'
-                  block
-                />
-              </div>
-            </div>
-          </div>
-          <div class='cols'>
-            <div class='cols-row'>
-              <div class='label'>반복 횟수</div>
-              <div class='content'>
-                <e-input
-                  type='number'
-                  v-model='aniCnt'
-                  placeholder='기본값: 0'
-                  :min='0'
-                  :max='9999'
-                  block
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class='rows'>
-          <div class='cols'>
-            <div class='cols-row'>
-              <div class='label'>방향</div>
-              <div class='content'>
-                <e-select
-                  v-model='aniDir'
-                  block
-                  @change='onChangeAniDir'
-                >
-                  <option :value='null'>선택</option>
-                  <option
-                    :value='item.value'
-                    v-for='(item, index) in aniDirOptions'
-                    :key='index'
-                  >
-                    {{ item.label }}
-                  </option>
-                </e-select>
-              </div>
-            </div>
-          </div>
-          <div class='cols'>
-            <div class='cols-row'>
-              <div class='label'>속도</div>
-              <div class='content'>
-                <e-select
-                  v-model='aniFunc'
-                  block
-                  @change='onChangeAniFunc'
-                >
-                  <option :value='null'>선택</option>
-                  <option
-                    :value='item.value'
-                    v-for='(item, index) in aniFuncOptions'
-                    :key='index'
-                  >
-                    {{ item.label }}
-                  </option>
-                </e-select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      :class='[
-        "item",
-        "accordion",
         isVisibleDetailOption ? undefined : "hide"
       ]'
     >
@@ -417,7 +286,7 @@
         class='label'
         @click.self='onClickDetailOption'
       >
-        상세 설정
+        상세설정
         <font-awesome-icon :icon='isVisibleDetailOption ? "chevron-up" : "chevron-down"'/>
       </div>
       <div class='content'>
@@ -693,17 +562,11 @@ const attrList = [
   'hue',
   'invert',
   'saturate',
-  'sepia',
-  'aniType',
-  'aniDur',
-  'aniDel',
-  'aniCnt',
-  'aniDir',
-  'aniFunc'
+  'sepia'
 ]
 
 export default {
-  name: 'NovelEditorSidebarScriptEditTemplateScg',
+  name: 'NovelEditorSidebarScriptEditTemplateParticle',
   components: {
     EInput,
     ETextarea,
@@ -727,9 +590,8 @@ export default {
   data() {
     const data = this.pureData
     const attr = {}
-    attrList.map(item => attr[item] = !!data.scg ? data.scg[item] : undefined)
+    attrList.map(item => attr[item] = !!data.particle ? data.particle[item] : undefined)
     attr.repeatType = 'no-repeat'
-    attr.pos = 2
     return {
       data,
       ...attr,
@@ -750,23 +612,6 @@ export default {
         {label: '원형', value: 'round'},
         {label: '간격', value: 'space'}
       ],
-      aniOptions: [
-        {label: '페이드인', value: 'fadein'},
-        {label: '페이드아웃', value: 'fadeout'},
-        {label: '쉐이크 1', value: 'shake1'},
-        {label: '쉐이크 2', value: 'shake2'}
-      ],
-      aniDirOptions: [
-        {label: '역방향', value: 'reverse'},
-        {label: '순 > 역 반복', value: 'alternate'},
-        {label: '역 > 순 반복', value: 'alternate-reverse'}
-      ],
-      aniFuncOptions: [
-        {label: '저 > 고 > 저속', value: 'ease'},
-        {label: '저 > 정상', value: 'ease-in'},
-        {label: '정상 > 저속', value: 'ease-out'},
-        {label: '저 > 정상 > 저속', value: 'ease-in-out'}
-      ],
       posList: [
         {label: 'TL', value: 1},
         {label: 'TC', value: 2},
@@ -779,7 +624,6 @@ export default {
         {label: 'BR', value: 9}
       ],
       isVisibleFilterOption: false,
-      isVisibleAniOption: false,
       isVisibleDetailOption: false,
       isApplyAllDraggedColumns: false,
       isApplyAllVisibleColumns: false
@@ -788,7 +632,7 @@ export default {
   watch: {
     pureData() {
       this.data = this.pureData
-      attrList.map(item => this[item] = !!this.pureData.scg ? this.pureData.scg[item] : undefined)
+      attrList.map(item => this[item] = !!this.pureData.particle ? this.pureData.particle[item] : undefined)
     }
   },
   computed: {
@@ -811,20 +655,8 @@ export default {
     onChangeRepeat(event) {
       this.repeatType = event.target.value
     },
-    onChangeAni(event) {
-      this.aniType = event.target.value
-    },
-    onChangeAniDir(event) {
-      this.aniDir = event.target.value
-    },
-    onChangeAniFunc(event) {
-      this.aniFunc = event.target.value
-    },
     onClickFilterOption() {
       this.isVisibleFilterOption = !this.isVisibleFilterOption
-    },
-    onClickAniOption() {
-      this.isVisibleAniOption = !this.isVisibleAniOption
     },
     onClickDetailOption() {
       this.isVisibleDetailOption = !this.isVisibleDetailOption
@@ -836,15 +668,15 @@ export default {
     },
     onClickClear() {
       attrList.map(item => this[item] = undefined)
-      delete this.data.scg
+      delete this.data.particle
       this.submit()
     },
     onClickSave() {
       if (this.isAllEmpty)
-        delete this.data.scg
+        delete this.data.particle
       else {
-        this.data.scg = {}
-        attrList.map(item => this[item] ? this.data.scg[item] = this[item] : undefined)
+        this.data.particle = {}
+        attrList.map(item => this[item] ? this.data.particle[item] = this[item] : undefined)
       }
       this.submit()
     },

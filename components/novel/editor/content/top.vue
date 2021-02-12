@@ -9,6 +9,15 @@
     <div class='item'>
       <div
         class='button'
+        @click='onClickPreviewPos'
+      >
+        <font-awesome-icon icon='bullseye'/>
+        추적
+      </div>
+    </div>
+    <div class='item'>
+      <div
+        class='button'
         @click='onClickDebug'
       >
         <font-awesome-icon icon='bug'/>
@@ -86,6 +95,9 @@ export default {
     window.addEventListener('DOMMouseScroll', this.onMouseWheel, false)
   },
   methods: {
+    onClickPreviewPos() {
+      this.$eventBus.$emit('cp.setPreviewPos')
+    },
     onClickDebug() {
       this.$eventBus.$emit('cp.toggleDebug')
     },

@@ -32,6 +32,8 @@ import NovelEditorSidebarScriptEditTemplateScript from '@/components/novel/edito
 import NovelEditorSidebarScriptEditTemplateBcg from '~/components/novel/editor/sidebar/script-edit/template/bcg'
 import NovelEditorSidebarScriptEditTemplateScg from '~/components/novel/editor/sidebar/script-edit/template/scg'
 import NovelEditorSidebarScriptEditTemplateJs from '@/components/novel/editor/sidebar/script-edit/template/js'
+import NovelEditorSidebarScriptEditTemplateParticle
+  from '@/components/novel/editor/sidebar/script-edit/template/particle'
 
 const EVENT_BUS_PREFIX = 'se'
 
@@ -41,7 +43,8 @@ export default {
     NovelEditorSidebarScriptEditTemplateScript,
     NovelEditorSidebarScriptEditTemplateBcg,
     NovelEditorSidebarScriptEditTemplateScg,
-    NovelEditorSidebarScriptEditTemplateJs
+    NovelEditorSidebarScriptEditTemplateJs,
+    NovelEditorSidebarScriptEditTemplateParticle
   },
   data() {
     return {
@@ -64,7 +67,8 @@ export default {
         {type: 'script', component: NovelEditorSidebarScriptEditTemplateScript},
         {type: 'bcg', component: NovelEditorSidebarScriptEditTemplateBcg},
         {type: 'scg', component: NovelEditorSidebarScriptEditTemplateScg},
-        {type: 'js', component: NovelEditorSidebarScriptEditTemplateJs}
+        {type: 'js', component: NovelEditorSidebarScriptEditTemplateJs},
+        {type: 'particle', component: NovelEditorSidebarScriptEditTemplateParticle}
       ]
       return componentList
         .find(item => item.type === this.type)?.component

@@ -1,7 +1,7 @@
 <template>
   <div class='e-section-body'>
     <div class='title'>
-      <font-awesome-icon icon='mountain'/>
+      <font-awesome-icon icon='image'/>
       백그라운드 CG 설정
     </div>
     <div class='item'>

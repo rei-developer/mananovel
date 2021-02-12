@@ -2,7 +2,8 @@
   <div
     :class='[
       "e-content-preview-in-game",
-      grabbing ? "grabbing" : undefined
+      grabbing ? "grabbing" : undefined,
+      isDebug ? undefined : "hide"
     ]'
     :style='getCustomCSSOptions("content")'
     @mousemove='onMouseMove'
@@ -10,6 +11,20 @@
     @mouseup='onMouseUp'
     v-if='viewId'
   >
+    <div class='backdrop' v-if='isDebug'/>
+    <vue-snowf
+      :amount='200'
+      :size='4'
+      :speed='10'
+      :wind='-1'
+      :opacity='0.1'
+      :swing='0'
+      :image='`/rain.png`'
+      :zIndex='100'
+      :resize='true'
+      color='#000'
+      v-if='isDebug'
+    />
     <div
       :class='[
         "background",
@@ -19,7 +34,7 @@
         ...getCustomCSSOptions("bcg"),
         boxShadow: isDebug ? `0 0 0 1px ${getDebugColor(backgroundInfo.id)[0]} inset` : undefined
       }'
-      v-if='backgroundInfo && backgroundInfo.isVisible'
+      v-if='backgroundInfo && backgroundInfo.isVisible && !backgroundInfo.isHidden'
     >
       <div
         class='label'
@@ -42,7 +57,7 @@
       }'
       v-for='(item, index) in standingInfo'
       :key='index'
-      v-if='item && item.isVisible'
+      v-if='item && item.isVisible && !item.isHidden'
     >
       <div
         class='label'
@@ -63,7 +78,7 @@
         ...getCustomCSSOptions("script"),
         boxShadow: isDebug ? `0 0 0 1px ${getDebugColor(scriptInfo.id)[0]} inset` : undefined
       }'
-      v-if='scriptInfo && scriptInfo.isVisible'
+      v-if='scriptInfo && scriptInfo.isVisible && !scriptInfo.isHidden'
     >
       <div
         class='label'
@@ -89,9 +104,16 @@
   position: absolute;
   color: #FFF;
   background-color: #000;
-  overflow: hidden;
   cursor: grab;
   &.grabbing {cursor: grabbing}
+  &.hide {overflow: hidden}
+  > .backdrop {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    outline: 1000rem solid rgba(0, 0, 0, .7);
+    z-index: 10000;
+  }
   > .background,
   > .standing,
   > .script {
@@ -111,6 +133,7 @@
     bottom: .5rem;
     border: 1px solid #FFF;
     background: rgba(0, 0, 0, .6);
+    z-index: 101;
     > .content {
       color: #FFF;
       text-shadow: 1px 1px #000;
@@ -187,7 +210,8 @@ export default {
       const {
         id: scriptId,
         name: scriptName,
-        column: scriptData
+        column: scriptData,
+        isHidden: scriptIsHidden
       } = this.getScriptData
       this.scriptInfo = {
         id: scriptId,
@@ -198,12 +222,14 @@ export default {
         text: !!scriptData.script
           ? scriptData.script.text
           : undefined,
-        isVisible: !!scriptData.script
+        isVisible: !!scriptData.script,
+        isHidden: scriptIsHidden
       }
       const {
         id: bcgId,
         name: bcgName,
-        column: bcgData
+        column: bcgData,
+        isHidden: bcgIsHidden
       } = this.getBackgroundData
       this.backgroundInfo = {
         id: bcgId,
@@ -250,14 +276,16 @@ export default {
         filter: !!bcgData.bcg
           ? this.getFilter(bcgData.bcg)
           : undefined,
-        isVisible: !!bcgData.bcg
+        isVisible: !!bcgData.bcg,
+        isHidden: bcgIsHidden
       }
       this.standingInfo = []
       await Promise.all(this.getStandingData.map(async (item, index) => {
         const {
           id: scgId,
           name: scgName,
-          column: scgData
+          column: scgData,
+          isHidden: scgIsHidden
         } = item
         this.standingInfo[index] = {
           id: scgId,
@@ -322,7 +350,8 @@ export default {
           aniFunc: !!scgData.scg
             ? scgData.scg.aniFunc
             : undefined,
-          isVisible: !!scgData.scg
+          isVisible: !!scgData.scg,
+          isHidden: scgIsHidden
         }
       }))
       this.$forceUpdate()
@@ -332,6 +361,9 @@ export default {
       }
       this.printText()
     }
+  },
+  mounted() {
+
   },
   computed: {
     getScriptData() {
