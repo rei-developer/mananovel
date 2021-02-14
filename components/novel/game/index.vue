@@ -37,7 +37,7 @@
 <style lang='less' scoped>
 @primary: #5F5476;
 @primary-hover: #EDE3EB;
-@font-color: #EDA7B2;
+@font-color: #A5CFFF;
 
 .backdrop {
   position: fixed;

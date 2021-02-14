@@ -105,7 +105,7 @@ export default {
     return {
       zoom: 1,
       audio: 1,
-      theme: '#EDA7B2'
+      theme: '#A5CFFF'
     }
   },
   watch: {
@@ -115,7 +115,7 @@ export default {
     }
   },
   mounted() {
-    this.theme = localStorage.getItem('theme') || '#EDA7B2'
+    this.theme = localStorage.getItem('theme') || '#A5CFFF'
     this.audio = Number(localStorage.getItem('audio')) ?? 1
     this.$eventBus.$emit('cp.setAudio', this.audio)
     window.addEventListener('mousewheel', this.onMouseWheel, {passive: false})
@@ -139,9 +139,9 @@ export default {
       localStorage.setItem('theme', theme)
     },
     onMouseWheel(event) {
-      event.preventDefault()
       if (!event.ctrlKey)
         return
+      event.preventDefault()
       const zoom = event.deltaY > 0
         ? this.zoom - 0.1
         : this.zoom + 0.1

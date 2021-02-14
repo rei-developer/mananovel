@@ -20,7 +20,7 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
+@primary: #A5CFFF;
 
 .wrapper-body {
   min-height: calc(100vh - 44px - 1rem);

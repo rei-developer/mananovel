@@ -6,7 +6,7 @@ module.exports = {
     meta: [
       {charset: 'utf-8'},
       {name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no'},
-      {name: 'theme-color', content: '#EDA7B2'},
+      {name: 'theme-color', content: '#A5CFFF'},
       {name: 'robots', content: 'index, follow'},
       {hid: 'description', name: 'description', content: '마나노벨'}
     ],
@@ -14,7 +14,7 @@ module.exports = {
       {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
     ]
   },
-  loading: {color: '#EDA7B2'},
+  loading: {color: '#A5CFFF'},
   css: [
     '@/assets/bootstrap',
     '@/assets/prism-editor',

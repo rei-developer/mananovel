@@ -212,6 +212,9 @@ export default {
       backgroundInfo: {},
       standingInfo: [],
       bgmInfo: {},
+      bgsInfo: {},
+      seInfo: [],
+      voiceInfo: [],
       previewText: '',
       grabbing: false
     }
@@ -428,7 +431,7 @@ export default {
         name: bgsName,
         column: bgsData,
         isHidden: bgsIsHidden
-      } = this.getBGMData
+      } = this.getBGSData
       this.bgsInfo = {
         id: bgsId,
         name: bgsName,
@@ -438,6 +441,42 @@ export default {
         isVisible: !!bgsData.bgs,
         isHidden: bgsIsHidden
       }
+      // this.seInfo = []
+      // await Promise.all(this.getSEData.map(async (item, index) => {
+      //   const {
+      //     id: seId,
+      //     name: seName,
+      //     column: seData,
+      //     isHidden: seIsHidden
+      //   } = item
+      //   this.seInfo[index] = {
+      //     id: seId,
+      //     name: seName,
+      //     url: !!seData.se
+      //       ? await this.getAudioUrl('se', seData.se.id, seData.se.url)
+      //       : undefined,
+      //     isVisible: !!seData.se,
+      //     isHidden: seIsHidden
+      //   }
+      // }))
+      // this.voiceInfo = []
+      // await Promise.all(this.getVoiceData.map(async (item, index) => {
+      //   const {
+      //     id: voiceId,
+      //     name: voiceName,
+      //     column: voiceData,
+      //     isHidden: voiceIsHidden
+      //   } = item
+      //   this.voiceInfo[index] = {
+      //     id: voiceId,
+      //     name: voiceName,
+      //     url: !!voiceData.voice
+      //       ? await this.getAudioUrl('voice', null, voiceData.voice.url)
+      //       : undefined,
+      //     isVisible: !!voiceData.voice,
+      //     isHidden: voiceIsHidden
+      //   }
+      // }))
       if (this.bgmInfo.url) {
         if (BGM.src !== this.bgmInfo.url)
           this.playBGM(this.bgmInfo.url)
@@ -480,6 +519,18 @@ export default {
     getBGMData() {
       return this.dataSource
         .find(item => item.type === 'bgm')
+    },
+    getBGSData() {
+      return this.dataSource
+        .find(item => item.type === 'bgs')
+    },
+    getSEData() {
+      return this.dataSource
+        .find(item => item.type === 'se')
+    },
+    getVoiceData() {
+      return this.dataSource
+        .find(item => item.type === 'voice')
     }
   },
   methods: {

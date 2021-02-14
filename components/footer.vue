@@ -28,7 +28,7 @@
 <style lang='less' scoped>
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
-@primary: #EDA7B2;
+@primary: #A5CFFF;
 
 .wrapper {
   height: 44px;

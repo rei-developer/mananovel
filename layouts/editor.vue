@@ -5,7 +5,8 @@
     <b-overlay variant='dark' :show='isLoading'>
       <template #overlay>
         <div class='text-center'>
-          <font-awesome-icon class='fa-spin' style='width: 3rem; height: 3rem' icon='cog'/>
+          <div class='logo'><img :src='`/mascot.png`' alt='mascot'></div>
+          <p><img :src='`/logo.png`' alt='logo'></p>
           <p>데이터를 불러오고 있는 중이에요...!</p>
         </div>
       </template>
@@ -19,7 +20,7 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
+@primary: #A5CFFF;
 
 .e-editor {
   user-select: none;
@@ -28,6 +29,13 @@
   -webkit-user-select: none;
   ::selection {background: @primary}
   ::-moz-selection {background: @primary}
+  .logo > img {
+    width: 8rem;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 500rem;
+    animation: spin 5s linear infinite;
+  }
 }
 
 .e-loading {cursor: wait}

@@ -112,8 +112,10 @@ export default {
         {label: '스탠딩 (SCG)', value: 'scg', max: 4},
         {label: '배경음악 (BGM)', value: 'bgm', max: 1},
         {label: '보조 배경음악 (BGS)', value: 'bgs', max: 1},
-        {label: '자바스크립트', value: 'js', max: 1},
-        {label: '파티클', value: 'particle', max: 1}
+        {label: '효과음 (SE)', value: 'se', max: 4},
+        {label: '보이스 (VOICE)', value: 'voice', max: 4},
+        {label: '자바스크립트 (JS)', value: 'js', max: 1},
+        {label: '파티클 (PARTICLE)', value: 'particle', max: 1}
       ],
       bottomMenuList: [
         {label: '추가', beep: true, function: () => this.beforeAddRow()},

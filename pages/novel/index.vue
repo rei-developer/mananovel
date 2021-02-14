@@ -15,7 +15,7 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
+@primary: #A5CFFF;
 @primary-focus: #5F5476;
 
 .content-box {

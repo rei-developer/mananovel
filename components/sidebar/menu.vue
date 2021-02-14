@@ -61,7 +61,7 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
+@primary: #A5CFFF;
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
 

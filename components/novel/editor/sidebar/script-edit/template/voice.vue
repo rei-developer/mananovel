@@ -1,48 +1,18 @@
 <template>
   <div class='e-section-body'>
     <div class='title'>
-      <font-awesome-icon icon='drum'/>
-      보조 배경음악 설정
+      <font-awesome-icon icon='microphone-alt'/>
+      보이스 설정
     </div>
     <div class='item'>
       <div class='label'>데이터베이스</div>
       <div class='content'>
         <div class='rows'>
-          <div class='cols'>
-            <div class='cols-row'>
-              <div class='label'>ID</div>
-              <div class='content'>
-                <e-input
-                  type='number'
-                  v-model='id'
-                  placeholder='보조 배경음악 ID'
-                  :maxlength='20'
-                  block
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
-          <div class='cols'>
-            <div class='content'>
-              <e-button
-                size='md'
-                icon='search'
-                @click='onClickSearch'
-                beep
-              >
-                찾기
-              </e-button>
-              <em>URL 주소 우선</em>
-            </div>
-          </div>
-        </div>
-        <div class='rows'>
-          <div class='label'>또는 URL</div>
+          <div class='label'>URL</div>
           <div class='block'>
             <e-input
               v-model='url'
-              placeholder='보조 배경음악 URL 주소'
+              placeholder='보이스 URL 주소'
               block
             />
           </div>
@@ -98,19 +68,14 @@
 
 <script>
 import EInput from '@/components/novel/editor/common/input'
-import ESelect from '@/components/novel/editor/common/select'
 import EButton from '@/components/novel/editor/common/button'
 
-const attrList = [
-  'id',
-  'url'
-]
+const attrList = ['url']
 
 export default {
-  name: 'NovelEditorSidebarScriptEditTemplateBgs',
+  name: 'NovelEditorSidebarScriptEditTemplateVoice',
   components: {
     EInput,
-    ESelect,
     EButton
   },
   props: {
@@ -130,7 +95,7 @@ export default {
   data() {
     const data = this.pureData
     const attr = {}
-    attrList.map(item => attr[item] = !!data.bgs ? data.bgs[item] : undefined)
+    attrList.map(item => attr[item] = !!data.voice ? data.voice[item] : undefined)
     return {
       data,
       ...attr,
@@ -141,7 +106,7 @@ export default {
   watch: {
     pureData() {
       this.data = this.pureData
-      attrList.map(item => this[item] = !!this.pureData.bgs ? this.pureData.bgs[item] : undefined)
+      attrList.map(item => this[item] = !!this.pureData.voice ? this.pureData.voice[item] : undefined)
     }
   },
   computed: {
@@ -151,20 +116,17 @@ export default {
     }
   },
   methods: {
-    onClickSearch() {
-
-    },
     onClickClear() {
       attrList.map(item => this[item] = undefined)
-      delete this.data.bgs
+      delete this.data.voice
       this.submit()
     },
     onClickSave() {
       if (this.isAllEmpty)
-        delete this.data.bgs
+        delete this.data.voice
       else {
-        this.data.bgs = {}
-        attrList.map(item => this[item] ? this.data.bgs[item] = this[item] : undefined)
+        this.data.voice = {}
+        attrList.map(item => this[item] ? this.data.voice[item] = this[item] : undefined)
       }
       this.submit()
     },

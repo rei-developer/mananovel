@@ -100,16 +100,30 @@
             @click='onClickVariable("author", true)'
             beep
           >
+            고급 분기
+          </e-button>
+          <e-button
+            size='sm'
+            @click='onClickVariable("author", true)'
+            beep
+          >
             변수
           </e-button>
         </div>
       </div>
       <div class='content'>
         <e-input
-          v-model='author'
           placeholder='선택지 1'
           :maxlength='20'
           display
+          block
+        />
+        <div class='display: flex; width: 100px; height: 5px'/>
+        <e-input
+          placeholder='이동할 책갈피'
+          :maxlength='20'
+          display
+          block
         />
       </div>
     </div>

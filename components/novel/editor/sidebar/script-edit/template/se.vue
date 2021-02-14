@@ -1,8 +1,8 @@
 <template>
   <div class='e-section-body'>
     <div class='title'>
-      <font-awesome-icon icon='drum'/>
-      보조 배경음악 설정
+      <font-awesome-icon icon='compact-disc'/>
+      효과음 설정
     </div>
     <div class='item'>
       <div class='label'>데이터베이스</div>
@@ -15,7 +15,7 @@
                 <e-input
                   type='number'
                   v-model='id'
-                  placeholder='보조 배경음악 ID'
+                  placeholder='효과음 ID'
                   :maxlength='20'
                   block
                   readonly
@@ -42,7 +42,7 @@
           <div class='block'>
             <e-input
               v-model='url'
-              placeholder='보조 배경음악 URL 주소'
+              placeholder='효과음 URL 주소'
               block
             />
           </div>
@@ -98,7 +98,6 @@
 
 <script>
 import EInput from '@/components/novel/editor/common/input'
-import ESelect from '@/components/novel/editor/common/select'
 import EButton from '@/components/novel/editor/common/button'
 
 const attrList = [
@@ -107,10 +106,9 @@ const attrList = [
 ]
 
 export default {
-  name: 'NovelEditorSidebarScriptEditTemplateBgs',
+  name: 'NovelEditorSidebarScriptEditTemplateSe',
   components: {
     EInput,
-    ESelect,
     EButton
   },
   props: {
@@ -130,7 +128,7 @@ export default {
   data() {
     const data = this.pureData
     const attr = {}
-    attrList.map(item => attr[item] = !!data.bgs ? data.bgs[item] : undefined)
+    attrList.map(item => attr[item] = !!data.se ? data.se[item] : undefined)
     return {
       data,
       ...attr,
@@ -141,7 +139,7 @@ export default {
   watch: {
     pureData() {
       this.data = this.pureData
-      attrList.map(item => this[item] = !!this.pureData.bgs ? this.pureData.bgs[item] : undefined)
+      attrList.map(item => this[item] = !!this.pureData.se ? this.pureData.se[item] : undefined)
     }
   },
   computed: {
@@ -156,15 +154,15 @@ export default {
     },
     onClickClear() {
       attrList.map(item => this[item] = undefined)
-      delete this.data.bgs
+      delete this.data.se
       this.submit()
     },
     onClickSave() {
       if (this.isAllEmpty)
-        delete this.data.bgs
+        delete this.data.se
       else {
-        this.data.bgs = {}
-        attrList.map(item => this[item] ? this.data.bgs[item] = this[item] : undefined)
+        this.data.se = {}
+        attrList.map(item => this[item] ? this.data.se[item] = this[item] : undefined)
       }
       this.submit()
     },

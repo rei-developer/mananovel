@@ -10,13 +10,7 @@
       <ul>
         <nuxt-link to='/'>
           <li class='logo'>
-            <div>
-              <img :src='`/logo${logo}.png`' alt='마나노벨'>
-            </div>
-            <div>
-              <div>MANA NOVEL</div>
-              <div>웹으로 즐기는 나의 이야기</div>
-            </div>
+            <img :src='`/logo.png`' alt='마나노벨'>
           </li>
         </nuxt-link>
         <li>
@@ -136,7 +130,7 @@
 </template>
 
 <style lang='less' scoped>
-@primary: #EDA7B2;
+@primary: #A5CFFF;
 @primary-hover: #5F5476;
 @font-color: #EDE3EB;
 
@@ -158,13 +152,6 @@
         > li.logo {
           display: flex;
           align-items: center;
-          &:last-child {
-            line-height: 1.2rem;
-            div:first-child {
-              font-size: 24px;
-              font-weight: bold;
-            }
-          }
         }
       }
       > li {
@@ -271,7 +258,6 @@ export default {
       boardList: BOARD_LIST
         .filter(item => item.visible),
       top: 0,
-      logo: Math.floor(Math.random() * 4) + 1,
       isNovelEditorPopupOpen: false,
       isSidebar: false
     }

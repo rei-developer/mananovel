@@ -6,6 +6,7 @@
       :type='type'
       :pureData='data'
     />
+    <div class='background' v-if='!type'/>
   </div>
 </template>
 
@@ -20,6 +21,17 @@
   border: 1px solid var(--primary);
   border-bottom: 0;
   background: #333;
+  > .background {
+    width: 337px;
+    height: 44px;
+    position: absolute;
+    right: .5rem;
+    bottom: .5rem;
+    background-image: url(/logo.png);
+    background-size: 75%;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+  }
 }
 </style>
 
@@ -29,6 +41,8 @@ import NovelEditorSidebarScriptEditTemplateBcg from '~/components/novel/editor/s
 import NovelEditorSidebarScriptEditTemplateScg from '~/components/novel/editor/sidebar/script-edit/template/scg'
 import NovelEditorSidebarScriptEditTemplateBgm from '~/components/novel/editor/sidebar/script-edit/template/bgm'
 import NovelEditorSidebarScriptEditTemplateBgs from '~/components/novel/editor/sidebar/script-edit/template/bgs'
+import NovelEditorSidebarScriptEditTemplateSe from '~/components/novel/editor/sidebar/script-edit/template/se'
+import NovelEditorSidebarScriptEditTemplateVoice from '~/components/novel/editor/sidebar/script-edit/template/voice'
 import NovelEditorSidebarScriptEditTemplateJs from '@/components/novel/editor/sidebar/script-edit/template/js'
 import NovelEditorSidebarScriptEditTemplateParticle
   from '@/components/novel/editor/sidebar/script-edit/template/particle'
@@ -43,6 +57,8 @@ export default {
     NovelEditorSidebarScriptEditTemplateScg,
     NovelEditorSidebarScriptEditTemplateBgm,
     NovelEditorSidebarScriptEditTemplateBgs,
+    NovelEditorSidebarScriptEditTemplateSe,
+    NovelEditorSidebarScriptEditTemplateVoice,
     NovelEditorSidebarScriptEditTemplateJs,
     NovelEditorSidebarScriptEditTemplateParticle
   },
@@ -69,6 +85,8 @@ export default {
         {type: 'scg', component: NovelEditorSidebarScriptEditTemplateScg},
         {type: 'bgm', component: NovelEditorSidebarScriptEditTemplateBgm},
         {type: 'bgs', component: NovelEditorSidebarScriptEditTemplateBgs},
+        {type: 'se', component: NovelEditorSidebarScriptEditTemplateSe},
+        {type: 'voice', component: NovelEditorSidebarScriptEditTemplateVoice},
         {type: 'js', component: NovelEditorSidebarScriptEditTemplateJs},
         {type: 'particle', component: NovelEditorSidebarScriptEditTemplateParticle}
       ]
