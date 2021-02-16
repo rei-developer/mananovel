@@ -11,7 +11,7 @@ const app = new Koa()
 const router = new Router()
 
 const config = require('../nuxt.config.js')
-config.dev = app.env !== 'production'
+global.isDev = app.env !== 'production'
 
 router
   .use(helmet())
@@ -37,9 +37,12 @@ async function start() {
     port = process.env.PORT || 10000
   } = nuxt.options.server
 
+  global.host = host
+  global.port = port
+
   await nuxt.ready()
 
-  if (config.dev) {
+  if (global.isDev) {
     const builder = new Builder(nuxt)
     await builder.build()
   }

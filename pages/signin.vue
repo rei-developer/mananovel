@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class='content-box'>
-      <b-alert variant='warning' show>
-        <font-awesome-icon icon='exclamation-triangle'/>
-        개발중인 페이지
-      </b-alert>
+    <div class='content-box' v-show='false'>
       <h6>
         <font-awesome-icon icon='sign-in-alt'/>
         로그인
@@ -48,13 +44,23 @@
         </b-button>
       </div>
     </div>
+    <div class='content-box'>
+      <b-button
+        squared
+        size='sm'
+        variant='warning'
+        block
+      >
+        카카오톡 로그인
+      </b-button>
+    </div>
   </div>
 </template>
 
 <style lang='less' scoped>
 .content-box {
   width: calc(302px + 1rem);
-  margin: 0 auto;
+  margin: 0 auto .5rem;
   padding: .5rem;
   border-radius: 2px;
   background: #FFF;

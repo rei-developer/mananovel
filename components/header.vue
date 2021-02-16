@@ -41,7 +41,7 @@
               <font-awesome-icon icon='sign-in-alt'/>
               로그인
             </b-button>
-            <b-button squared size='sm' variant='outline-primary' to='/signup'>회원가입</b-button>
+<!--            <b-button squared size='sm' variant='outline-primary' to='/signup'>회원가입</b-button>-->
           </b-button-group>
         </li>
       </ul>
