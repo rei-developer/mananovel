@@ -131,6 +131,11 @@ export default {
       isHiddenAll: false
     }
   },
+  watch: {
+    '$store.state.novel.editor.gameId': function () {
+      this.init()
+    }
+  },
   async created() {
     await this.$nextTick()
     document.querySelector('.scene-board-box > .inner').addEventListener('scroll', this.handleInnerScroll)
@@ -151,20 +156,6 @@ export default {
     ]
     onEventBusList.map(item => this.$eventBus.$on(`${p}${item[0]}`, item[1]))
   },
-  async mounted() {
-    const doInit = await indexedDB.init('PAGE')
-    if (doInit.status === 'FAIL') {
-      alert(doInit.message)
-      return window.close()
-    }
-    db = doInit.result
-    console.log(doInit.result)
-    const doLoadPage = await this.loadPage()
-    doLoadPage.status === 'DONE'
-      ? this.dataSource = doLoadPage.result.data
-      : this.addRow(true)
-    this.commit('setLoading', false)
-  },
   beforeDestroy() {
     const p = `${EVENT_BUS_PREFIX}.`
     const offEventBusList = ['view', 'openSidebar', 'name', 'reverse', 'playSound', 'hide', 'hideAll', 'remove', 'beforeRemoveAll', 'removeAll', 'clear', 'update']
@@ -175,6 +166,23 @@ export default {
     document.querySelector('.scene-board-box > .inner').removeEventListener('scroll', this.handleInnerScroll)
   },
   methods: {
+    test() {
+      alert('Aa')
+    },
+    async init() {
+      const doInit = await indexedDB.init('PAGE')
+      if (doInit.status === 'FAIL') {
+        alert(doInit.message)
+        return window.close()
+      }
+      db = doInit.result
+      console.log(doInit.result)
+      const doLoadPage = await this.loadPage()
+      doLoadPage.status === 'DONE'
+        ? this.dataSource = doLoadPage.result.data
+        : this.addRow(true)
+      this.commit('setLoading', false)
+    },
     getHideCount() {
       let count = 0
       this.dataSource

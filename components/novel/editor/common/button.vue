@@ -21,6 +21,7 @@
   padding: 0 5px;
   color: #333;
   font-size: 13px;
+  cursor: default;
   &.primary {
     background-color: var(--primary);
     &:hover {opacity: .9}

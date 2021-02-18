@@ -41,7 +41,7 @@
               <font-awesome-icon icon='sign-in-alt'/>
               로그인
             </b-button>
-<!--            <b-button squared size='sm' variant='outline-primary' to='/signup'>회원가입</b-button>-->
+            <!--            <b-button squared size='sm' variant='outline-primary' to='/signup'>회원가입</b-button>-->
           </b-button-group>
         </li>
       </ul>
@@ -321,12 +321,7 @@ export default {
     },
     async onNovelEditorClick() {
       this.isNovelEditorPopupOpen = !this.isNovelEditorPopupOpen
-      let routeData = this.$router.resolve(
-        {
-          path: '/novel/editor',
-          query: {'gameId': 'test'}
-        })
-      window.open(routeData.href, '_blank', `width=1280,height=720`)
+      window.open('/novel/editor', '_blank', `width=1280,height=720`)
     },
     onSidebarClick() {
       this.isSidebar = !this.isSidebar

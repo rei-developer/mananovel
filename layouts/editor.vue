@@ -110,6 +110,7 @@ export default {
         service,
         token
       })
+      this.$store.commit('novel/editor/setEditorState', 'open')
     }
   }
 }

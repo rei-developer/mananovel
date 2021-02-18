@@ -30,62 +30,6 @@
   </div>
 </template>
 
-<style lang='less' scoped>
-@primary: #A5CFFF;
-@primary-hover: #5F5476;
-@font-color: #EDE3EB;
-
-.backdrop {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, .6);
-  z-index: 1000;
-}
-
-.drag-it-dude {
-  position: fixed;
-  > .dialog {
-    min-height: 100px;
-    font-size: 13px;
-    border: 1px solid #000;
-    background: #FFF;
-    box-shadow: 1px 0 10px rgba(0, 0, 0, .1);
-    cursor: move;
-    animation: fadein 1s;
-    -moz-animation: fadein 1s;
-    -webkit-animation: fadein 1s;
-    -o-animation: fadein 1s;
-    > .header {
-      height: 25px;
-      line-height: 21px;
-      padding: 0 .5rem;
-      color: #FFF;
-      background: @primary;
-      > .close {
-        padding-top: 3px;
-        color: #FFF;
-        font-size: 18px;
-        cursor: pointer;
-      }
-    }
-    > .content {
-      padding: .5rem;
-      word-break: break-all;
-    }
-    > .footer {
-      display: flex;
-      flex: 1;
-      justify-content: flex-end;
-      padding: 0 0.5rem 0.5rem;
-      > button {margin-left: 5px}
-    }
-  }
-}
-</style>
-
 <script>
 import DragItDude from 'vue-drag-it-dude'
 
@@ -107,8 +51,8 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('keydown', e => {
-      if (e.keyCode === 27)
+    window.addEventListener('keydown', event => {
+      if (event.keyCode === 27)
         this.close()
     })
   },
